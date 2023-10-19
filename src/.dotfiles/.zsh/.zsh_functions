@@ -1,0 +1,8 @@
+#!/usr/bin/env zsh
+# shellcheck disable=SC1090
+# ==================================================================
+# .zsh_functions
+# ==================================================================
+# This file exists so that you may add any alias files you require
+# Don't uncomment any files below unless you know what you're doing!
+# ==================================================================

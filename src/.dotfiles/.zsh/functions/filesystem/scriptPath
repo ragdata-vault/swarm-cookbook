@@ -1,0 +1,4 @@
+# undefined
+builtin autoload -X
+
+printf '%s' "$(realpath "${BASH_SOURCE[0]:-${(%):-%x}}")"

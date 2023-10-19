@@ -1,0 +1,5 @@
+# undefined
+builtin autoload -X
+
+ansi_report 6n "$ANSI_CSI" R || return 1
+printf '%s\n' "${ANSI_REPORT//;/,}"

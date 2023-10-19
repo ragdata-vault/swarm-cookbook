@@ -1,0 +1,17 @@
+# undefined
+builtin autoload -X
+
+[[ -z "$ANSI_CSI" ]] && source "$ZFNDIR"/ansi_color.zsh
+
+ansi_report 11t "$ANSI_CSI" t || return 1
+case "$ANSI_REPORT" in
+	1)
+		printf 'open\n'
+		;;
+	2)
+		printf 'iconified\n'
+		;;
+	*)
+		printf 'unknown (%s)\n' "$ANSI_REPORT"
+		;;
+esac

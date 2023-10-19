@@ -1,0 +1,17 @@
+# undefined
+builtin autoload -X
+
+local ind="${2:-0}"
+local chr="${3:'- '}"
+local tab=""
+local c=1
+
+if [[ -n "$ind" ]] && [[ "$ind" =~ ^[1-9]$ ]]; then
+	while [ "$c" -le "$ind" ]
+	do
+		tab+="\t"
+		((c++))
+	done
+fi
+
+echo -e "${tab}${chr}${1}"

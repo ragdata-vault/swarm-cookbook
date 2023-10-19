@@ -1,0 +1,11 @@
+# undefined
+builtin autoload -X
+
+if [ -z "$1" ]; then echo "ERROR: Argument Not Passed!"; return 1; fi
+
+case "$1" in
+
+	# core)   export-file /var/lh/stacks/core/core.env;;
+	*)      export-file "$1";;
+
+esac

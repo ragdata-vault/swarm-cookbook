@@ -1,0 +1,52 @@
+# undefined
+builtin autoload -X
+
+local msg="${1:-}"
+local COLOR OUTPUT
+local PREFIX=""
+local SUFFIX=""
+local STREAM="1"
+
+local OUTARGS=()
+
+[[ -z "$msg" ]] && { echo "${RED}ERROR :: echoAlias :: Requires Argument!${RESET}"; return 1; }
+
+shift
+
+while getopts ":ec:p:s:En" char
+do
+	case "$char" in
+		e)
+			STREAM=2
+			;;
+		c)
+			COLOR="${OPTARG}"
+			;;
+		p)
+			PREFIX="${OPTARG}"
+			;;
+		s)
+			SUFFIX="${OPTARG}"
+			;;
+		E)
+			OUTARGS+=("-e")
+			;;
+		n)
+			OUTARGS+=("-n")
+			;;
+		:)
+			echo "${RED}ERROR: -${OPTARG} Requires an Argument!${RESET}"
+			return 2
+			;;
+		*)
+			echo "${RED}ERROR: Invalid Argument!${RESET}"
+			return 3
+			;;
+	esac
+done
+
+OUTPUT="${COLOR}${PREFIX}$msg${SUFFIX}${RESET}"
+
+[[ "$STREAM" -eq 2 ]] && echo "${OUTARGS[@]}" "$OUTPUT" >&2 || echo "${OUTARGS[@]}" "$OUTPUT"
+
+return 0

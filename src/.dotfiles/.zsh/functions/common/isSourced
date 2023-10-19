@@ -1,0 +1,5 @@
+# undefined
+builtin autoload -X
+
+[[ "${FUNCNAME[1]-}" == "source" || "${FUNCNAME[1]-}" == "${BASH_SOURCE[0]:-${(%):-%x}}" ]]
+

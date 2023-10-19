@@ -1,0 +1,25 @@
+# undefined
+builtin autoload -X
+
+# Optionally override detection logic
+# to support post processors that interpret color codes AFTER output is generated.
+# Use environment variable "ANSI_FORCE_SUPPORT=true" to enable the override.
+if [[ -n "${ANSI_FORCE_SUPPORT-}" ]]; then
+	return 0
+fi
+
+if hash tput &> /dev/null; then
+	if [[ "$(tput colors)" -lt 8 ]]; then
+		return 1
+	fi
+	return 0
+fi
+
+# Query the console and see if we get ANSI codes back.
+# CSI 0 c == CSI c == Primary Device Attributes.
+# Idea:	CSI c
+# Response = CSI ? 6 [234] ; 2 2 c
+# The "22" means ANSI color, but terminals don't need to send that back.
+# If we get anything back, let's assume it works.
+ansi_report c "$ANSI_CSI?" c || return 1
+[[ -n "$ANSI_REPORT" ]]

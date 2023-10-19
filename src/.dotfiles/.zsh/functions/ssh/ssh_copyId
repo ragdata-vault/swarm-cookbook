@@ -1,0 +1,32 @@
+# undefined
+builtin autoload -X
+
+local SRV USR
+
+options=$(getopt -l "user:,server:" -o "u:s:" -a -- "$@")
+
+eval set --"$options"
+
+while true
+do
+	case "$1" in
+		-s|--server)
+			[[ -z "$2" ]] && errorExit "Missing Argument!"
+			SRV="$2"
+			shift
+			;;
+		-u|--user)
+			[[ -z "$2" ]] && errorExit "Missing Argument!"
+			USR="$2"
+			shift
+			;;
+		--)
+			shift; break;;
+		*)
+			errorExit "Invalid Option '$1'"
+			;;
+	esac
+	shift
+done
+
+eval "ssh-copy-id ${USR}@${SRV}"

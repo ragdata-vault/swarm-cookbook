@@ -1,0 +1,105 @@
+#!/usr/bin/env zsh
+# shellcheck disable=SC1091,SC1090,SC2155
+# ==================================================================
+# .stack
+# ==================================================================
+# Swarm Cookbook - Stack Controller
+#
+# File:         .stack
+# Author:       Ragdata
+# Date:         29/09/2023
+# License:      MIT License
+# Copyright:    Copyright © 2023 Darren (Ragdata) Poulton
+# ==================================================================
+# DEPENDENCIES
+# ==================================================================
+
+# ==================================================================
+# VARIABLES
+# ==================================================================
+
+# ==================================================================
+# FUNCTIONS
+# ==================================================================
+# ------------------------------------------------------------------
+# init
+# ------------------------------------------------------------------
+stackInit()
+{
+	local USERNAME="${SUDO_USER:-$(whoami)}"
+
+	local NODE_ID SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]:-${(%):-%x}}")")"
+
+	if [[ ! -f "$SCRIPT_DIR"/.env ]]; then
+		cp "$SCRIPT_DIR"/.env.dist "$SCRIPT_DIR"/.env
+	fi
+
+	source "$SCRIPT_DIR"/.env
+
+#	local INGRESS_SUBNET INGRESS_GATEWAY
+	# replace ingress network with encrypted net
+#	INGRESS_SUBNET="$(docker network inspect ingress | jq '.[].IPAM.Config[0].Subnet')"
+#	INGRESS_GATEWAY="$(docker network inspect ingress | jq '.[].IPAM.Config[0].Gateway')"
+#
+#	docker network rm ingress
+#
+#	sleep 3
+#
+	NODE_ID="$(docker info -f '{{.Swarm.NodeID}}')"
+#
+#	hashSET NODE:"${NODE_ID}" INGRESS_SUBNET "${INGRESS_SUBNET}"
+#	hashSET NODE:"${NODE_ID}" INGRESS_GATEWAY "${INGRESS_GATEWAY}"
+#
+#	docker network create --ingress --driver=overlay --opt=encrypted --scope=swarm --subnet="${INGRESS_SUBNET}" --gateway="${INGRESS_GATEWAY}" ingress
+
+	# node labels
+	docker node update --label-add traefik.certs=true "${NODE_ID}"
+
+#	# create traefik public net
+#	docker network create --driver=overlay --attachable=true --opt=encrypted --scope=swarm --subnet="${PUBLIC_SUBNET}" --gateway="${PUBLIC_GATEWAY}" traefik
+#	# create traefik private net
+#	docker network create --driver=overlay --attachable=true --opt=encrypted --scope=swarm --subnet="${PRIVATE_SUBNET}" --gateway="${PRIVATE_GATEWAY}" --internal private
+#	# create traefik proxy net
+#	docker network create --driver=overlay --attachable=true --opt=encrypted --scope=swarm --subnet="${PROXY_SUBNET}" --gateway="${PROXY_GATEWAY}" --internal proxy
+
+	docker network create --driver=overlay --attachable=true --scope=swarm --subnet="${PUBLIC_SUBNET}" --gateway="${PUBLIC_GATEWAY}" traefik
+
+#	docker network create --driver=overlay --attachable=true --scope=swarm --subnet="${PRIVATE_SUBNET}" --gateway="${PRIVATE_GATEWAY}" --internal private
+#
+#	docker network create --driver=overlay --attachable=true --scope=swarm --subnet="${PROXY_SUBNET}" --gateway="${PROXY_GATEWAY}" --internal proxy
+
+#	local ADMIN_PWD NODE_IPv4 NODE_HOSTNAME NODE_DOMAIN
+#
+#	ADMIN_PWD="$(getPassword)"
+#
+#	hashSET NODE:"${NODE_ID}" ADMIN_PWD "$ADMIN_PWD" &> /dev/null
+#
+#	writeENV ADMIN_PWD "$ADMIN_PWD" "$SCRIPT_DIR"/.env
+#
+#	mkdir -p /"$SWARMDIR"/stacks/traefik-mkcert/volumes/auth
+#
+#	htpasswd -c -B -b ./volumes/auth/.htpasswd "${ADMIN_USER}" "${ADMIN_PWD}"
+#
+#	NODE_IPv4="$(hashGET NODE:"${NODE_ID}" NODE_IPv4)"
+#	NODE_HOSTNAME="$(hashGET NODE:"${NODE_ID}" NODE_HOSTNAME)"
+#	NODE_DOMAIN="$(hashGET NODE:"${NODE_ID}" NODE_DOMAIN)"
+#
+#	writeENV NODE_IPv4 "$NODE_IPv4" "$SCRIPT_DIR"/.env
+#	writeENV NODE_HOSTNAME "$NODE_HOSTNAME" "$SCRIPT_DIR"/.env
+#	writeENV NODE_DOMAIN "$NODE_DOMAIN" "$SCRIPT_DIR"/.env
+}
+# ------------------------------------------------------------------
+# destroy
+# ------------------------------------------------------------------
+stackDestroy()
+{
+	docker stack rm traefik
+
+	docker network rm traefik
+#	docker network rm private
+#	docker network rm proxy
+#
+#	NODE_ID="$(docker info -f '{{.Swarm.NodeID}}')"
+#
+#	docker node update --label-rm traefik.certs "${NODE_ID}"
+}

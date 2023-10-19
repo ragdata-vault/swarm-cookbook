@@ -1,0 +1,14 @@
+# undefined
+builtin autoload -X
+
+local field="${1:-}"
+local value="${2:-}"
+local file="${3:-}"
+
+if [[ -z "$field" ]] || [[ -z "$value" ]] || [[ -z "$file" ]] || [[ ! -f "$file" ]]; then echoError "Missing / Invalid Arguments!"; fi
+
+if ! grep -q "$field" "$file"; then
+	echo "$field=$value" >> "$file"
+else
+	sed -i "/^${field}.*/c\\${field}=${value}" "$file"
+fi

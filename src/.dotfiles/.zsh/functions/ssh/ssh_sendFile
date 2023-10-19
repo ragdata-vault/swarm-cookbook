@@ -1,0 +1,61 @@
+# undefined
+builtin autoload -X
+
+local DEST SRV PATH USR
+local -a OPTS
+options=$(getopt -l "dest:,path:,Port:,server:,user:" -o "d:i:p:P:qrs:u:v" -a -- "$@")
+
+eval set --"$options"
+
+while true
+do
+	case "$1" in
+		-d|--dest)
+			[[ -z "$2" ]] && errorExit "Missing Argument!"
+			DEST="$2"
+			shift
+			;;
+		-i)
+			OPTS+=("-i")
+			;;
+		-p|--path)
+			[[ -z "$2" ]] && errorExit "Missing Argument!"
+			PATH="$2"
+			shift
+			;;
+		-P|--Port)
+			[[ -z "$2" ]] && errorExit "Missing Argument!"
+			OPTS+=("-P $2")
+			shift
+			;;
+		-q)
+			OPTS+=("-q")
+			;;
+		-r)
+			OPTS+=("-r")
+			;;
+		-s|--server)
+			[[ -z "$2" ]] && errorExit "Missing Argument!"
+			SRV="$2"
+			shift
+			;;
+		-u|--user)
+			[[ -z "$2" ]] && errorExit "Missing Argument!"
+			USR="$2"
+			shift
+			;;
+		-v)
+			OPTS+=("-v")
+			;;
+		--)
+			shift; break;;
+		*)
+			errorExit "Invalid Option '$1'"
+			;;
+	esac
+	shift
+done
+
+if [[ -z "$PATH" ]] || [[ -z "$USR" ]] || [[ -z "$SRV" ]] || [[ -z "$DEST" ]]; then errorExit "Missing Argument(s)!"; fi
+
+eval "scp ${OPTS[@]} ${USR}@${SRV}:${PATH} ${DEST}"

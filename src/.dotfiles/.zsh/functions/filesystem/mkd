@@ -1,0 +1,4 @@
+# undefined
+builtin autoload -X
+
+mkdir -m "$1" -p "${@:2}"

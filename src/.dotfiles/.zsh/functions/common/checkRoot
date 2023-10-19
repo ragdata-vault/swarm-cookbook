@@ -1,0 +1,12 @@
+# undefined
+builtin autoload -X
+
+tmpFile="$(mktemp)"
+
+id -u > "$tmpFile"
+
+ID="$(cat "$tmpFile")"
+
+if [ "$ID" != 0 ]; then
+	errorExit "This script MUST be run as root!"
+fi

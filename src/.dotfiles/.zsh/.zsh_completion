@@ -1,0 +1,11 @@
+#!/usr/bin/env zsh
+# shellcheck disable=SC1090
+# ==================================================================
+# .zsh_completion
+# ==================================================================
+zstyle 'completion:*:*:git:*' script "$ZSHDIR"/completion/git-completion.bash
+zstyle 'completion:*:*:git:*' script "$ZSHDIR"/completion/_git
+
+fpath=("$ZSHDIR"/completion "$fpath")
+
+autoload -Uz compinit && compinit

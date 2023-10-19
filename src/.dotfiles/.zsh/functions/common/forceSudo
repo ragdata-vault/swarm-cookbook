@@ -1,0 +1,16 @@
+# undefined
+builtin autoload -X
+
+local result="" command="${*}" file="${*:-1}" permission
+
+if ! $command 2>/dev/null
+then
+	permission=$(stat -c '%a' "$file")
+	sudo chmod o+rx "$file"
+	result=$command 2>/dev/null
+	sudo chmod "$permission" "$file"
+	if ! "$result"
+	then
+		echo "$result"
+	fi
+fi

@@ -1,0 +1,24 @@
+# undefined
+builtin autoload -X
+
+local buff c report
+
+report=""
+
+# NOTE: read bypass piping, which lets this work:
+# ansi --report-window-chars | cut -d, -f 1
+read -p "$ANSI_CSI$1" -r -N "${#2}" -s -t 1 buff
+
+if [ "$buff" != "$2" ]; then
+	return 1
+fi
+
+read -r -N "${#3}" -s -t 1 buff
+
+while [[ "$buff" != "$3" ]]; do
+	report="$report${buff:0:1}"
+	read -r -N 1 -s -t 1 c || exit 1
+	buff="${buff:1}$c"
+done
+
+ANSI_REPORT=$report

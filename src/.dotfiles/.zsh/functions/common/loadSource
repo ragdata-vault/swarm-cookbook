@@ -1,0 +1,85 @@
+# undefined
+builtin autoload -X
+
+local file="${1:-}" options
+local dir
+
+[[ -z "$file" ]] && errorExit "loadSource :: Missing Argument!"
+
+local fileName="${file##*/}"
+local fileName="${fileName%%.*}"
+local fullPath filePath pathName
+
+declare -A FILEOPTS
+
+FILEOPTS[install]=0
+FILEOPTS[config]=0
+FILEOPTS[remove]=0
+FILEOPTS[test]=0
+
+options=$(getopt -o "cirt" -a -- "$@")
+
+eval set --"$options"
+
+while true
+do
+	case $1 in
+		-c) FILEOPTS[config]=1;;
+		-i) FILEOPTS[install]=1;;
+		-r) FILEOPTS[remove]=1;;
+		-t) FILEOPTS[test]=1;;
+		--)
+			shift
+			break
+			;;
+		*)
+			errorExit "loadSource :: Invalid Option '$1'" --code=14
+	esac
+	shift
+done
+
+if [[ -f "$file" ]]; then
+	fullPath="$file"
+else
+	if [[ $DEBUG == 1 ]]; then echo "Finding '$file'"; fi
+	for dir in "${SOURCE_DIRS[@]}"
+	do
+		if [[ $DEBUG -eq 1 ]]; then echo "Searching '$dir'"; fi
+		while IFS= read -r filePath
+		do
+			if [[ $DEBUG -eq 1 ]]; then echo "Testing '$filePath'"; fi
+			pathName="${filePath##*/}"
+			if [[ -f "$dir/$pathName" ]]; then
+				fullPath="$filePath"
+				break
+			fi
+		done < <(find "$dir" -maxdepth 1 -type f)
+	done
+fi
+
+[[ -z "$fullPath" ]] && errorExit "File '$file' Not Found!"
+
+source "$fullPath"
+
+## INSTALL & REMOVE
+if [[ "${FILEOPTS[install]}" -eq 1 ]]; then
+	eval "$fileName::install"
+elif [[ "${FILEOPTS[remove]}" -eq 1 ]]; then
+	eval "$fileName::remove"
+fi
+## CONFIGURE
+if [[ "${FILEOPTS[config]}" -eq 1 ]]; then
+	eval "$fileName::config"
+fi
+## TEST
+if [[ "${FILEOPTS[test]}" -eq 1 ]]; then
+	if grep -q "$fileName::test" "$fullPath"; then
+		eval "$fileName::test"
+	fi
+fi
+
+unset options
+unset FILEOPTS
+unset fullPath
+unset fileName
+unset file

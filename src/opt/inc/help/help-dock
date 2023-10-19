@@ -1,0 +1,36 @@
+#!/usr/bin/env zsh
+
+# ==================================================================
+# help-dock
+# ==================================================================
+# Swarm Cookbook Installer
+#
+# File:         help-dock
+# Author:       Ragdata
+# Date:         15/04/2023
+# License:      MIT License
+# Copyright:    Copyright © 2023 Darren (Ragdata) Poulton
+# ==================================================================
+# DEPENDENCIES
+# ==================================================================
+
+# ==================================================================
+# MAIN
+# ==================================================================
+echo
+echo "${GOLD}======================================================${RESET}"
+echo "${GOLD}/usr/local/bin/${RESET}${WHITE}dock${RESET} ${GOLD}COMMAND USAGE${RESET}"
+echo "${GOLD}======================================================${RESET}"
+echo
+echo "${GOLD}Functions:${RESET}"
+echo     "    - up"
+echo     "    - dn|down"
+echo     "    - status"
+echo     "    - logs"
+echo     "    - cklogs|checklogs"
+echo     "    - droplogs"
+echo     "    - access"
+echo     "    - moreaccess"
+echo     "    - dropaccess"
+echo     "    - rebuild"
+

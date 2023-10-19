@@ -1,0 +1,9 @@
+# undefined
+builtin autoload -X
+
+(( $# < 2 )) && errorExit "Missing Argument(s)!"
+
+local FIELD="${1:-}"
+local VALUE="${2:-}"
+
+eval "launchctl setenv ${FIELD}=${VALUE}"

@@ -1,0 +1,8 @@
+USERNAME="${SUDO_USER:-$(whoami)}"
+
+declare -gax LIB_DIRS=("/usr/lib" "/usr/local/lib" "/usr/local/lib/.zsh")
+declare -gax SOURCE_DIRS=("/usr/bin" "/usr/local/bin" "/$SWARMDIR/apps" "/$SWARMDIR/stacks")
+
+declare -gx DOJO_OPT=/opt/dd
+declare -gx DOJO_LIB=/usr/local/lib/dd
+

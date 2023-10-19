@@ -1,0 +1,17 @@
+# undefined
+builtin autoload -X
+
+local msg code
+
+msg="ERROR:"
+[[ -n ${FUNCNAME[1]} ]] && msg="$msg ${FUNCNAME[1]} ::"
+[[ -n "$1" ]] && msg="$msg $1"
+
+if [[ -n "$2" ]]; then
+	code="$2"
+else
+	[[ $? -eq 1 ]] && code=1 || code="$?"
+fi
+
+echo "${RED}${msg}${RESET}"
+exit "$code"

@@ -1,0 +1,28 @@
+#!/usr/bin/env zsh
+
+# ==================================================================
+# help-swarm
+# ==================================================================
+# Swarm Cookbook Installer
+#
+# File:         help-swarm
+# Author:       Ragdata
+# Date:         15/04/2023
+# License:      MIT License
+# Copyright:    Copyright © 2023 Darren (Ragdata) Poulton
+# ==================================================================
+# DEPENDENCIES
+# ==================================================================
+
+# ==================================================================
+# MAIN
+# ==================================================================
+echo
+echoGold "======================================================"
+echoGold "/usr/local/bin/${WHITE}swarm${RESET} COMMAND USAGE"
+echoGold "======================================================"
+echo
+echoGold "Logs:"
+echo     "    swarm -l|--logs follow [OPTIONS] CONTAINER        - Automatically follow logFiles by scrolling text"
+echo 	 "    swarm -l|--logs tail FILENAME                     - Output the last 50 lines of the specified file"
+echo     "    swarm -l|--logs CONTAINER                         - View logs for the specified container"

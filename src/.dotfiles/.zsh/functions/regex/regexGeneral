@@ -1,0 +1,20 @@
+# undefined
+builtin autoload -X
+
+local isVARNAME='^[A-Za-z\_][A-Za-z0-9\_]*$'
+local isDBNAME='^[A-Za-z0-9\-\_\.]+$'
+local isPATH='^(/[^/]*)*(/?.+(\..+))$'
+local isLOC='^[a-z]{2}_[A-Z]{2}.*$'
+local isUSERPASS='^[a-zA-Z0-9\-\~\_\.\,\!\@\#\$\%\^\&\*\(\)\+\=]+$'
+local isPASS='^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[\-\~\_\.\,\!\@\#\$\%\^\&\*\(\)\+\=])(?=\S*?[0-9])\S{8,})$'
+
+[[ -n "${!1}" ]] && { printf '%s' "${!1}"; return 0; } || return 1
+# ==================================================================
+# FUNCTION ALIASES
+# ==================================================================
+regex::isVARNAME()		{ regex::general isVARNAME; }
+regex::isDBNAME()		{ regex::general isDBNAME; }
+regex::isPATH()			{ regex::general isPATH; }
+regex::isLOC()			{ regex::general isLOC; }
+regex::isUSERPASS()		{ regex::general isUSERPASS; }
+regex::isPASS()			{ regex::general isPASS; }

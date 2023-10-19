@@ -1,0 +1,18 @@
+# undefined
+builtin autoload -X
+
+declare -gx SHELL_TYPE
+declare -gx SHELL_VERSION
+
+SHELL_TYPE="$SHELL"
+SHELL_TYPE="${SHELL_TYPE##*/}"
+
+if [[ "$SHELL_TYPE" == "zsh" ]]; then
+	SHELL_VERSION="$ZSH_VERSION"
+elif [[ "$SHELL_TYPE" == "bash" ]]; then
+	SHELL_VERSION="$BASH_VERSION"
+fi
+
+if [ "${SHELL_VERSION:0:1}" -lt 4 ]; then
+	errorExit "This script requires a minimum Bash / ZSH version of 4+"
+fi

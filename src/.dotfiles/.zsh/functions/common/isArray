@@ -1,0 +1,4 @@
+# undefined
+builtin autoload -X
+
+[[ "$(declare -p "$1" 2> /dev/null)" == "declare -"[aA]* ]]

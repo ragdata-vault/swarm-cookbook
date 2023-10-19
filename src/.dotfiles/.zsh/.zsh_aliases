@@ -1,0 +1,18 @@
+#!/usr/bin/env zsh
+# shellcheck disable=SC1090
+# ==================================================================
+# .zsh_aliases
+# ==================================================================
+# This file exists so that you may add any alias files you require
+# ==================================================================
+# LOAD DOTFILES
+# ==================================================================
+source "$ZSHDIR"/aliases/docker.zsh
+source "$ZSHDIR"/aliases/filesystem.zsh
+source "$ZSHDIR"/aliases/general.zsh
+source "$ZSHDIR"/aliases/git.zsh
+source "$ZSHDIR"/aliases/regex.zsh
+source "$ZSHDIR"/aliases/zsh.zsh
+# ==================================================================
+# ALIAS FUNCTIONS
+# ==================================================================

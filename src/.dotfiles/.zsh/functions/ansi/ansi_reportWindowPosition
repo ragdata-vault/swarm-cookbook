@@ -1,0 +1,5 @@
+# undefined
+builtin autoload -X
+
+ansi_report 13t "${ANSI_CSI}3;" t || return 1
+printf '%s\n' "${ANSI_REPORT//;/,}"

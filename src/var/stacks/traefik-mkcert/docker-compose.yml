@@ -1,0 +1,100 @@
+####################################################################
+# TRAEFIK-MKCERT
+####################################################################
+version: '3.8'
+
+####################################################################
+# SERVICES
+####################################################################
+services:
+
+    #---------------------------------------------------------------
+    # TRAEFIK
+    #---------------------------------------------------------------
+    traefik:
+        image: traefik:v2.10
+        env_file:
+            - .env
+        environment:
+            DOMAIN: "${NODE_DOMAIN}"
+        networks:
+            traefik:
+                ipv4_address: 172.120.0.254
+        ports:
+            - target: 80
+              published: 80
+              protocol: tcp
+              mode: host
+            - target: 443
+              published: 443
+              protocol: tcp
+              mode: host
+#            - target: 8080
+#              published: 8080
+#              protocol: tcp
+#              mode: host
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - /etc/timezone:/etc/timezone:ro
+#            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - ./volumes/certs:/etc/certs:ro
+            - ./volumes/conf:/etc/traefik
+            - ./volumes/logs:/var/logs/traefik
+        command:
+            - --global.checkNewVersion=true
+            - --global.sendAnonymousUsage=true
+            ## ENTRYPOINTS
+            - --entryPoints.http.address=:80
+            - --entryPoints.https.address=:443
+            - --entryPoints.traefik.address=:8080
+            ## SERVICES
+            - --api=true
+            - --api.insecure=true
+            - --api.dashboard=true
+            ## LOGS
+            - --log=true
+            - --log.filePath=/var/logs/traefik/traefik.log
+            - --log.level=DEBUG
+            ## ACCESS LOGS
+            - --accessLog=true
+            - --accessLog.filePath=/var/logs/traefik/access.log
+            ## PROVIDER :: DOCKER
+            - --providers.docker=true
+#            - --providers.docker.endpoint=unix:///var/run/docker.sock
+            - --providers.docker.endpoint=tcp://127.0.0.1:2377
+            - --providers.docker.exposedByDefault=false
+            - --providers.docker.network=traefik
+            - --providers.docker.swarmMode=true
+            - --providers.docker.tls.insecureSkipVerify=true
+            ## PROVIDER :: FILE
+            - --providers.file.directory=/etc/traefik
+            - --providers.file.watch=true
+        deploy:
+#            mode: global
+#            placement:
+#                constraints:
+#                    - node.role == manager
+#                    - node.labels.traefik.certs == true
+            labels:
+                traefik.enable: "true"
+                traefik.docker.network: traefik
+                ## Router 1 :: HTTP -> HTTPS
+                traefik.http.routers.catchall.entrypoints: http
+                traefik.http.routers.catchall.rule: HostRegexp(`{host:.+}`)
+                traefik.http.routers.catchall.middlewares: https-redirect@file
+                ## Router 2 :: HTTPS -> Dashboard
+                traefik.http.routers.dashboard.entrypoints: https
+                traefik.http.routers.dashboard.rule: Host(`traefik.${DOMAIN}`) && PathPrefix(`/api`,`/dashboard`)
+                traefik.http.routers.dashboard.service: api@internal
+                traefik.http.routers.dashboard.tls: "true"
+                traefik.http.routers.dashboard.tls.options: tls-opts@file
+                traefik.http.services.traefik.loadbalancer.server.port: 8080
+
+
+####################################################################
+# NETWORKS
+####################################################################
+networks:
+    traefik:
+        external: true
+        name: traefik

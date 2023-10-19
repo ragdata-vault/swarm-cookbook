@@ -1,0 +1,11 @@
+# undefined
+builtin autoload -X
+
+local file="${1:-.env}" line
+
+[[ ! -f "$file" ]] && errorExit "File '$file' Not Found!"
+
+while IFS= read -r line
+do
+	eval "export $line"
+done < "$file"

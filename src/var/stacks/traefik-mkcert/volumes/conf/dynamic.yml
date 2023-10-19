@@ -1,0 +1,13 @@
+tls:
+    stores:
+        default: {}
+
+    certificates:
+        - certFile: /etc/certs/_wildcard.redeyed.local.pem
+          keyFile: /etc/certs/_wildcard.redeyed.local-key.pem
+
+    options:
+
+        tls-opts:
+            minVersion: VersionTLS12
+            sniStrict: false

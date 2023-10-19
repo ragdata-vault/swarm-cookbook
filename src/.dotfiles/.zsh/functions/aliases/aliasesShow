@@ -1,0 +1,16 @@
+# shellcheck disable=SC2168,SC2155
+# undefined
+builtin autoload -X
+
+#local -a ARGS=("$@")
+#local FILTER line
+#local dataFile="$(mktemp)"
+
+#if [[ "${#ARGS[@]}" -gt 0 ]]; then
+#	FILTER="${1:-}"
+#fi
+
+#while IFS= read -r line
+#do
+#	echo "$line"
+#done < "$dataFile"

@@ -1,0 +1,5 @@
+# undefined
+builtin autoload -X
+
+ansi_report 20t "${ANSI_OSC}L" "$ANSI_ST" || return 1
+printf '%s\n' "${ANSI_REPORT//;/,}"

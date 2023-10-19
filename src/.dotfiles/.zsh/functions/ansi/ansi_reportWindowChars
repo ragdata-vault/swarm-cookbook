@@ -1,0 +1,5 @@
+# undefined
+builtin autoload -X
+
+ansi_report 18t "${ANSI_CSI}8;" t || return 1
+printf '%s\n' "${ANSI_REPORT//;/,}"
