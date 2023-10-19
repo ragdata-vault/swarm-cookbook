@@ -1,8 +1,6 @@
 # undefined
 builtin autoload -X
 
-local dir file
-
 while IFS= read -r dir
 do
 	chmod 0755 "$dir"
