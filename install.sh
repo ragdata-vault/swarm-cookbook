@@ -17,17 +17,6 @@
 if [[ -z "$DEBUG" ]]; then declare -gx DEBUG=0; fi
 # if script is called with 'debug' as an argument, then set debug mode
 if [[ "${1:l}" == "debug" ]] || [[ "$DEBUG" == 1 ]]; then shift; DEBUG=1; set -- "${@}"; set -axeET; else set -aeET; fi
-# get the username of the user executing the script
-declare -gx USERNAME="${SUDO_USER:-$(whoami)}"
-# set sudo-safe home directory
-if [[ "$USERNAME" != "root" ]]; then
-	declare -gx USERDIR=/home/"$USERNAME"
-else
-	declare -gx USERDIR=/root
-fi
-declare -gx SHELL_TYPE
-SHELL_TYPE="$SHELL"
-SHELL_TYPE="${SHELL_TYPE##*/}"
 # ==================================================================
 # DEPENDENCIES
 # ==================================================================
@@ -186,6 +175,63 @@ install::dotfiles()
 	install::report "$logFile"
 }
 # ------------------------------------------------------------------
+# install::install
+# ------------------------------------------------------------------
+install::install()
+{
+	local type="${1:-}"
+	local cont="${2:-}"
+	local source logFile
+
+	logFile="$(mktemp -t FULL-XXXXXX)"
+
+	echo
+	echo "=================================================================="
+	echo "FULL INSTALLATION"
+	echo "=================================================================="
+	echo
+
+	if [[ "$SHELL_TYPE" != "zsh" ]] || [[ -n "$cont" ]]; then
+		install::zsh "$@"
+	fi
+
+	install::config
+	install::dotfiles
+	install::bin
+	install::swarm
+
+	echo
+	echo "FULL INSTALLATION - DONE!"
+	echo "=================================================================="
+	echo
+
+	install::report "$logFile"
+}
+# ------------------------------------------------------------------
+# install::init
+# ------------------------------------------------------------------
+install::init()
+{
+	local logFile
+
+	logFile="$(mktemp -t INIT-XXXXXX)"
+
+	echo
+	echo "=================================================================="
+	echo "SYSTEM INITIALIZATION"
+	echo "=================================================================="
+	echo
+
+
+
+	echo
+	echo "SYSTEM INITIALIZATION - DONE!"
+	echo "=================================================================="
+	echo
+
+	install::report "$logFile"
+}
+# ------------------------------------------------------------------
 # install::swarm
 # ------------------------------------------------------------------
 install::swarm()
@@ -247,37 +293,14 @@ install::swarm()
 	install::report "$logFile"
 }
 # ------------------------------------------------------------------
-# install::install
+# install::uninstall
 # ------------------------------------------------------------------
-install::install()
+install::uninstall()
 {
-	local type="${1:-}"
-	local cont="${2:-}"
-	local source logFile
-
-	logFile="$(mktemp -t FULL-XXXXXX)"
-
-	echo
-	echo "=================================================================="
-	echo "FULL INSTALLATION"
-	echo "=================================================================="
-	echo
-
-	if [[ "$SHELL_TYPE" != "zsh" ]] || [[ -n "$cont" ]]; then
-		install::zsh "$@"
-	fi
-
-	install::config
-	install::dotfiles
-	install::bin
-	install::swarm
-
-	echo
-	echo "FULL INSTALLATION - DONE!"
-	echo "=================================================================="
-	echo
-
-	install::report "$logFile"
+	cd /usr/local/bin || return 1
+	rm -f app* stack* swarm*
+	rm -Rf "${ZSHDIR?}"
+	rm -Rf "${SWARMDIR?}"
 }
 # ------------------------------------------------------------------
 # install::zsh
@@ -476,16 +499,6 @@ install::report()
 	esac
 }
 # ------------------------------------------------------------------
-# install::uninstall
-# ------------------------------------------------------------------
-install::uninstall()
-{
-	cd /usr/local/bin || return 1
-	rm -f app* stack* swarm*
-	rm -Rf /"${ZSHDIR:?}"
-	rm -Rf /"${SWARMDIR:?}"
-}
-# ------------------------------------------------------------------
 # install::checkRoot
 # ------------------------------------------------------------------
 install::checkRoot()
@@ -557,15 +570,16 @@ install::log::redis()
 install::checkShell
 install::checkRoot
 
-declare -a ARGS
+install::init
 
-if [[ "${#ARGS[@]}" == 0 ]]; then ARGS=("all"); fi
+if [[ "$#" == 0 ]]; then set -- "all"; fi
 
-for arg in "${ARGS[@]}"
+while true
 do
-	case "${arg:l}" in
+	case "$1" in
 		all)
 			install::install "$@"
+			exit 0
 			;;
 		bin)
 			install::bin
@@ -573,14 +587,14 @@ do
 		config)
 			install::config
 			;;
+		configReset)
+			install::config new
+			;;
 		dotfiles)
 			install::dotfiles
 			;;
-		new-config)
-			install::config new
-			;;
-		rz)
-			install::zshRemove
+		init)
+			install::init
 			;;
 		swarm)
 			install::swarm
@@ -588,8 +602,13 @@ do
 		zsh)
 			install::zsh "$@"
 			;;
+		rmzsh|zshRemove)
+			install::zshRemove
+			;;
 		*)
-			echo "Invalid Option '$arg'"
+			echo "Invalid Option '$1'"
+			exit 1
 			;;
 	esac
+	shift
 done

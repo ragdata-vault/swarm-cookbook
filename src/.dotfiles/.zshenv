@@ -58,6 +58,10 @@ export GIT_AUTOCRLF="$(git config --global --get core.autocrlf)"
 # ------------------------------------------------------------------
 export EDITOR="pico"
 export LC_ALL="en_AU.UTF-8"
+export SYMBOL_ERROR="✘"
+export SYMBOL_SUCCESS="✔"
+export SYMBOL_INFO="ℹ️"
+export SYMBOL_WARNING="⚠️"
 # ------------------------------------------------------------------
 # ENV
 # ------------------------------------------------------------------
