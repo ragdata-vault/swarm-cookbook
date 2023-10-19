@@ -1,7 +1,7 @@
 # undefined
 builtin autoload -X
 
-local msg code
+declare msg code
 
 msg="ERROR:"
 [[ -n ${FUNCNAME[1]} ]] && msg="$msg ${FUNCNAME[1]} ::"

@@ -1,9 +1,9 @@
 # undefined
 builtin autoload -X
 
-local field="${1:-}"
-local value="${2:-}"
-local file="${3:-}"
+declare field="${1:-}"
+declare value="${2:-}"
+declare file="${3:-}"
 
 if [[ -z "$field" ]] || [[ -z "$value" ]] || [[ -z "$file" ]] || [[ ! -f "$file" ]]; then echoError "Missing / Invalid Arguments!"; fi
 

@@ -1,14 +1,14 @@
 # undefined
 builtin autoload -X
 
-local file="${1:-}" options
-local dir
+declare file="${1:-}" options
+declare dir
 
 [[ -z "$file" ]] && errorExit "loadSource :: Missing Argument!"
 
-local fileName="${file##*/}"
-local fileName="${fileName%%.*}"
-local fullPath filePath pathName
+declare fileName="${file##*/}"
+declare fileName="${fileName%%.*}"
+declare fullPath filePath pathName
 
 declare -A FILEOPTS
 

@@ -1,8 +1,8 @@
 # undefined
 builtin autoload -X
 
-local DEST SRV PATH USR
-local -a OPTS
+declare DEST SRV PATH USR
+declare -a OPTS
 options=$(getopt -l "dest:,path:,Port:,server:,user:" -o "d:i:p:P:qrs:u:v" -a -- "$@")
 
 eval set --"$options"

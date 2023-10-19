@@ -2,9 +2,9 @@
 # undefined
 builtin autoload -X
 
-#local -a ARGS=("$@")
-#local FILTER line
-#local dataFile="$(mktemp)"
+#declare -a ARGS=("$@")
+#declare FILTER line
+#declare dataFile="$(mktemp)"
 
 #if [[ "${#ARGS[@]}" -gt 0 ]]; then
 #	FILTER="${1:-}"

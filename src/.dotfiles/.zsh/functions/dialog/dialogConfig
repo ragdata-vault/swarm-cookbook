@@ -1,7 +1,7 @@
 # undefined
 builtin autoload -X
 
-local theme="${1:-}"
+declare theme="${1:-}"
 
 if [[ -z "$theme" ]] && [[ -f "/$USERDIR/.dialogrc" ]]; then
 	echo "Resetting Theme"
@@ -10,7 +10,7 @@ fi
 
 [[ "${theme:0:1}" != "." ]] && theme=".$theme"
 
-if [[ -n "$theme" ]] && [[ -f /usr/local/etc/dlg/"$theme" ]]; then
+if [[ -n "$theme" ]] && [[ -f /usr/declare/etc/dlg/"$theme" ]]; then
 	[[ -f /"$USERDIR"/.dialogrc ]] && rm -f /"$USERDIR"/.dialogrc
 	install -m 0644 -T /opt/dd/cfg/."$theme" /"$USERDIR"/.dialogrc
 fi

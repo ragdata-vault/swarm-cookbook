@@ -5,8 +5,8 @@ if [[ -z "$REDISCLI_AUTH" ]]; then source /"$SWARMDIR"/cfg/.env; fi
 
 (( $# < 3 )) && errorExit "Missing Arguments!"
 
-local key="${1:-}"
-local field="${2:-}"
-local value="${3:-}"
+declare key="${1:-}"
+declare field="${2:-}"
+declare value="${3:-}"
 
 redis-cli HSET "$key" "$field" "$value" &>/dev/null

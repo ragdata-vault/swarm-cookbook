@@ -5,9 +5,9 @@ if [[ -z "$REDISCLI_AUTH" ]]; then source /"$SWARMDIR"/cfg/.env; fi
 
 (( $# < 2 )) && errorExit "Missing Arguments!"
 
-local value
-local key="${1:-}"
-local field="${2:-}"
+declare value
+declare key="${1:-}"
+declare field="${2:-}"
 
 value="$(redis-cli HGET "$key" "$field")"
 

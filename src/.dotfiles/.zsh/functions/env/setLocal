@@ -3,11 +3,11 @@ builtin autoload -X
 
 (( $# < 2 )) && errorExit "Missing Argument(s)!"
 
-local FIELD="${1:-}"
-local VALUE="${2:-}"
+declare FIELD="${1:-}"
+declare VALUE="${2:-}"
 
-local DETECTED_SHELL="$(ps -o comm= -p $$)"
-local RCFILE="$HOME/.${DETECTED_SHELL//-/}rc"
+declare DETECTED_SHELL="$(ps -o comm= -p $$)"
+declare RCFILE="$HOME/.${DETECTED_SHELL//-/}rc"
 
 if ! grep -q "$FIELD=$VALUE" "$RCFILE"; then
 	echo "export $FIELD=$VALUE" >> "$RCFILE"

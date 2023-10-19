@@ -4,8 +4,8 @@ builtin autoload -X
 [[ $# -eq 0 ]] && return
 [[ ! $(is::array "$1") ]] && errorReturn "'$1' Not an Array!" 1
 
-local i
-local -n TOOLS="$1"
+declare i
+declare -n TOOLS="$1"
 for i in "${!TOOLS[@]}"
 do
 	if ! command -v "${TOOLS[$i]}" &> /dev/null; then

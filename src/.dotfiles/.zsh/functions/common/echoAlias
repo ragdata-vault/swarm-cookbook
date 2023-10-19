@@ -1,13 +1,13 @@
 # undefined
 builtin autoload -X
 
-local msg="${1:-}"
-local COLOR OUTPUT
-local PREFIX=""
-local SUFFIX=""
-local STREAM="1"
+declare msg="${1:-}"
+declare COLOR OUTPUT
+declare PREFIX=""
+declare SUFFIX=""
+declare STREAM="1"
 
-local OUTARGS=()
+declare OUTARGS=()
 
 [[ -z "$msg" ]] && { echo "${RED}ERROR :: echoAlias :: Requires Argument!${RESET}"; return 1; }
 

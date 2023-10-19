@@ -1,7 +1,7 @@
 # undefined
 builtin autoload -X
 
-local result="" command="${*}" file="${*:-1}" permission
+declare result="" command="${*}" file="${*:-1}" permission
 
 if ! $command 2>/dev/null
 then

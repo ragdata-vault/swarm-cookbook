@@ -1,7 +1,7 @@
 # undefined
 builtin autoload -X
 
-local SRV USR
+declare SRV USR
 
 options=$(getopt -l "user:,server:" -o "u:s:" -a -- "$@")
 

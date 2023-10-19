@@ -3,7 +3,7 @@ builtin autoload -X
 
 [[ -z "$RED" ]] && source "$ZFNDIR"/ansi_color.zsh
 
-local msg code
+declare msg code
 
 msg="ERROR:"
 [[ -n ${FUNCNAME[1]} ]] && msg="$msg ${FUNCNAME[1]} ::"

@@ -1,7 +1,7 @@
 # undefined
 builtin autoload -X
 
-local file="${1:-.env}" line
+declare file="${1:-.env}" line
 
 [[ ! -f "$file" ]] && errorExit "File '$file' Not Found!"
 

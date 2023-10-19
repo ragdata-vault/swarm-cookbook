@@ -1,9 +1,9 @@
 # undefined
 builtin autoload -X
 
-local -n lineNo="${1:-LINENO}"
-local -n bashLineNo="${2:-BASH_LINENO}"
-local lastCommand="${3:-BASH_COMMAND}"
+declare -n lineNo="${1:-LINENO}"
+declare -n bashLineNo="${2:-BASH_LINENO}"
+declare lastCommand="${3:-BASH_COMMAND}"
 local code="${4:-0}"
 
 local lastCommandHeight

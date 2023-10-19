@@ -5,7 +5,7 @@ if [[ -z "$REDISCLI_AUTH" ]]; then source /"$SWARMDIR"/cfg/.env; fi
 
 (( $# < 2 )) && errorExit "Missing Arguments!"
 
-local field="${1:-}"
-local value="${2:-}"
+declare field="${1:-}"
+declare value="${2:-}"
 
 redis-cli SET "$field" "$value" &>/dev/null
