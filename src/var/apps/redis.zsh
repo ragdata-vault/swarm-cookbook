@@ -18,6 +18,13 @@
 # FUNCTIONS
 # ==================================================================
 #
+# INSTALLED FUNCTION
+#
+redis::installed()
+{
+	command -v redis-server
+}
+#
 # INSTALL FUNCTION
 #
 redis::install()

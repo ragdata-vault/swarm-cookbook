@@ -18,6 +18,13 @@
 # FUNCTIONS
 # ==================================================================
 #
+# INSTALLED FUNCTION
+#
+jq::installed()
+{
+	command -v jq
+}
+#
 # INSTALL FUNCTION
 #
 jq::install()

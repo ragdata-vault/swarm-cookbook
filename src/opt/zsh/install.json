@@ -1,0 +1,43 @@
+{
+    "plugins": {
+        "essential": {
+            "oh-my-zsh": { "source": "ohmyzsh/ohmyzsh" },
+            "auto-suggestions": { "source": "zsh-users/zsh-autosuggestions" },
+            "git": { "source": "davidde/git" },
+            "sudo": { "source": "hcgraf/zsh-sudo" },
+            "powerlevel10k": { "source": "romkatv/powerlevel10k" },
+            "syntax-highlighting": { "source": "zsh-users/zsh-syntax-highlighting" }
+        },
+        "recommended": {
+            "git-aliases": { "source": "mdumitru/git-aliases" },
+            "git-tree": { "source": "dehlen/git-tree-zsh" },
+            "zsh-defer": { "source": "romkatv/zsh-defer" },
+            "web-search": { "source": "Anant-mishra1729/web-search" },
+            "docker-aliases": { "source": "webyneter/docker-aliases" },
+            "docker-compose": { "source": "sroze/docker-compose-zsh-plugin" },
+            "systemd": { "source": "le0me55i/zsh-systemd" },
+            "enhancd": { "source": "babarot/enhancd" },
+            "jq": { "source": "reegnz/jq-zsh-plugin" },
+            "lazyload": { "source": "qoomon/zsh-lazyload" }
+        },
+        "optional": {
+            "copyzshell": { "source": "rutchkiwi/copyzshell" },
+            "zsh-containers": { "source": "redxtech/zsh-containers" },
+            "sysadmin-util": { "source": "skx/sysadmin-util" },
+            "crash": { "source": "molovo/crash" },
+            "czhttpd": { "source": "jsks/czhttpd" },
+            "directory-history": { "source": "tymm/zsh-directory-history" },
+            "blackbox": { "source": "StackExchange/blackbox" },
+            "gpg-agent": { "source": "axtl/gpg-agent.zsh" },
+            "gpg-crypt": { "source": "Czocher/gpg-crypt" },
+            "dotfiles-plugin": { "source": "vladmyr/dotfiles-plugin" },
+            "laravel": { "source": "baliestri/laravel.plugin.zsh" },
+            "shell-plugins": { "source": "gmatheu/shell-plugins" },
+            "ssh-connect": { "source": "gko/ssh-connect" },
+            "zsh-plugin": { "source": "paraqles/zsh-plugin-ssh" },
+            "wakatime": { "source": "sobolevn/wakatime-zsh-plugin" },
+            "zshrc": { "source": "freak2geek/zshrc" },
+            "zui": { "source": "zdharma-continuum/zui" }
+        }
+    }
+}

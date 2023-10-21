@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC1090,SC2031,SC2034,SC2154,SC2155,SC2260
+# shellcheck disable=SC1090,SC2031,SC2034,SC2154,SC2155,SC2181,SC2260
 # ==================================================================
 # install.sh
 # ==================================================================
@@ -213,6 +213,7 @@ install::install()
 install::init()
 {
 	local logFile
+	local -A PACKAGES
 
 	logFile="$(mktemp -t INIT-XXXXXX)"
 
@@ -222,7 +223,8 @@ install::init()
 	echo "=================================================================="
 	echo
 
-
+	install::checkPkg "jq" "JQ" "$logFile"
+	install::checkPkg "redis" "Redis" "$logFile"
 
 	echo
 	echo "SYSTEM INITIALIZATION - DONE!"
@@ -386,37 +388,6 @@ install::zsh()
 			["powerlevel10k"]="romkatv/powerlevel10k"
 			["syntax-highlighting"]="zsh-users/zsh-syntax-highlighting"
 		)
-		PLUGINS_RECOMMENDED=(
-			["git-aliases"]="mdumitru/git-aliases"
-			["git-tree"]="dehlen/git-tree-zsh"
-			["zsh-defer"]="romkatv/zsh-defer"
-			["web-search"]="Anant-mishra1729/web-search"
-			["docker-aliases"]="webyneter/docker-aliases"
-			["docker-compose"]="sroze/docker-compose-zsh-plugin"
-			["systemd"]="le0me55i/zsh-systemd"
-			["enhancd"]="babarot/enhancd"
-			["jq"]="reegnz/jq-zsh-plugin"
-			["lazyload"]="qoomon/zsh-lazyload"
-		)
-		PLUGINS_OPTIONAL=(
-			["copyzshell"]="rutchkiwi/copyzshell"
-			["zsh-containers"]="redxtech/zsh-containers"
-			["sysadmin-util"]="skx/sysadmin-util"
-			["crash"]="molovo/crash"
-			["czhttpd"]="jsks/czhttpd"
-			["directory-history"]="tymm/zsh-directory-history"
-			["blackbox"]="StackExchange/blackbox"
-			["gpg-agent"]="axtl/gpg-agent.zsh"
-			["gpg-crypt"]="Czocher/gpg-crypt"
-			["dotfiles-plugin"]="vladmyr/dotfiles-plugin"
-			["laravel"]="baliestri/laravel.plugin.zsh"
-			["shell-plugins"]="gmatheu/shell-plugins"
-			["ssh-connect"]="gko/ssh-connect"
-			["zsh-plugin"]="paraqles/zsh-plugin-ssh"
-			["wakatime"]="sobolevn/wakatime-zsh-plugin"
-			["zshrc"]="freak2geek/zshrc"
-			["zui"]="zdharma-continuum/zui"
-		)
 
 		for key in "${!PLUGINS_ESSENTIAL[@]}"
 		do
@@ -499,6 +470,26 @@ install::report()
 	esac
 }
 # ------------------------------------------------------------------
+# install::checkPkg
+# ------------------------------------------------------------------
+install::checkPkg()
+{
+	local pkg="${1:-}"
+	local name="${2:-}"
+	local logFile="${3:-}"
+
+	if [[ -z "$pkg" ]] || [[ -z "$name" ]] || [[ -z "$logFile" ]]; then echo "Missing Argument(s)!"; exit 1; fi
+
+	install::log "Checking '$name' installed ..." "$logFile"
+	if install::loadSource "$pkg" "$logFile" -d; then
+		install::log "Found '$name'" "$logFile"
+	else
+		install::log "Installing '$name'" "$logFile"
+		install::loadSource "$pkg" "$logFile" -i
+		if [ "$?" -ne 0 ]; then install::log "Failed installing '$name' - exiting ..." "$logFile"; exit 1; fi
+	fi
+}
+# ------------------------------------------------------------------
 # install::checkRoot
 # ------------------------------------------------------------------
 install::checkRoot()
@@ -537,6 +528,94 @@ install::checkShell()
 	fi
 }
 # ------------------------------------------------------------------
+# install::loadSource
+# ------------------------------------------------------------------
+install::loadSource()
+{
+	local app="${1:-}"
+	local logFile="${2:-}"
+	local options dir fileName fullPath filePath pathName
+	local -A FILEOPTS
+
+	if [[ -z "$app" ]] || [[ -z "$logFile" ]]; then install::log "Missing Argument(s)!" "$logFile"; exit 1; fi
+
+	shift 2
+
+	fileName="${app##*/}"
+	fileName="${fileName%%.*}"
+
+	FILEOPTS[installed]=0
+	FILEOPTS[install]=0
+	FILEOPTS[config]=0
+	FILEOPTS[remove]=0
+	FILEOPTS[test]=0
+
+	options=$(getopt -o "cdirt" -a -- "$@")
+
+	eval set -- "$options"
+
+	while true
+	do
+		case "$1" in
+			-c) FILEOPTS[config]=1;;
+			-d) FILEOPTS[installed]=1;;
+			-i) FILEOPTS[install]=1;;
+			-r) FILEOPTS[remove]=1;;
+			-t) FILEOPTS[test]=1;;
+			--)
+				shift
+				break
+				;;
+			*)
+				install::log "loadSource :: Invalid Option '$1'" "$logFile"
+				exit 1
+				;;
+		esac
+		shift
+	done
+
+	if [[ -f "$app" ]]; then
+		fullPath="$app"
+	else
+		if [[ $DEBUG -eq 1 ]]; then install::log "Finding '$app'" "$logFile"; fi
+		if [[ ! $app = *.* ]]; then app="$app".zsh; fi
+		if [[ ! $app = */* ]]; then fullPath="$REPO"/src/var/apps/"$app"; fi
+	fi
+
+	if [[ -z "$fullPath" ]] || [[ ! -f "$fullPath" ]]; then install::log "File '$app' Not Found!" "$logFile"; exit 1; fi
+
+	source "$fullPath"
+
+	# INSTALLED
+	if [[ "${FILEOPTS[installed]}" -eq 1 ]]; then
+		install::log "Checking if '$fileName' installed" "$logFile"
+		eval "$fileName::installed"
+		return $?
+	fi
+	# INSTALL & REMOVE
+	if [[ "${FILEOPTS[install]}" -eq 1 ]]; then
+		install::log "Installing '$fileName'" "$logFile"
+		eval "$fileName::install"
+		return $?
+	elif [[ "${FILEOPTS[remove]}" -eq 1 ]]; then
+		install::log "Uninstalling '$fileName'" "$logFile"
+		eval "$fileName::remove"
+		return $?
+	fi
+	# CONFIGURE
+	if [[ "${FILEOPTS[config]}" -eq 1 ]]; then
+		install::log "Configuring '$fileName'" "$logFile"
+		eval "$fileName::config"
+		return $?
+	fi
+	# TEST
+	if [[ "${FILEOPTS[test]}" -eq 1 ]]; then
+		install::log "Testing '$fileName'" "$logFile"
+		eval "$fileName::test"
+		return $?
+	fi
+}
+# ------------------------------------------------------------------
 # install::log
 # ------------------------------------------------------------------
 install::log()
@@ -548,6 +627,7 @@ install::log()
 
 	[[ ! -f "$log" ]] && { echo "LogFile '$log' Not Found!"; exit 1; }
 
+	if [[ "$LOG_VERBOSE" -eq 1 ]]; then echo "$msg"; fi
 	echo "$timestamp :: $USERNAME - $msg" >>"$log"
 }
 # ------------------------------------------------------------------
@@ -562,11 +642,13 @@ install::log::redis()
 
 	[[ ! -f "$log" ]] && { echo "LogFile '$log' Not Found!"; exit 1; }
 
+	if [[ "$LOG_VERBOSE" -eq 1 ]]; then echo "$msg"; fi
 	echo "$timestamp :: $USERNAME - $msg" >>"$log"
 }
 # ==================================================================
 # MAIN
 # ==================================================================
+clear
 install::checkShell
 install::checkRoot
 

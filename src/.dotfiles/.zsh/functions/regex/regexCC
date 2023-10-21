@@ -10,13 +10,3 @@ declare isMCARD='^(?:5[1-5]\d{2}|222[1-9]|22[3-9]\d|2[3-6]\d{2}|27[01]\d|2720)[ 
 declare isVISA='^4\d{3}[ -]*\d{4}[ -]*\d{4}[ -]*\d(?:\d{3})?$'
 
 [[ -n "${!1}" ]] && { printf '%s' "${!1}"; return 0; } || return 1
-# ==================================================================
-# FUNCTION ALIASES
-# ==================================================================
-regex::isCC()			{ regex::cc isCC; }
-regex::isAMEX()			{ regex::cc isAMEX; }
-regex::isDINERS()		{ regex::cc isDINERS; }
-regex::isDISCOVER()		{ regex::cc isDISCOVER; }
-regex::isJCB()			{ regex::cc isJCB; }
-regex::isMCARD()		{ regex::cc isMCARD; }
-regex::isVISA()			{ regex::cc isVISA; }

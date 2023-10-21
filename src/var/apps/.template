@@ -18,6 +18,13 @@
 # FUNCTIONS
 # ==================================================================
 #
+# INSTALLED FUNCTION
+#
+template::installed()
+{
+	command -v template
+}
+#
 # INSTALL FUNCTION
 #
 template::install()

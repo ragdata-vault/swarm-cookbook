@@ -5,8 +5,3 @@ declare isDOCKJOIN='^[\s]+(docker swarm join \-\-token (SWMTKN\-[^\s]+) (((25[0-
 declare isSWMKEY='^[\s]+(SWMKEY[^\s\n]+)$'
 
 [[ -n "${!1}" ]] && { printf '%s' "${!1}"; return 0; } || return 1
-# ==================================================================
-# FUNCTION ALIASES
-# ==================================================================
-regex::isDOCKJOIN()		{ regex::docker isDOCKJOIN; }
-regex::isSWMKEY()		{ regex::docker isSWMKEY; }
