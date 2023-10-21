@@ -20,7 +20,7 @@ if [[ "${1:l}" == "debug" ]] || [[ "$DEBUG" == 1 ]]; then shift; DEBUG=1; set --
 # ==================================================================
 # DEPENDENCIES
 # ==================================================================
-if [[ -z "$REPO" ]]; then REPO="${0:h}"; export "${REPO?}"; fi
+if [[ -z "$REPO" ]]; then export REPO="$(dirname "$(realpath "${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]}")")"; fi
 if [[ ! -f .env ]]; then cp "$REPO"/.env.dist "$REPO"/.env; fi
 source "$REPO"/.env
 # ==================================================================
