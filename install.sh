@@ -91,6 +91,8 @@ install::config()
 	if [[ ! -f "$SWARMDIR"/.env ]] || [[ "$refresh" == 1 ]]; then install -v -m 0755 -C -T "$source"/.env.dist "$SWARMDIR"/.env; fi
 	if [[ ! -f "$SWARMDIR"/.node ]] || [[ "$refresh" == 1 ]]; then install -v -m 0755 -C -T "$source"/.node.dist "$SWARMDIR"/.node; fi
 
+	chown -R "$USERNAME":"$USERNAME" "$SWARMDIR"
+
 	echo
 	echo "CONFIG FILES - DONE!"
 	echo "=================================================================="
