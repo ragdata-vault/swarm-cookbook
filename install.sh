@@ -168,6 +168,8 @@ install::dotfiles()
 		install -v -C -m 0644 -D -t "$ZSHDIR/includes" "$file"
 	done < <(find "$source" -type f)
 
+	chown -R "$USERNAME":"$USERNAME" "$USERDIR"
+
 	echo
 	echo "DOTFILES - DONE!"
 	echo "=================================================================="
@@ -283,6 +285,8 @@ install::swarm()
 			install -v -C -m "$mode" -D -t "$SWARMDIR/stacks${stub}" "$file"
 		fi
 	done < <(find "$source" -type f)
+
+	chown -R "$USERNAME":"$USERNAME" "$SWARMDIR"
 
 	echo
 	echo "SWARM FILES - DONE!"
