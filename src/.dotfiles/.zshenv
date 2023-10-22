@@ -16,10 +16,11 @@ fi
 # ------------------------------------------------------------------
 # ZSH VARIABLES
 # ------------------------------------------------------------------
-launchctl setenv ZDOTDIR="$USERDIR"
-launchctl setenv ZSHDIR="$USERDIR"/.zsh
-#export ZSH="$USERDIR"/.oh-my-zsh
-export ZSH="$USERDIR"/.local/share/sheldon/repos/github.com/ohmyzsh/ohmyzsh
+# launchctl setenv ZDOTDIR="$USERDIR"
+# launchctl setenv ZSHDIR="$USERDIR"/.zsh
+export ZDOTDIR="$USERDIR"
+export ZSHDIR="$USERDIR"/.zsh
+export ZSH="$USERDIR"/.oh-my-zsh
 export ZSH_CUSTOM="$ZSH/custom"
 # ------------------------------------------------------------------
 # XDG PATH VARIABLES

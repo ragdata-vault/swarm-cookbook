@@ -23,6 +23,7 @@ if [[ "${1:l}" == "debug" ]] || [[ "$DEBUG" == 1 ]]; then shift; DEBUG=1; set --
 if [[ -z "$REPO" ]]; then export REPO="$(dirname "$(realpath "${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]}")")"; fi
 if [[ ! -f .env ]]; then cp "$REPO"/.env.dist "$REPO"/.env; fi
 source "$REPO"/.env
+chown "$USERNAME":"$USERNAME" "$REPO"/.env
 # ==================================================================
 # FUNCTIONS
 # ==================================================================
@@ -80,17 +81,15 @@ install::config()
 
 	install::log "Installing distribution versions of config files" "$logFile"
 
-	source="$REPO"/src/var/cfg
+	source="$REPO"
 
-	install -v -C -m 0755 -D -t "$SWARMDIR"/cfg "$source"/.env.dist
-	install -v -C -m 0755 -D -t "$SWARMDIR"/cfg "$source"/.node.dist
-	install -v -C -m 0755 -D -t "$SWARMDIR"/cfg "$source"/.paths.dist
+	install -v -C -m 0755 -D -t "$SWARMDIR" "$source"/.env.dist
+	install -v -C -m 0755 -D -t "$SWARMDIR" "$source"/.node.dist
 
-	install::log "Installing config files in '$SWARMDIR/cfg', if available" "$logFile"
+	install::log "Installing config files in '$SWARMDIR', if available" "$logFile"
 
-	if [[ ! -f "$SWARMDIR"/cfg/.env ]] || [[ "$refresh" == 1 ]]; then install -v -m 0755 -C -T "$source"/.env.dist "$SWARMDIR"/cfg/.env; fi
-	if [[ ! -f "$SWARMDIR"/cfg/.node ]] || [[ "$refresh" == 1 ]]; then install -v -m 0755 -C -T "$source"/.node.dist "$SWARMDIR"/cfg/.node; fi
-	if [[ ! -f "$SWARMDIR"/cfg/.paths ]] || [[ "$refresh" == 1 ]]; then install -v -m 0755 -C -T "$source"/.paths.dist "$SWARMDIR"/cfg/.paths; fi
+	if [[ ! -f "$SWARMDIR"/.env ]] || [[ "$refresh" == 1 ]]; then install -v -m 0755 -C -T "$source"/.env.dist "$SWARMDIR"/.env; fi
+	if [[ ! -f "$SWARMDIR"/.node ]] || [[ "$refresh" == 1 ]]; then install -v -m 0755 -C -T "$source"/.node.dist "$SWARMDIR"/.node; fi
 
 	echo
 	echo "CONFIG FILES - DONE!"
@@ -190,10 +189,6 @@ install::install()
 	echo "FULL INSTALLATION"
 	echo "=================================================================="
 	echo
-
-	if [[ "$SHELL_TYPE" != "zsh" ]] || [[ -n "$cont" ]]; then
-		install::zsh "$@"
-	fi
 
 	install::config
 	install::dotfiles
@@ -305,139 +300,6 @@ install::uninstall()
 	rm -Rf "${SWARMDIR?}"
 }
 # ------------------------------------------------------------------
-# install::zsh
-# ------------------------------------------------------------------
-install::zsh()
-{
-	local script="${0}"
-	local type="${1:-}"
-	local cont="${2:-}"
-	local source logFile
-
-	if [[ -n "$cont" ]] && [[ "$cont" != "cont" ]]; then echo "Unexpected Argument in pos 2 '$2'!"; exit 1; fi
-
-	logFile="$(mktemp -t ZSH-XXXXXX)"
-
-	[[ ! -d "$XDG_DOWNLOAD_DIR" ]] && mkdir -p "$XDG_DOWNLOAD_DIR"
-
-	if [[ -z "$cont" ]]; then
-		echo
-		echo "=================================================================="
-		echo "INSTALL ZSH"
-		echo "=================================================================="
-		echo
-
-		install::log "Update & Upgrade System" "$logFile"
-		apt update && apt upgrade -y
-
-		install::log "Archiving existing shell config" "$logFile"
-		mkdir -p "$USERDIR/.bash_archive"
-		mv "$USERDIR/.bash*" "$USERDIR/.bash_archive/."
-		mv "$USERDIR/.profile" "$USERDIR/.bash_archive/."
-
-		install::log "Installing ZSH Shell" "$logFile"
-		apt install -y zsh
-
-		install::log "Set ZSH as default shell" "$logFile"
-		chsh -s "$(which zsh)"
-
-		install::log "Perform basic configuration of ZSH" "$logFile"
-		launchctl setenv ZDOTDIR="$USERDIR"
-		launchctl setenv ZSHDIR="$USERDIR"/.zsh
-
-		# write a line to the user's .zshrc file which automatically executes this installation script again
-		# when returning from system reboot with the same arguments it was called with originally.
-		install::log "Writing restart command to $USERDIR/.zshrc" "$logFile"
-		echo "zsh_install ${script} ${type} cont" >> "$USERDIR"/.zshrc
-
-		install::log "Persist this logFile" "$logFile"
-		install -b -C -m 0644 -T "$logFile" "$USERDIR"/install."$(date +"%Y%m%d%H%M%S")".log
-
-		install::log "Rebooting ..." "$logFile"
-		reboot
-	else
-		local -A PLUGINS_ESSENTIAL
-
-		echo
-		echo "=================================================================="
-		echo "INSTALL ZSH (CONTINUED)"
-		echo "=================================================================="
-		echo
-
-		install::log "Returning from reboot - remove exec command" "$logFile"
-		tail -n 1 "$USERDIR/.zshrc" | wc -c xargs -I {} truncate "$USERDIR/.zshrc" -s -{}
-
-		install::log "Installing Powerline Fonts" "$logFile"
-		apt install -y fonts-powerline
-
-		install::log "Installing Sheldon Plugin Manager" "$logFile"
-		install -C -m 0755 -D -t /usr/local/bin "$REPO/src/var/zsh/sheldon"
-
-		install::log "Initializing Sheldon Plugin Manager" "$logFile"
-		sheldon init --shell "$SHELL_TYPE"
-
-		install::log "Adding plugins for Oh-My-ZSH via Sheldon Plugin Manager:" "$logFile"
-		# ----------------------------------------------------------
-		# MUST-HAVE PLUGINS
-		# ----------------------------------------------------------
-		PLUGINS_ESSENTIAL=(
-			["oh-my-zsh"]="ohmyzsh/ohmyzsh"
-			["auto-suggestions"]="zsh-users/zsh-autosuggestions"
-			["git"]="davidde/git"
-			["sudo"]="hcgraf/zsh-sudo"
-			["powerlevel10k"]="romkatv/powerlevel10k"
-			["syntax-highlighting"]="zsh-users/zsh-syntax-highlighting"
-		)
-
-		for key in "${!PLUGINS_ESSENTIAL[@]}"
-		do
-			install::log "Add Plugin: $key" "$logFile"
-			sheldon add "$key" --github "${PLUGINS_ESSENTIAL[$key]}"
-		done
-	fi
-
-	echo
-	echo "FULL INSTALLATION - DONE!"
-	echo "=================================================================="
-	echo
-
-	install::report "$logFile"
-}
-# ------------------------------------------------------------------
-# install::zshRemove
-# ------------------------------------------------------------------
-install::zshRemove()
-{
-	local source logFile SHELL_TYPE
-
-	logFile="$(mktemp -t FULL-XXXXXX)"
-
-	echo
-	echo "=================================================================="
-	echo "UNINSTALLING ZSH"
-	echo "=================================================================="
-	echo
-
-	if [[ -d "$USERDIR/.zsh_archive" ]]; then rm -f "$USERDIR"/.zsh_archive/*; else mkdir -p "$USERDIR/.zsh_archive"; fi
-	if [[ -d "$USERDIR/.oh-my-zsh" ]]; then rm -Rf "$USERDIR/.oh-my-zsh"; fi
-	if [[ -d "$USERDIR/.zsh" ]]; then rm -Rf "$USERDIR/.zsh"; fi
-	if [[ -f "$USERDIR/.zshrc*" ]]; then mv "$USERDIR/.zshrc*" "$USERDIR/.zsh_archive/.zshrc*"; fi
-	if [[ -f "$USERDIR/.p10k.zsh" ]]; then mv "$USERDIR/.p10k*" "$USERDIR/.zsh_archive/.p10k*"; fi
-
-	if [[ -d "$USERDIR/.bash_archive" ]]; then mv "$USERDIR/.bash_archive/*" "$USERDIR"/.; fi
-
-	apt purge -y zsh
-
-	chsh -s "$(which bash)"
-
-	echo
-	echo "UNINSTALLING ZSH - DONE!"
-	echo "=================================================================="
-	echo
-
-	install::report "$logFile"
-}
-# ------------------------------------------------------------------
 # install::report
 # ------------------------------------------------------------------
 install::report()
@@ -480,12 +342,10 @@ install::checkPkg()
 
 	if [[ -z "$pkg" ]] || [[ -z "$name" ]] || [[ -z "$logFile" ]]; then echo "Missing Argument(s)!"; exit 1; fi
 
-	install::log "Checking '$name' installed ..." "$logFile"
 	if install::loadSource "$pkg" "$logFile" -d; then
 		install::log "Found '$name'" "$logFile"
 	else
-		install::log "Installing '$name'" "$logFile"
-		install::loadSource "$pkg" "$logFile" -i
+S		install::loadSource "$pkg" "$logFile" -i
 		if [ "$?" -ne 0 ]; then install::log "Failed installing '$name' - exiting ..." "$logFile"; exit 1; fi
 	fi
 }
@@ -680,12 +540,6 @@ do
 			;;
 		swarm)
 			install::swarm
-			;;
-		zsh)
-			install::zsh "$@"
-			;;
-		rmzsh|zshRemove)
-			install::zshRemove
 			;;
 		*)
 			echo "Invalid Option '$1'"
