@@ -328,6 +328,7 @@ install::report()
 		v)
 			echo
 			cat "$logFile"
+			exit 0
 			;;
 		r)
 			reboot
