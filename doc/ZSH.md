@@ -1,13 +1,19 @@
 ## Install ZSH
 
+Update & Upgrade:
+
 ```shell
 sudo apt update && sudo apt upgrade -y
 ```
+
+Set ENV vars:
 
 ```shell
 export USER=ragdata
 export USERDIR=/home/"$USER"
 ```
+
+Archive bash profile files:
 
 ```shell
 mkdir -p "$USERDIR"/.bash_archive
@@ -16,53 +22,42 @@ mv "$USERDIR/.bash*" "$USERDIR/.bash_archive/."
 mv "$USERDIR/.profile" "$USERDIR/.bash_archive/."
 ```
 
+Install ZSH
+
 ```shell
 sudo apt install -y zsh
 sudo chsh -s "$(which zsh)" "$USER"
 exec zsh
 ```
 
+### Install Oh-My-ZSH:
+
+Set ENV vars:
+
 ```shell
 export USER=ragdata
 export USERDIR=/home/"$USER"
 export REPO="$USERDIR"/projects/ragdata/swarm-cookbook
-launchctl setenv ZDOTDIR="$USERDIR"
-launchctl setenv ZSHDIR="$USERDIR"/.zsh
+export ZDOTDIR="$USERDIR"
+export ZSHDIR="$USERDIR"/.zsh
 ```
+
+Download and install OMZSH:
 
 ```shell
 wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
 bash install.sh
 ```
 
+### Install Powerlevel10k ZSH Theme:
+
+@TODO Install fonts locally
+
+Download and install theme:
+
 ```shell
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
-```shell
-sudo install -C -m 0755 -D -t /usr/local/bin "$REPO/src/opt/zsh/sheldon"
-sheldon init --shell zsh
-```
-
-```shell
-sheldon add oh-my-zsh --github "ohmyzsh/ohmyzsh"
-sheldon add auto-suggestions --github "zsh-users/zsh-autosuggestions"
-sheldon add git --github "davidde/git"
-sheldon add sudo --github "hcgraf/zsh-sudo"
-sheldon add powerlevel10k --github "romkatv/powerlevel10k"
-sheldon add syntax-highlighting --github "zsh-users/zsh-syntax-highlighting"
+sed -i '/^ZSH_THEME.*/c\ZSH_THEME="powerlevel10k/powerlevel10k"'
 ```
 
 ## Uninstall ZSH
