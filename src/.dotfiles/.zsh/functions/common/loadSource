@@ -2,7 +2,7 @@
 builtin autoload -X
 
 declare file="${1:-}"
-declare options dir fileName fullPath filePath pathName
+declare options dir fileName fullPath filePath pathName thisFile
 
 [[ -z "$file" ]] && errorExit "loadSource :: Missing Argument!"
 
@@ -45,25 +45,27 @@ if [[ -f "$file" ]]; then
 	fullPath="$file"
 else
 	if [[ $DEBUG == 1 ]]; then echo "Finding '$file'"; fi
+	if [[ ! "$file" = *.* ]]; then thisFile="$file".zsh; else thisFile="$file"; fi
 	for dir in "${SOURCE_DIRS[@]}"
 	do
 		if [[ $DEBUG -eq 1 ]]; then echo "Searching '$dir'"; fi
-		while IFS= read -r filePath
-		do
-			if [[ $DEBUG -eq 1 ]]; then echo "Testing '$filePath'"; fi
-			pathName="${filePath##*/}"
-			if [[ -f "$dir/$pathName" ]]; then
-				fullPath="$filePath"
-				break
-			fi
-		done < <(find "$dir" -maxdepth 1 -type f)
+		if [[ -f "$dir/$thisFile" ]]; then
+			fullPath="$dir/$thisFile"
+			break
+		fi
 	done
 fi
 
 if [[ -z "$fullPath" ]] || [[ ! -f "$fullPath" ]]; then errorExit "File '$file' Not Found!"; fi
 
+# shellcheck disable=SC1090
 source "$fullPath"
 
+# INSTALLED
+if [[ "${FILEOPTS[installed]}" -eq 1 ]]; then
+	eval "$fileName::installed"
+	return $?
+fi
 ## INSTALL & REMOVE
 if [[ "${FILEOPTS[install]}" -eq 1 ]]; then
 	eval "$fileName::install"
@@ -78,6 +80,7 @@ fi
 if [[ "${FILEOPTS[test]}" -eq 1 ]]; then
 	if grep -q "$fileName::test" "$fullPath"; then
 		eval "$fileName::test"
+		return "$?"
 	fi
 fi
 

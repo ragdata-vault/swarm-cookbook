@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
 
 # ==================================================================
-# src/var/apps/redis
+# install/template
 # ==================================================================
-# Swarm Cookbook - App Installer
+# Swarm Cookbook - Installer Source File
 #
-# File:         src/var/apps/redis
+# File:         install/template
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -20,19 +20,23 @@
 #
 # INSTALLED FUNCTION
 #
-redis::installed() { command -v redis-server; }
+template::installed() { return 1; }
 #
 # INSTALL FUNCTION
 #
-redis::install()
+template::install()
 {
+	local logFile
+
+	logFile="${1:-}"
+
 	echo
 	echo "===================================================================="
-	echo "INSTALLING REDIS"
+	echo "INSTALLING :: TEMPLATE FILES"
 	echo "===================================================================="
 	echo
 
-	apt install -y redis-server redis-tools
+	echo
 
 	echo
 	echo "DONE!"
@@ -41,39 +45,19 @@ redis::install()
 #
 # CONFIG FUNCTION
 #
-redis::config()
+template::config()
 {
-	local REDIS_PWD ENV_FILE
-	local USER="${SUDO_USER:-$(whoami)}"
+	local logFile
+
+	logFile="${1:-}"
 
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING REDIS"
+	echo "CONFIGURING :: TEMPLATE FILES"
 	echo "===================================================================="
 	echo
 
-	if grep -q "^# requirepass.*$" /etc/redis/redis.conf; then
-		REDIS_PWD="$(install::getPassword | base64)"
-		sed -i "/^supervised.*/c\supervised systemd" /etc/redis/redis.conf
-		sed -i "/^# requirepass.*/c\requirepass ${REDIS_PWD}" /etc/redis/redis.conf
-	elif grep -E -q "^requirepass.*$" /etc/redis/redis.conf; then
-		REDIS_PWD="$(install::redis::passGET)"
-		if [[ -f "/home/$USER/.zshenv" ]]; then
-			ENV_FILE="/home/$USER/.zshenv"
-		elif [[ -f "/home/$USER/.swarm/.env" ]]; then
-			ENV_FILE="/home/$USER/.swarm/.env"
-		fi
-		if ! grep -q "REDISCLI_AUTH" "$ENV_FILE"; then
-			{
-				echo "# Redis-Server Authentication String"
-				echo "export REDISCLI_AUTH=${REDIS_PWD}"
-			} >> "$ENV_FILE"
-		fi
-	fi
-
-	systemctl daemon-reload
-	systemctl enable redis-server.service
-	systemctl start redis-server
+	echo
 
 	echo
 	echo "DONE!"
@@ -82,15 +66,40 @@ redis::config()
 #
 # REMOVE FUNCTION
 #
-redis::remove()
+template::remove()
 {
+	local logFile
+
+	logFile="${1:-}"
+
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING REDIS"
+	echo "UNINSTALLING :: TEMPLATE FILES"
 	echo "===================================================================="
 	echo
 
-	apt purge -y redis-server redis-tools
+	echo
+
+	echo
+	echo "DONE!"
+	echo
+}
+#
+# TEST FUNCTION
+#
+template::test()
+{
+	local logFile
+
+	logFile="${1:-}"
+
+	echo
+	echo "===================================================================="
+	echo "TESTING :: TEMPLATE FILES"
+	echo "===================================================================="
+	echo
+
+	echo
 
 	echo
 	echo "DONE!"

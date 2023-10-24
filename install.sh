@@ -17,194 +17,29 @@
 if [[ -z "$DEBUG" ]]; then declare -gx DEBUG=0; fi
 # if script is called with 'debug' as an argument, then set debug mode
 if [[ "${1:l}" == "debug" ]] || [[ "$DEBUG" == 1 ]]; then shift; DEBUG=1; set -- "${@}"; set -axeET; else set -aeET; fi
+if [[ "${1:l}" == "verbose" ]] || [[ "$LOG_VERBOSE" == 1 ]]; then shift; LOG_VERBOSE=1; else LOG_VERBOSE=0; fi
+# ==================================================================
+# VARIABLES
+# ==================================================================
+if [[ -z "$REPO" ]]; then export REPO="$(dirname "$(realpath "${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]}")")"; fi
+SOURCE_DIRS=("$REPO/src/var/apps" "$REPO/install")
+logFile="$(mktemp -t INSTALL-XXXXXX)"
 # ==================================================================
 # DEPENDENCIES
 # ==================================================================
-if [[ -z "$REPO" ]]; then export REPO="$(dirname "$(realpath "${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]}")")"; fi
 if [[ ! -f .env ]]; then cp "$REPO"/.env.dist "$REPO"/.env; fi
-source "$REPO"/.env
 chown "$USERNAME":"$USERNAME" "$REPO"/.env
+source "$REPO"/.env
 # ==================================================================
 # FUNCTIONS
 # ==================================================================
-# ------------------------------------------------------------------
-# install::bin
-# ------------------------------------------------------------------
-install::bin()
-{
-	local source logFile
-
-	logFile="$(mktemp -t BIN-XXXXXX)"
-
-	echo
-	echo "=================================================================="
-	echo "INSTALLING :: BIN FILES"
-	echo "=================================================================="
-	echo
-
-	source="$REPO"/src/bin
-
-	while IFS= read -r file
-	do
-		install -v -C -m 0755 -D -t /usr/local/bin "$file"
-		if [[ $? -ne 0 ]]; then
-			install::log "Possible problem installing '$file' to /usr/local/bin - exit code $?" "$logFile"
-		else
-			install::log "Installed '$file' to /usr/local/bin OK!" "$logFile"
-		fi
-	done < <(find "$source" -type f)
-
-	echo
-	echo "BIN FILES - DONE!"
-	echo "=================================================================="
-	echo
-
-	install::report "$logFile"
-}
-# ------------------------------------------------------------------
-# install::config
-# ------------------------------------------------------------------
-install::config()
-{
-	local flag="${1:-}"
-	local source logFile refresh=0
-
-	logFile="$(mktemp -t CFG-XXXXXX)"
-
-	if [[ -n "$flag" ]] && [[ "${flag:l}" == "new" ]]; then refresh=1; install::log "Config Refresh Flag Detected!" "$logFile"; fi
-
-	echo
-	echo "=================================================================="
-	echo "INSTALLING :: CONFIG FILES"
-	echo "=================================================================="
-	echo
-
-	install::log "Installing distribution versions of config files" "$logFile"
-
-	source="$REPO"
-
-	install -v -C -m 0755 -D -t "$SWARMDIR" "$source"/.env.dist
-	install -v -C -m 0755 -D -t "$SWARMDIR" "$source"/.node.dist
-
-	install::log "Installing config files in '$SWARMDIR', if available" "$logFile"
-
-	if [[ ! -f "$SWARMDIR"/.env ]] || [[ "$refresh" == 1 ]]; then install -v -m 0755 -C -T "$source"/.env.dist "$SWARMDIR"/.env; fi
-	if [[ ! -f "$SWARMDIR"/.node ]] || [[ "$refresh" == 1 ]]; then install -v -m 0755 -C -T "$source"/.node.dist "$SWARMDIR"/.node; fi
-
-	chown -R "$USERNAME":"$USERNAME" "$SWARMDIR"
-
-	echo
-	echo "CONFIG FILES - DONE!"
-	echo "=================================================================="
-	echo
-
-	install::report "$logFile"
-}
-# ------------------------------------------------------------------
-# install::dotfiles
-# ------------------------------------------------------------------
-install::dotfiles()
-{
-	local source logFile fileDir stub
-
-	logFile="$(mktemp -t DOT-XXXXXX)"
-
-	echo
-	echo "=================================================================="
-	echo "INSTALLING :: DOTFILES"
-	echo "=================================================================="
-	echo
-
-	install::log "Installing ZSH Profile Files to '$USERDIR'" "$logFile"
-
-	source="$REPO"/src/.dotfiles
-	install -v -C -m 0644 -D -t "$USERDIR" "$source"/.zshenv
-	install -v -C -m 0644 -D -t "$USERDIR" "$source"/.zprofile
-	install -v -C -m 0644 -D -t "$USERDIR" "$source"/.zshrc
-	install -v -C -m 0644 -D -t "$USERDIR" "$source"/.zlogin
-	install -v -C -m 0644 -D -t "$USERDIR" "$source"/.zlogout
-
-	install::log "Installing ZSH Loaders / Utility Files to '$ZSHDIR'" "$logFile"
-
-	source="$REPO"/src/.dotfiles/.zsh/
-	install -v -C -m 0644 -D -t "$ZSHDIR" "$source"/.zsh_aliases
-	install -v -C -m 0644 -D -t "$ZSHDIR" "$source"/.zsh_completion
-	install -v -C -m 0644 -D -t "$ZSHDIR" "$source"/.zsh_functions
-	if [[ ! -f "$source"/.zsh_ssh ]]; then install -v -C -m 0644 -T "$source"/.zsh_ssh.dist "$ZSHDIR"/.zsh_ssh;
-	else install -v -C -m 0644 -D -t "$ZSHDIR" "$source"/.zsh_ssh; fi
-	if [[ ! -f "$source"/.zsh_ssh ]]; then install -v -C -m 0644 -T "$source"/.zsh_ssh.dist "$ZSHDIR"/.zsh_ware;
-	else install -v -C -m 0644 -D -t "$ZSHDIR" "$source"/.zsh_ware; fi
-
-	install::log "Installing ZSH Aliases to '$ZSHDIR/aliases'" "$logFile"
-
-	source="$REPO"/src/.dotfiles/.zsh/aliases
-	while IFS= read -r file
-	do
-		install -v -C -m 0644 -D -t "$ZSHDIR"/aliases "$file"
-	done < <(find "$source" -type f)
-
-	install::log "Installing ZSH Completion Files to '$ZSHDIR/completion'" "$logFile"
-
-	source="$REPO"/src/.dotfiles/.zsh/completion
-	install -v -C -m 0644 -T "$source"/git-completion.bash "$ZSHDIR"/completion/git-completion.bash
-	install -v -C -m 0644 -T "$source"/git-completion.zsh "$ZSHDIR"/completion/_git
-
-	install::log "Installing ZSH Autoload Functions to '$ZSHDIR/functions'" "$logFile"
-
-	source="$REPO"/src/.dotfiles/.zsh/functions
-	len="${#source}"
-	while IFS= read -r file
-	do
-		fileDir="${file%/*}"
-		stub="${fileDir:$len}"
-		install -v -C -m 0644 -D -t "$ZSHDIR/functions${stub}" "$file"
-	done < <(find "$source" -type f)
-
-	install::log "Installing ZSH Includes to '$ZSHDIR/includes'" "$logFile"
-
-	source="$REPO"/src/.dotfiles/.zsh/includes
-	while IFS= read -r file
-	do
-		install -v -C -m 0644 -D -t "$ZSHDIR/includes" "$file"
-	done < <(find "$source" -type f)
-
-	chown -R "$USERNAME":"$USERNAME" "$USERDIR"
-
-	install::log "Writing to .zshrc" "$logFile"
-
-	if ! grep -q "Load .zsh_ssh" "$USERDIR"/.zshrc; then
-		{
-			echo ""
-			echo "# Load .zsh_aliases, if available"
-			echo "[[ ! -f \"$ZSHDIR\"/.zsh_aliases ]] || source \"$ZSHDIR\"/.zsh_aliases"
-			echo "# Load .zsh_completion, if available"
-			echo "[[ ! -f \"$ZSHDIR\"/.zsh_completion ]] || source \"$ZSHDIR\"/.zsh_completion"
-			echo "# Load .zsh_functions, if available"
-			echo "[[ ! -f \"$ZSHDIR\"/.zsh_functions ]] || source \"$ZSHDIR\"/.zsh_functions"
-			echo "# Load .zsh_ssh, if available"
-			echo "[[ ! -f \"$ZSHDIR\"/.zsh_ssh ]] || source \"$ZSHDIR\"/.zsh_ssh"
-			echo "# Load .zsh_ware, if available"
-			echo "[[ ! -f \"$ZSHDIR\"/.zsh_ware ]] || source \"$ZSHDIR\"/.zsh_ware"
-		} > "$USERDIR"/.zshrc
-	fi
-
-	echo
-	echo "DOTFILES - DONE!"
-	echo "=================================================================="
-	echo
-
-	install::report "$logFile"
-}
 # ------------------------------------------------------------------
 # install::install
 # ------------------------------------------------------------------
 install::install()
 {
-	local type="${1:-}"
-	local cont="${2:-}"
+	local logFile="${1:-}"
 	local source logFile
-
-	logFile="$(mktemp -t FULL-XXXXXX)"
 
 	echo
 	echo "=================================================================="
@@ -212,27 +47,23 @@ install::install()
 	echo "=================================================================="
 	echo
 
-	install::config
-	install::dotfiles
-	install::bin
-	install::swarm
+	install::loadSource config.sh "$logFile" -i
+	install::loadSource dotfiles.sh "$logFile" -i
+	install::loadSource bin.sh "$logFile" -i
+	install::loadSource swarm.sh "$logFile" -i
 
 	echo
 	echo "FULL INSTALLATION - DONE!"
 	echo "=================================================================="
 	echo
-
-	install::report "$logFile"
 }
 # ------------------------------------------------------------------
 # install::init
 # ------------------------------------------------------------------
 install::init()
 {
-	local logFile
+	local logFile="${1:-}"
 	local -A PACKAGES
-
-	logFile="$(mktemp -t INIT-XXXXXX)"
 
 	echo
 	echo "=================================================================="
@@ -245,69 +76,6 @@ install::init()
 
 	echo
 	echo "SYSTEM INITIALIZATION - DONE!"
-	echo "=================================================================="
-	echo
-
-	install::report "$logFile"
-}
-# ------------------------------------------------------------------
-# install::swarm
-# ------------------------------------------------------------------
-install::swarm()
-{
-	local source logFile
-
-	logFile="$(mktemp SWARM-XXXXXX)"
-
-	echo
-	echo "=================================================================="
-	echo "INSTALLING :: SWARM FILES"
-	echo "=================================================================="
-	echo
-
-	install::log "Installing App Installer Files to '$SWARMDIR/apps'" "$logFile"
-
-	source="$REPO"/src/var/apps
-	while IFS= read -r file
-	do
-		install -v -C -m 0755 -D -t "$SWARMDIR"/apps "$file"
-	done < <(find "$source" -type f)
-
-	install::log "Installing Script Files to '$SWARMDIR/scripts'" "$logFile"
-
-	source="$REPO"/src/var/scripts
-	while IFS= read -r file
-	do
-		install -v -C -m 0755 -D -t "$SWARMDIR"/scripts "$file"
-	done < <(find "$source" -type f)
-
-	install::log "Installing Stack Files to '$SWARMDIR/stacks'" "$logFile"
-
-	source="$REPO"/src/var/stacks
-	len="${#source}"
-	while IFS= read -r file
-	do
-		fileDir="${file%/*}"
-		fileName="${file##*/}"
-		stub="${fileDir:$len}"
-		[[ "$fileName" == ".stack" ]] && mode="0755" || mode="0644"
-		if [[ "$fileName" == ".env.dist" ]]; then
-			fullName="$SWARMDIR"/stacks${stub}/.env
-			if [[ -f "$fullName" ]]; then
-				install -v -C -m "$mode" -D -t "$SWARMDIR/stacks${stub}" "$file"
-				install -v -C -m "$mode" -D -t "$SWARMDIR/stacks${stub}" "$fullName"
-			else
-				install -v -C -m "$mode" -D -t "$SWARMDIR/stacks${stub}" "$file"
-			fi
-		else
-			install -v -C -m "$mode" -D -t "$SWARMDIR/stacks${stub}" "$file"
-		fi
-	done < <(find "$source" -type f)
-
-	chown -R "$USERNAME":"$USERNAME" "$SWARMDIR"
-
-	echo
-	echo "SWARM FILES - DONE!"
 	echo "=================================================================="
 	echo
 
@@ -413,6 +181,27 @@ install::checkShell()
 	fi
 }
 # ------------------------------------------------------------------
+# install::getPassword
+# ------------------------------------------------------------------
+install::getPassword()
+{
+	local len="${1:-16}"
+	local NUM_REGEX CAP_REGEX SML_REGEX SYM_REGEX
+	local passwd=""
+
+	NUM_REGEX='^.*[0-9]+.*$'
+	CAP_REGEX='^.*[A-Z]+.*$'
+	SML_REGEX='^.*[a-z]+.*$'
+	SYM_REGEX='^[A-Za-z0-9]+[@#%_+=][A-Za-z0-9]+$'
+
+	while [[ ! $passwd =~ $NUM_REGEX ]] && [[ ! $passwd =~ $CAP_REGEX ]] && [[ ! $passwd =~ $SML_REGEX ]] && [[ ! $passwd =~ $SYM_REGEX ]]
+	do
+		passwd=$(tr </dev/urandom -dc 'A-Za-z0-9@#%_+=' | head -c "$len")
+	done
+
+	echo "$passwd"
+}
+# ------------------------------------------------------------------
 # install::loadSource
 # ------------------------------------------------------------------
 install::loadSource()
@@ -422,7 +211,7 @@ install::loadSource()
 	local options dir fileName fullPath filePath pathName
 	local -A FILEOPTS
 
-	if [[ -z "$app" ]] || [[ -z "$logFile" ]]; then install::log "Missing Argument(s)!" "$logFile"; exit 1; fi
+	if [[ -z "$app" ]] || [[ -z "$logFile" ]]; then echo "Missing Argument(s)!"; exit 1; fi
 
 	shift 2
 
@@ -452,7 +241,7 @@ install::loadSource()
 				break
 				;;
 			*)
-				install::log "loadSource :: Invalid Option '$1'" "$logFile"
+				echo "loadSource :: Invalid Option '$1'" "$logFile"
 				exit 1
 				;;
 		esac
@@ -463,8 +252,12 @@ install::loadSource()
 		fullPath="$app"
 	else
 		if [[ $DEBUG -eq 1 ]]; then install::log "Finding '$app'" "$logFile"; fi
-		if [[ ! $app = *.* ]]; then app="$app".zsh; fi
-		if [[ ! $app = */* ]]; then fullPath="$REPO"/src/var/apps/"$app"; fi
+		if [[ ! "$file" = *.* ]]; then thisFile="$file".zsh; else thisFile="$file"; fi
+		for dir in "${SOURCE_DIRS[@]}"
+		do
+			if [[ $DEBUG -eq 1 ]]; then install::log "Searching '$dir'" "$logFile"; fi
+			if [[ -f "$dir/$thisFile" ]]; then fullPath="$dir/$thisFile"; break; fi
+		done
 	fi
 
 	if [[ -z "$fullPath" ]] || [[ ! -f "$fullPath" ]]; then install::log "File '$app' Not Found!" "$logFile"; exit 1; fi
@@ -480,23 +273,23 @@ install::loadSource()
 	# INSTALL & REMOVE
 	if [[ "${FILEOPTS[install]}" -eq 1 ]]; then
 		install::log "Installing '$fileName'" "$logFile"
-		eval "$fileName::install"
+		eval "$fileName::install $logFile"
 		return $?
 	elif [[ "${FILEOPTS[remove]}" -eq 1 ]]; then
 		install::log "Uninstalling '$fileName'" "$logFile"
-		eval "$fileName::remove"
+		eval "$fileName::remove $logFile"
 		return $?
 	fi
 	# CONFIGURE
 	if [[ "${FILEOPTS[config]}" -eq 1 ]]; then
 		install::log "Configuring '$fileName'" "$logFile"
-		eval "$fileName::config"
+		eval "$fileName::config $logFile"
 		return $?
 	fi
 	# TEST
 	if [[ "${FILEOPTS[test]}" -eq 1 ]]; then
 		install::log "Testing '$fileName'" "$logFile"
-		eval "$fileName::test"
+		eval "$fileName::test $logFile"
 		return $?
 	fi
 }
@@ -529,7 +322,7 @@ install::log::redis()
 
 	if [[ "$LOG_VERBOSE" -eq 1 ]]; then echo "$msg"; fi
 
-
+	redis-cli
 	# echo "$timestamp :: $USERNAME - $msg" >>"$log"
 }
 # ------------------------------------------------------------------
@@ -537,7 +330,7 @@ install::log::redis()
 # ------------------------------------------------------------------
 install::redis::passGET()
 {
-	sed -n -e '/^requirepass.*/p' /etc/redis.conf | awk '{print $2}'
+	sed -n -e '/^requirepass.*/p' /etc/redis/redis.conf | awk '{print $2}'
 }
 # ==================================================================
 # MAIN
@@ -546,7 +339,7 @@ clear
 install::checkShell
 install::checkRoot
 
-install::init
+install::init "$logFile"
 
 if [[ "$#" == 0 ]]; then set -- "all"; fi
 
@@ -554,26 +347,35 @@ while true
 do
 	case "$1" in
 		all)
-			install::install "$@"
+			install::install "$logFile"
 			exit 0
 			;;
 		bin)
-			install::bin
+			install::loadSource bin.sh "$logFile" -i
+			;;
+		rmBin|binRemove)
+			install::loadSource bin.sh "$logFile" -r
 			;;
 		config)
-			install::config
+			install::loadSource config.sh "$logFile" -i
 			;;
-		configReset)
-			install::config new
+		rmConfig|configRemove)
+			install::loadSource config.sh "$logFile" -r
 			;;
 		dotfiles)
-			install::dotfiles
+			install::loadSource dotfiles.sh "$logFile" -i
+			;;
+		rmDotfiles|dotfilesRemove)
+			install::loadSource dotfiles.sh "$logFile" -r
 			;;
 		init)
 			install::init
 			;;
 		swarm)
-			install::swarm
+			install::loadSource swarm.sh "$logFile" -i
+			;;
+		rmSwarm|swarmRemove)
+			install::loadSource swarm.sh "$logFile" -r
 			;;
 		*)
 			echo "Invalid Option '$1'"
@@ -582,3 +384,5 @@ do
 	esac
 	shift
 done
+
+install::report "$logFile"
