@@ -377,6 +377,9 @@ do
 		rmSwarm|swarmRemove)
 			install::loadSource swarm.sh "$logFile" -r
 			;;
+		node)
+			install::loadSource node.sh "$logFile" -i -c
+			;;
 		*)
 			echo "Invalid Option '$1'"
 			exit 1

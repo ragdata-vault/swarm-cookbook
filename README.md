@@ -68,7 +68,47 @@ If you like this repository, please give it a ⭐ (it really does help)
 
 ### 📂 [Installation](#toc)
 
+While I plan to realease a version for the bash shell, this is not yet complete.  So, to get the full functionality contained within the cookbook, you'll need to install the ZSH Shell, plus a few extras ...
 
+#### Step 1 - Install ZSH + Extras
+
+#### Step 2 - Clone the Repo
+
+Once you've got your new shell sorted, clone the repo ...
+
+Via SSH:
+
+```shell
+git clone git@github.com:ragdata/swarm-cookbook
+```
+
+Via HTTPS:
+
+```shell
+git clone https://github.com/ragdata/swarm-cookbook
+```
+
+#### Step 3 - Run the Installer
+
+Now, run the installer to setup each node with all the goodies provided by the cookbook ...
+
+To install everything at once:
+
+```shell
+cd swarm-cookbook
+sudo ./install.sh
+```
+
+**OR**, install one part at a time:
+
+```shell
+cd swarm-cookbook
+sudo ./install.sh config
+sudo ./install.sh dotfiles
+sudo ./install.sh bin
+sudo ./install.sh swarm
+sudo ./install.sh node
+```
 
 [//]: # ([`^ Top`]&#40;#toc&#41;)
 [//]: # (### 📛 [Badges]&#40;#toc&#41;)
