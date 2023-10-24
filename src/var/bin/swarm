@@ -41,11 +41,11 @@ swarm::init()
 	local USERNAME="${SUDO_USER:-$(whoami)}"
 	local ENV_FILE ENV_NODE ENV_PATHS
 
-	ENV_FILE=/"$SWARMDIR"/cfg/.env
-	ENV_NODE=/"$SWARMDIR"/cfg/.node
-	ENV_PATHS=/"$SWARMDIR"/cfg/.paths
+	ENV_FILE="$SWARMDIR"/.env
+	ENV_NODE="$SWARMDIR"/.node
+	ENV_PATHS="$SWARMDIR"/.paths
 
-	[[ -f /"$SWARMDIR"/cfg/.init ]] && errorReturn "Node Already Initialized!"
+	[[ -f "$SWARMDIR"/.init ]] && errorReturn "Node Already Initialized!"
 
 	local NODE_IPv4 IPv4_REPORTED MANAGER_TKN WORKER_TKN NODE_ID
 
@@ -102,7 +102,7 @@ swarm::init()
 
 	redis-cli RENAME NODE:1 NODE:"${NODE_ID}"
 
-	touch /"$SWARMDIR"/cfg/.init
+	touch "$SWARMDIR"/.init
 }
 # ------------------------------------------------------------------
 # swarm::info
@@ -118,7 +118,7 @@ swarm::leave()
 {
 	local USERNAME="${SUDO_USER:-$(whoami)}"
 
-	source /"$SWARMDIR"/cfg/.env
+	source "$SWARMDIR"/.env
 
 	local NODE_ID
 
@@ -128,7 +128,7 @@ swarm::leave()
 
 	docker swarm leave --force
 
-	rm -f /"$SWARMDIR"/cfg/.init
+	rm -f "$SWARMDIR"/.init
 }
 # ------------------------------------------------------------------
 # swarm::netinfo
@@ -137,7 +137,7 @@ swarm::netinfo()
 {
 	local USERNAME="${SUDO_USER:-$(whoami)}"
 
-	source /"$SWARMDIR"/cfg/.env
+	source "$SWARMDIR"/.env
 
 	local NODE_ID
 	local line type state send recv addr peer process row tmpFile

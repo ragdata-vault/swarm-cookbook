@@ -57,8 +57,8 @@ redis::config()
 	sed -i "/^supervised.*/c\supervised systemd" /etc/redis/redis.conf
 	sed -i "/^# requirepass.*/c\requirepass ${REDIS_PWD}" /etc/redis/redis.conf
 
-	if ! grep -q REDISCLI_AUTH /"$SWARMDIR"/cfg/.env; then
-		echo "export REDISCLI_AUTH=${REDIS_PWD}" >> /"$SWARMDIR"/cfg/.env
+	if ! grep -q REDISCLI_AUTH "$SWARMDIR"/.env; then
+		echo "export REDISCLI_AUTH=${REDIS_PWD}" >> "$SWARMDIR"/.env
 	fi
 
 	systemctl daemon-reload

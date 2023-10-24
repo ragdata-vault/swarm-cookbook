@@ -176,7 +176,7 @@ eval "$(sheldon source)"
 [[ ! -f "$ZSHDIR"/.zsh_completion ]] || source "$ZSHDIR"/.zsh_completion
 # Load .zsh_functions, if available
 [[ ! -f "$ZSHDIR"/.zsh_functions ]] || source "$ZSHDIR"/.zsh_functions
-# Load .zsh_functions, if available
+# Load .zsh_ssh, if available
 [[ ! -f "$ZSHDIR"/.zsh_ssh ]] || source "$ZSHDIR"/.zsh_ssh
-# Load .zsh_functions, if available
+# Load .zsh_ware, if available
 [[ ! -f "$ZSHDIR"/.zsh_ware ]] || source "$ZSHDIR"/.zsh_ware

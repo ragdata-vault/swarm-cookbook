@@ -1,0 +1,6 @@
+# undefined
+builtin autoload -X
+
+checkRoot
+
+sed -n -e '/^requirepass.*/p' /etc/redis.conf | awk '{print $2}'

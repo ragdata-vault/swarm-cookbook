@@ -1,7 +1,7 @@
 # undefined
 builtin autoload -X
 
-if [[ -z "$REDISCLI_AUTH" ]]; then source /"$SWARMDIR"/cfg/.env; fi
+if [[ -z "$REDISCLI_AUTH" ]]; then source "$SWARMDIR"/.env; fi
 
 (( $# != 1 )) && errorExit "Missing Arguments!"
 

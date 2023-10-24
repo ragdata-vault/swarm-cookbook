@@ -44,7 +44,7 @@ git::config()
 	local GIT_USER GIT_USER_DEFAULT GIT_EMAIL_DEFAULT status
 	local NODE_ID="$(docker info -f '{{.Swarm.NodeID}}')"
 
-	source /"$SWARMDIR"/cfg/.env
+	source "$SWARMDIR"/.env
 
 	echo
 	echo "===================================================================="

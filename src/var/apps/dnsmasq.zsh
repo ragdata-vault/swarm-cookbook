@@ -34,7 +34,7 @@ dnsmasq::install()
 
 	NODE_ID="$(docker info -f '{{.Swarm.NodeID}}')"
 
-	source /"$SWARMDIR"/cfg/.env
+	source "$SWARMDIR"/.env
 
 	NODE_DOMAIN="$(hashGET NODE:"${NODE_ID}" NODE_DOMAIN)"
 

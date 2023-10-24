@@ -170,6 +170,24 @@ install::dotfiles()
 
 	chown -R "$USERNAME":"$USERNAME" "$USERDIR"
 
+	install::log "Writing to .zshrc" "$logFile"
+
+	if ! grep -q "Load .zsh_ssh" "$USERDIR"/.zshrc; then
+		{
+			echo ""
+			echo "# Load .zsh_aliases, if available"
+			echo "[[ ! -f \"$ZSHDIR\"/.zsh_aliases ]] || source \"$ZSHDIR\"/.zsh_aliases"
+			echo "# Load .zsh_completion, if available"
+			echo "[[ ! -f \"$ZSHDIR\"/.zsh_completion ]] || source \"$ZSHDIR\"/.zsh_completion"
+			echo "# Load .zsh_functions, if available"
+			echo "[[ ! -f \"$ZSHDIR\"/.zsh_functions ]] || source \"$ZSHDIR\"/.zsh_functions"
+			echo "# Load .zsh_ssh, if available"
+			echo "[[ ! -f \"$ZSHDIR\"/.zsh_ssh ]] || source \"$ZSHDIR\"/.zsh_ssh"
+			echo "# Load .zsh_ware, if available"
+			echo "[[ ! -f \"$ZSHDIR\"/.zsh_ware ]] || source \"$ZSHDIR\"/.zsh_ware"
+		} > "$USERDIR"/.zshrc
+	fi
+
 	echo
 	echo "DOTFILES - DONE!"
 	echo "=================================================================="
@@ -503,14 +521,23 @@ install::log()
 install::log::redis()
 {
 	local msg="${1:-}" timestamp
-	local key="${2:-}"zZ
+	local key="${2:-}"
 
 	timestamp="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 
 	[[ ! -f "$log" ]] && { echo "LogFile '$log' Not Found!"; exit 1; }
 
 	if [[ "$LOG_VERBOSE" -eq 1 ]]; then echo "$msg"; fi
-	echo "$timestamp :: $USERNAME - $msg" >>"$log"
+
+
+	# echo "$timestamp :: $USERNAME - $msg" >>"$log"
+}
+# ------------------------------------------------------------------
+# install::redis::passGET
+# ------------------------------------------------------------------
+install::redis::passGET()
+{
+	sed -n -e '/^requirepass.*/p' /etc/redis.conf | awk '{print $2}'
 }
 # ==================================================================
 # MAIN
