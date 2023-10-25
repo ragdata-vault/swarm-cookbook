@@ -66,8 +66,9 @@ dotfiles::install()
 	install::log "Installing ZSH Completion Files to '$ZSHDIR/completion'"
 
 	source="$REPO"/src/.dotfiles/.zsh/completion
+	mkdir -p "$ZSHDIR"/completion
 	install -v -C -m 0644 -T "$source"/git-completion.bash "$ZSHDIR"/completion/git-completion.bash
-	install -v -C -m 0644 -T "$source"/git-completion.zsh "$ZSHDIR"/completion/_git
+	install -v -C -m 0644 -T "$source"/_git "$ZSHDIR"/completion/_git
 
 	install::log "Installing ZSH Autoload Functions to '$ZSHDIR/functions'"
 
@@ -88,7 +89,8 @@ dotfiles::install()
 		install -v -C -m 0644 -D -t "$ZSHDIR/includes" "$file"
 	done < <(find "$source" -type f)
 
-	chown -R "$USERNAME":"$USERNAME" "$USERDIR"
+	chown -R "$USERNAME":"$USERNAME" "$ZSHDIR"
+	chown "$USERNAME":"$USERNAME" "$USERDIR"/*
 
 	install::log "Writing to .zshrc"
 
@@ -96,15 +98,15 @@ dotfiles::install()
 		{
 			echo ""
 			echo "# Load .zsh_aliases, if available"
-			echo "[[ ! -f \"$ZSHDIR\"/.zsh_aliases ]] || source \"$ZSHDIR\"/.zsh_aliases"
+			echo "[[ ! -f $ZSHDIR/.zsh_aliases ]] || source $ZSHDIR/.zsh_aliases"
 			echo "# Load .zsh_completion, if available"
-			echo "[[ ! -f \"$ZSHDIR\"/.zsh_completion ]] || source \"$ZSHDIR\"/.zsh_completion"
+			echo "[[ ! -f $ZSHDIR/.zsh_completion ]] || source $ZSHDIR/.zsh_completion"
 			echo "# Load .zsh_functions, if available"
-			echo "[[ ! -f \"$ZSHDIR\"/.zsh_functions ]] || source \"$ZSHDIR\"/.zsh_functions"
+			echo "[[ ! -f $ZSHDIR/.zsh_functions ]] || source $ZSHDIR/.zsh_functions"
 			echo "# Load .zsh_ssh, if available"
-			echo "[[ ! -f \"$ZSHDIR\"/.zsh_ssh ]] || source \"$ZSHDIR\"/.zsh_ssh"
+			echo "[[ ! -f $ZSHDIR/.zsh_ssh ]] || source $ZSHDIR/.zsh_ssh"
 			echo "# Load .zsh_ware, if available"
-			echo "[[ ! -f \"$ZSHDIR\"/.zsh_ware ]] || source \"$ZSHDIR\"/.zsh_ware"
+			echo "[[ ! -f $ZSHDIR/.zsh_ware ]] || source $ZSHDIR/.zsh_ware"
 		} >> "$USERDIR"/.zshrc
 	fi
 

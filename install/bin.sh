@@ -34,10 +34,10 @@ bin::install()
 	echo "===================================================================="
 	echo
 
-	source="$REPO"/src/bin
+	source="$REPO"/src/var/bin
 	while IFS= read -r file
 	do
-		install -v -C -m 0755 -D -t /usr/local/bin "$file"
+		sudo install -v -C -m 0755 -D -t /usr/local/bin "$file"
 		if [[ $? -ne 0 ]]; then
 			install::log "Possible problem installing '$file' to /usr/local/bin - exit code $?"
 		else

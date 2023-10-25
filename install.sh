@@ -97,15 +97,27 @@ install::report()
 
 	echo "The previous operation was logged and details are available to view"
 	echo "Please select from the following options:"
+	echo
 	echo -e "\t (V)iew Logs"
 	echo -e "\t (R)eboot"
 	echo -e "\t (Q)uit"
-	read -r -n 1 resp
+	echo
 
-	case "${resp:l}" in
+	read -rs -k 1 resp
+
+	resp="${resp:l}"
+
+	case "$resp" in
 		v)
 			echo
+			echo "===================================================================="
+			echo "CONTENT OF LOGFILE '$logFile'"
+			echo "===================================================================="
+			echo
 			sudo cat "$logFile"
+			echo
+			echo "DONE!"
+			echo
 			exit 0
 			;;
 		r)
@@ -193,7 +205,7 @@ install::loadSource()
 
 	if [[ -z "$app" ]]; then echo "Missing Argument!"; exit 1; fi
 
-	shift 2
+	shift
 
 	fileName="${app##*/}"
 	fileName="${fileName%%.*}"
