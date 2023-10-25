@@ -1,0 +1,33 @@
+#!/usr/bin/env zsh
+
+# ==================================================================
+# .zsh_ssh
+# ==================================================================
+# This file exists so that you may add any ssh keys that you require on session start
+# NOTE: What appears below is a suggestion only!
+# You will need to know what you're doing before you uncomment these lines!
+# ==================================================================
+if [[ "$AUTH_AGENT" == "ssh" ]] || [[ "$AUTH_AGENT" == "both" ]]; then
+	eval "$(ssh-agent)" > /dev/null 2>&1
+	while IFS= read -ru3 line
+	do
+		if grep -i -q "IdentityFile" "$line"; then
+			file="$(echo "$line" | awk '{print $2}')"
+			ssh-add "$file" > /dev/null 2>&1
+		fi
+	done 3< "$USERDIR"/.ssh/config
+elif [[ "$AUTH_AGENT" == "gpg" ]] || [[ "$AUTH_AGENT" == "both" ]]; then
+	# Stop the gpg-agent to configure
+	systemctl --user stop gpg-agent
+	eval "$(gpg-agent --daemon --enable-ssh-support --sh)"
+	# Start the gpg-agent if not already running
+	if ! pgrep -xu "$USERNAME" gpg-agent > /dev/null 2>&1; then
+		gpg-connect-agent /bye > /dev/null 2>&1
+	fi
+	gpg-connect-agent updatestartuptty /bye > /dev/null
+	if [ -z "$SSH_AUTH_SOCK" ]; then
+		SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+		export SSH_AUTH_SOCK
+	fi
+fi
+

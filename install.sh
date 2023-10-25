@@ -48,6 +48,7 @@ install::install()
 
 	install::loadSource config.sh -i
 	install::loadSource dotfiles.sh -i
+	install::loadSource zsh-plugins.sh -i
 	install::loadSource bin.sh -i
 	install::loadSource swarm.sh -i
 
@@ -369,6 +370,9 @@ do
 			;;
 		node)
 			install::loadSource node.sh -i -c
+			;;
+		plugins)
+			install::loadSource zsh-plugins.sh -i
 			;;
 	esac
 	shift

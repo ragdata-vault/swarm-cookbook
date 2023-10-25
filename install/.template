@@ -26,10 +26,6 @@ template::installed() { return 1; }
 #
 template::install()
 {
-	local logFile
-
-	logFile="${1:-}"
-
 	echo
 	echo "===================================================================="
 	echo "INSTALLING :: TEMPLATE FILES"
@@ -47,10 +43,6 @@ template::install()
 #
 template::config()
 {
-	local logFile
-
-	logFile="${1:-}"
-
 	echo
 	echo "===================================================================="
 	echo "CONFIGURING :: TEMPLATE FILES"
@@ -68,10 +60,6 @@ template::config()
 #
 template::remove()
 {
-	local logFile
-
-	logFile="${1:-}"
-
 	echo
 	echo "===================================================================="
 	echo "UNINSTALLING :: TEMPLATE FILES"
@@ -89,10 +77,6 @@ template::remove()
 #
 template::test()
 {
-	local logFile
-
-	logFile="${1:-}"
-
 	echo
 	echo "===================================================================="
 	echo "TESTING :: TEMPLATE FILES"

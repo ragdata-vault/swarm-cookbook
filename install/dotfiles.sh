@@ -50,9 +50,9 @@ dotfiles::install()
 	install -v -C -m 0644 -D -t "$ZSHDIR" "$source"/.zsh_aliases
 	install -v -C -m 0644 -D -t "$ZSHDIR" "$source"/.zsh_completion
 	install -v -C -m 0644 -D -t "$ZSHDIR" "$source"/.zsh_functions
-	if [[ ! -f "$source"/.zsh_ssh ]]; then install -v -C -m 0644 -T "$source"/.zsh_ssh.dist "$ZSHDIR"/.zsh_ssh;
+	if [[ ! -f "$source"/.zsh_ssh ]]; then install -v -C -m 0644 -T "$source"/.zsh_ssh "$ZSHDIR"/.zsh_ssh;
 	else install -v -C -m 0644 -D -t "$ZSHDIR" "$source"/.zsh_ssh; fi
-	if [[ ! -f "$source"/.zsh_ssh ]]; then install -v -C -m 0644 -T "$source"/.zsh_ssh.dist "$ZSHDIR"/.zsh_ware;
+	if [[ ! -f "$source"/.zsh_ssh ]]; then install -v -C -m 0644 -T "$source"/.zsh_ware.dist "$ZSHDIR"/.zsh_ware;
 	else install -v -C -m 0644 -D -t "$ZSHDIR" "$source"/.zsh_ware; fi
 
 	install::log "Installing ZSH Aliases to '$ZSHDIR/aliases'"
@@ -91,24 +91,6 @@ dotfiles::install()
 
 	chown -R "$USERNAME":"$USERNAME" "$ZSHDIR"
 	chown "$USERNAME":"$USERNAME" "$USERDIR"/*
-
-	install::log "Writing to .zshrc"
-
-	if ! grep -q "Load .zsh_ssh" "$USERDIR"/.zshrc; then
-		{
-			echo ""
-			echo "# Load .zsh_aliases, if available"
-			echo "[[ ! -f $ZSHDIR/.zsh_aliases ]] || source $ZSHDIR/.zsh_aliases"
-			echo "# Load .zsh_completion, if available"
-			echo "[[ ! -f $ZSHDIR/.zsh_completion ]] || source $ZSHDIR/.zsh_completion"
-			echo "# Load .zsh_functions, if available"
-			echo "[[ ! -f $ZSHDIR/.zsh_functions ]] || source $ZSHDIR/.zsh_functions"
-			echo "# Load .zsh_ssh, if available"
-			echo "[[ ! -f $ZSHDIR/.zsh_ssh ]] || source $ZSHDIR/.zsh_ssh"
-			echo "# Load .zsh_ware, if available"
-			echo "[[ ! -f $ZSHDIR/.zsh_ware ]] || source $ZSHDIR/.zsh_ware"
-		} >> "$USERDIR"/.zshrc
-	fi
 
 	echo
 	echo "DONE!"

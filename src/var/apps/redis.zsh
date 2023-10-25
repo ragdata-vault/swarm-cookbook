@@ -58,10 +58,10 @@ redis::config()
 		sed -i "/^# requirepass.*/c\requirepass ${REDIS_PWD}" /etc/redis/redis.conf
 	elif grep -E -q "^requirepass.*$" /etc/redis/redis.conf; then
 		REDIS_PWD="$(install::redis::passGET)"
-		if [[ -f "/home/$USER/.zshenv" ]]; then
-			ENV_FILE="/home/$USER/.zshenv"
-		elif [[ -f "/home/$USER/.swarm/.env" ]]; then
-			ENV_FILE="/home/$USER/.swarm/.env"
+		if [[ -f "/home/$USERNAME/.zshenv" ]]; then
+			ENV_FILE="/home/$USERNAME/.zshenv"
+		elif [[ -f "/home/$USERNAME/.swarm/.env" ]]; then
+			ENV_FILE="/home/$USERNAME/.swarm/.env"
 		fi
 		if ! grep -q "REDISCLI_AUTH" "$ENV_FILE"; then
 			{

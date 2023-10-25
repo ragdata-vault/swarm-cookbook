@@ -13,4 +13,11 @@
 # ==================================================================
 # ALIASES
 # ==================================================================
-alias ez='exec zsh'
+if [ -n "$ZSH_VERSION" ]; then
+	timefile() { printf '%s%s' "$(date -Iseconds)" ".$1"; }
+	alias -g ez='exec zsh'
+	alias -g isotime='$(date -u -Iseconds)'
+	alias -g nnote='$(timefile md)'
+	alias -g todaynote='"$(date -u +%Y-%m-%d)"*'
+	alias -g detch='&> /dev/null 2> /dev/null & disown'
+fi

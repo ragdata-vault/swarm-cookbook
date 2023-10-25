@@ -14,13 +14,17 @@
 alias gitclean='git clean -df && git checkout -- .'         # discards unstaged changes
 alias g='git'
 alias gc='gitclean'
-alias cc='git commit'
-alias cm='git commit -m'
+alias gcom='git commit -m'
+alias gcoma='git commit -am'
 alias gl='git pull'
+alias gpull='gl'
 alias gp='git push'
 alias ga='git add'
 alias gaa='git add .'
 alias gsub='git submodule update --recursive --remote'
+alias gstat='git status'
+alias gcl='git clone'
+alias gclr='gcl --recursive'
 
 alias sdiff="git diff && git submodule foreach 'git diff'"
 alias spush='git push --recurse-submodules=on-demand'

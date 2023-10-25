@@ -9,8 +9,8 @@ sudo apt update && sudo apt upgrade -y
 Set ENV vars:
 
 ```shell
-export USER=ragdata
-export USERDIR=/home/"$USER"
+export USERNAME=ragdata
+export USERDIR=/home/"$USERNAME"
 ```
 
 Archive bash profile files:
@@ -26,7 +26,7 @@ Install ZSH
 
 ```shell
 sudo apt install -y zsh
-sudo chsh -s "$(which zsh)" "$USER"
+sudo chsh -s "$(which zsh)" "$USERNAME"
 exec zsh
 ```
 
@@ -35,8 +35,8 @@ exec zsh
 Set ENV vars:
 
 ```shell
-export USER=ragdata
-export USERDIR=/home/"$USER"
+export USERNAME=ragdata
+export USERDIR=/home/"$USERNAME"
 export REPO="$USERDIR"/projects/ragdata/swarm-cookbook
 export ZDOTDIR="$USERDIR"
 export ZSHDIR="$USERDIR"/.zsh
@@ -63,8 +63,8 @@ sed -i '/^ZSH_THEME.*/c\ZSH_THEME="powerlevel10k/powerlevel10k"'
 ## Uninstall ZSH
 
 ```shell
-export USER=ragdata
-export USERDIR=/home/"$USER"
+export USERNAME=ragdata
+export USERDIR=/home/"$USERNAME"
 ```
 
 ```shell
@@ -77,7 +77,7 @@ mv "$USERDIR/.p10k.zsh" "$USERDIR/.zsh_archive/.p10k.zsh"
 ```
 
 ```shell
-sudo chsh -s "$(which bash)" "$USER"
+sudo chsh -s "$(which bash)" "$USERNAME"
 ```
 
 Restart terminal session, then:
