@@ -40,7 +40,7 @@ source "$REPO"/.env
 install::install()
 {
 	local logFile="${1:-}"
-	local source logFile
+	local logFile source
 
 	echo
 	echo "=================================================================="

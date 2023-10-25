@@ -26,7 +26,7 @@ dotfiles::installed() { return 1; }
 #
 dotfiles::install()
 {
-	local source logFile fileDir stub
+	local logFile fileDir stub source
 
 	logFile="${1:-}"
 

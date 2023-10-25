@@ -36,8 +36,6 @@ swarm::install()
 	echo "===================================================================="
 	echo
 
-	install::log "Installing "
-
 	install::log "Installing App Installer Files to '$SWARMDIR/apps'" "$logFile"
 
 	source="$REPO"/src/var/apps
@@ -76,6 +74,10 @@ swarm::install()
 			install -v -C -m "$mode" -D -t "$SWARMDIR/stacks${stub}" "$file"
 		fi
 	done < <(find "$source" -type f)
+
+	install::log "Installing /etc files to '$SWARMDIR/etc'" "$logFile"
+
+	source="$REPO"
 
 	chown -R "$USERNAME":"$USERNAME" "$SWARMDIR"
 

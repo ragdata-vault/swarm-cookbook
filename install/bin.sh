@@ -26,7 +26,7 @@ bin::installed() { return 1; }
 #
 bin::install()
 {
-	local source logFile
+	local logFile source
 
 	logFile="${1:-}"
 	source="$REPO"/src/bin

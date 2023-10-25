@@ -28,11 +28,11 @@ stackInit()
 {
 	local NODE_ID
 
-	if [[ ! -f ./.env ]]; then
-		cp ./.env.dist ./.env
+	if [[ ! -f "$SWARMDIR"/.env ]]; then
+		cp "$SWARMDIR"/.env.dist "$SWARMDIR"/.env
 	fi
 
-	source ./.env
+	source "$SWARMDIR"/.env
 
 	NODE_ID="$(docker info -f '{{.Swarm.NodeID}}')"
 }
