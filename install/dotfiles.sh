@@ -35,7 +35,7 @@ dotfiles::install()
 	echo
 
 	if [[ ! -f "$USERDIR/.zshenv" ]]; then
-		install::log "Installing ZSH Profile Files to '$USERDIR'" "$logFile"
+		install::log "Installing ZSH Profile Files to '$USERDIR'"
 		source="$REPO"/src/.dotfiles
 		install -v -b -C -m 0644 -D -t "$USERDIR" "$source"/.zshenv
 		install -v -b -C -m 0644 -D -t "$USERDIR" "$source"/.zprofile
@@ -44,7 +44,7 @@ dotfiles::install()
 		install -v -b -C -m 0644 -D -t "$USERDIR" "$source"/.zlogout
 	fi
 
-	install::log "Installing ZSH Loaders / Utility Files to '$ZSHDIR'" "$logFile"
+	install::log "Installing ZSH Loaders / Utility Files to '$ZSHDIR'"
 
 	source="$REPO"/src/.dotfiles/.zsh/
 	install -v -C -m 0644 -D -t "$ZSHDIR" "$source"/.zsh_aliases
@@ -55,7 +55,7 @@ dotfiles::install()
 	if [[ ! -f "$source"/.zsh_ssh ]]; then install -v -C -m 0644 -T "$source"/.zsh_ssh.dist "$ZSHDIR"/.zsh_ware;
 	else install -v -C -m 0644 -D -t "$ZSHDIR" "$source"/.zsh_ware; fi
 
-	install::log "Installing ZSH Aliases to '$ZSHDIR/aliases'" "$logFile"
+	install::log "Installing ZSH Aliases to '$ZSHDIR/aliases'"
 
 	source="$REPO"/src/.dotfiles/.zsh/aliases
 	while IFS= read -r file
@@ -63,13 +63,13 @@ dotfiles::install()
 		install -v -C -m 0644 -D -t "$ZSHDIR"/aliases "$file"
 	done < <(find "$source" -type f)
 
-	install::log "Installing ZSH Completion Files to '$ZSHDIR/completion'" "$logFile"
+	install::log "Installing ZSH Completion Files to '$ZSHDIR/completion'"
 
 	source="$REPO"/src/.dotfiles/.zsh/completion
 	install -v -C -m 0644 -T "$source"/git-completion.bash "$ZSHDIR"/completion/git-completion.bash
 	install -v -C -m 0644 -T "$source"/git-completion.zsh "$ZSHDIR"/completion/_git
 
-	install::log "Installing ZSH Autoload Functions to '$ZSHDIR/functions'" "$logFile"
+	install::log "Installing ZSH Autoload Functions to '$ZSHDIR/functions'"
 
 	source="$REPO"/src/.dotfiles/.zsh/functions
 	len="${#source}"
@@ -80,7 +80,7 @@ dotfiles::install()
 		install -v -C -m 0644 -D -t "$ZSHDIR/functions${stub}" "$file"
 	done < <(find "$source" -type f)
 
-	install::log "Installing ZSH Includes to '$ZSHDIR/includes'" "$logFile"
+	install::log "Installing ZSH Includes to '$ZSHDIR/includes'"
 
 	source="$REPO"/src/.dotfiles/.zsh/includes
 	while IFS= read -r file
@@ -90,7 +90,7 @@ dotfiles::install()
 
 	chown -R "$USERNAME":"$USERNAME" "$USERDIR"
 
-	install::log "Writing to .zshrc" "$logFile"
+	install::log "Writing to .zshrc"
 
 	if ! grep -q "Load .zsh_ssh" "$USERDIR"/.zshrc; then
 		{

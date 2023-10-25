@@ -39,9 +39,9 @@ bin::install()
 	do
 		install -v -C -m 0755 -D -t /usr/local/bin "$file"
 		if [[ $? -ne 0 ]]; then
-			install::log "Possible problem installing '$file' to /usr/local/bin - exit code $?" "$logFile"
+			install::log "Possible problem installing '$file' to /usr/local/bin - exit code $?"
 		else
-			install::log "Installed '$file' to /usr/local/bin OK!" "$logFile"
+			install::log "Installed '$file' to /usr/local/bin OK!"
 		fi
 	done < <(find "$source" -type f)
 

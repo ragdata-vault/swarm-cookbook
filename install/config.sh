@@ -34,12 +34,12 @@ config::install()
 
 	source="$REPO"
 
-	install::log "Installing distribution versions of config files" "$logFile"
+	install::log "Installing distribution versions of config files"
 
 	install -v -C -m 0755 -D -t "$SWARMDIR" "$source"/.env.dist
 	install -v -C -m 0755 -D -t "$SWARMDIR" "$source"/.node.dist
 
-	install::log "Installing config files in '$SWARMDIR', if available" "$logFile"
+	install::log "Installing config files in '$SWARMDIR', if available"
 
 	if [[ ! -f "$SWARMDIR"/.env ]]; then install -v -m 0755 -C -T "$source"/.env.dist "$SWARMDIR"/.env; fi
 	if [[ ! -f "$SWARMDIR"/.node ]]; then install -v -m 0755 -C -T "$source"/.node.dist "$SWARMDIR"/.node; fi
@@ -78,7 +78,7 @@ config::remove()
 	echo "===================================================================="
 	echo
 
-	install::log "Removing config files in '$SWARMDIR'" "$logFile"
+	install::log "Removing config files in '$SWARMDIR'"
 
 	rm -f "$SWARMDIR/.env*" "$SWARMDIR/.node*"
 
