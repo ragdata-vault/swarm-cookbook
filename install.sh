@@ -73,6 +73,7 @@ install::init()
 
 	install::checkPkg "jq" "JQ" "$logFile"
 	install::checkPkg "redis" "Redis" "$logFile"
+	install::checkPkg "dialog" "Dialog" "$logFile"
 
 	echo
 	echo "SYSTEM INITIALIZATION - DONE!"

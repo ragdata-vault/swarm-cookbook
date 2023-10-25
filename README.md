@@ -107,8 +107,11 @@ sudo ./install.sh config
 sudo ./install.sh dotfiles
 sudo ./install.sh bin
 sudo ./install.sh swarm
-sudo ./install.sh node
 ```
+
+#### Step 4 - Run Node Setup Scripts
+
+
 
 [//]: # ([`^ Top`]&#40;#toc&#41;)
 [//]: # (### 📛 [Badges]&#40;#toc&#41;)

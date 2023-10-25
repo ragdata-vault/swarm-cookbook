@@ -88,7 +88,7 @@ bin::remove()
 	echo
 
 	cd /usr/local/bin || return 1
-	rm -f app* stack* swarm*
+	rm -f app* stack* swarm* cluster*
 	cd - || return 1
 
 	echo
