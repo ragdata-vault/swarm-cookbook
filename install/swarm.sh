@@ -36,6 +36,8 @@ swarm::install()
 	echo "===================================================================="
 	echo
 
+	install::log "Installing "
+
 	install::log "Installing App Installer Files to '$SWARMDIR/apps'" "$logFile"
 
 	source="$REPO"/src/var/apps
