@@ -77,7 +77,15 @@ swarm::install()
 
 	install::log "Installing /etc files to '$SWARMDIR/etc'" "$logFile"
 
-	source="$REPO"
+	source="$REPO"/src/var/etc
+	len="${#source}"
+	while IFS= read -r file
+	do
+		fileDir="${file%/*}"
+		fileName="${file##*/}"
+		stub="${fileDir:$len}"
+		install -v -C -m 0644 -D -t "$SWARMDIR/etc${stub}" "$file"
+	done < <(find "$source" -type f)
 
 	chown -R "$USERNAME":"$USERNAME" "$SWARMDIR"
 
