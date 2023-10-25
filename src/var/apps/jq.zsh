@@ -20,10 +20,7 @@
 #
 # INSTALLED FUNCTION
 #
-jq::installed()
-{
-	command -v jq
-}
+jq::installed() { command -v jq; }
 #
 # INSTALL FUNCTION
 #

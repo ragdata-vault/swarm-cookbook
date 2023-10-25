@@ -1,15 +1,11 @@
 # undefined
 builtin autoload -X
 
-declare -gx SHELL_TYPE
-declare -gx SHELL_VERSION
+declare SHELL_VERSION
 
-SHELL_TYPE="$SHELL"
-SHELL_TYPE="${SHELL_TYPE##*/}"
-
-if [[ "$SHELL_TYPE" == "zsh" ]]; then
+if [[ "${SHELL##*/}" == "zsh" ]]; then
 	SHELL_VERSION="$ZSH_VERSION"
-elif [[ "$SHELL_TYPE" == "bash" ]]; then
+elif [[ "${SHELL##*/}" == "bash" ]]; then
 	SHELL_VERSION="$BASH_VERSION"
 fi
 

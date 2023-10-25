@@ -47,7 +47,7 @@ logrotate::config()
 	echo "===================================================================="
 	echo
 
-	cp /"$SWARMDIR"/inc/log/logrotate-traefik.conf /etc/logrotate.d/traefik
+	cp "$SWARMDIR"/inc/log/logrotate-traefik.conf /etc/logrotate.d/traefik
 
 	echo
 	echo "DONE!"

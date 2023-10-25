@@ -14,10 +14,13 @@
 # DEPENDENCIES
 # ==================================================================
 
-source /usr/local/lib/dialog.zsh
 # ==================================================================
 # FUNCTIONS
 # ==================================================================
+#
+# INSTALLED FUNCTION
+#
+dialog::installed() { command -v dialog; }
 #
 # INSTALL FUNCTION
 #

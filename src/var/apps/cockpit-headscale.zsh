@@ -30,11 +30,11 @@ cockpit-headscale::install()
 	echo "===================================================================="
 	echo
 
-	[[ ! -d /"$USERDIR"/downloads ]] && mkdir -p /"$USERDIR"/downloads
+	[[ ! -d "$USERDIR"/downloads ]] && mkdir -p "$USERDIR"/downloads
 
-	wget -O /"$USERDIR"/downloads/cockpit-headscale-v0.0.1-1.fc38.noarch.rpm https://github.com/spotsnel/cockpit-headscale/releases/download/v0.0.1/cockpit-headscale-v0.0.1-1.fc38.noarch.rpm
+	wget -O "$USERDIR"/downloads/cockpit-headscale-v0.0.1-1.fc38.noarch.rpm https://github.com/spotsnel/cockpit-headscale/releases/download/v0.0.1/cockpit-headscale-v0.0.1-1.fc38.noarch.rpm
 
-	rpm -ivh /"$USERDIR"/downloads/cockpit-headscale-v0.0.1-1.fc38.noarch.rpm
+	rpm -ivh "$USERDIR"/downloads/cockpit-headscale-v0.0.1-1.fc38.noarch.rpm
 
 	systemctl restart cockpit.socket
 

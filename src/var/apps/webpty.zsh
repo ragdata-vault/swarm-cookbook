@@ -30,11 +30,11 @@ webpty::install()
 	echo "===================================================================="
 	echo
 
-	[[ ! -d /"$USERDIR"/downloads ]] && mkdir -p /"$USERDIR"/downloads
+	[[ ! -d "$USERDIR"/downloads ]] && mkdir -p "$USERDIR"/downloads
 
-	wget -O /"$USERDIR"/downloads/webpty.bin https://github.com/mickael-kerjean/webpty/releases/download/stable/webpty_linux_amd64.bin
+	wget -O "$USERDIR"/downloads/webpty.bin https://github.com/mickael-kerjean/webpty/releases/download/stable/webpty_linux_amd64.bin
 
-	install -v -m 0755 -C -D -t /usr/local/bin /"$USERDIR"/downloads/webpty.bin
+	install -v -m 0755 -C -D -t /usr/local/bin "$USERDIR"/downloads/webpty.bin
 
 	echo
 	echo "DONE!"

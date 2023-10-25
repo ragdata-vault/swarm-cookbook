@@ -30,13 +30,13 @@ dry::install()
 	echo "===================================================================="
 	echo
 
-	[[ ! -d /"$USERDIR"/downloads ]] && mkdir -p /"$USERDIR"/downloads
+	[[ ! -d "$USERDIR"/downloads ]] && mkdir -p "$USERDIR"/downloads
 
-	wget -O /"$USERDIR"/downloads/dryup.zsh https://moncho.github.io/dry/dryup.zsh
+	wget -O "$USERDIR"/downloads/dryup.zsh https://moncho.github.io/dry/dryup.zsh
 
-	chmod 0755 /"$USERDIR"/downloads/dryup.zsh
+	chmod 0755 "$USERDIR"/downloads/dryup.zsh
 
-	sh /"$USERDIR"/downloads/dryup.zsh
+	sh "$USERDIR"/downloads/dryup.zsh
 
 	chmod 0755 /usr/local/bin/dry
 

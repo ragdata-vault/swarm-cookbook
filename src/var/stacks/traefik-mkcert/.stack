@@ -76,7 +76,7 @@ stackInit()
 #
 #	writeENV ADMIN_PWD "$ADMIN_PWD" "$SCRIPT_DIR"/.env
 #
-#	mkdir -p /"$SWARMDIR"/stacks/traefik-mkcert/volumes/auth
+#	mkdir -p "$SWARMDIR"/stacks/traefik-mkcert/volumes/auth
 #
 #	htpasswd -c -B -b ./volumes/auth/.htpasswd "${ADMIN_USER}" "${ADMIN_PWD}"
 #

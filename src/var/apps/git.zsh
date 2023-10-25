@@ -69,7 +69,7 @@ git::config()
 		0)
 			[[ -z "$RESULT" ]] && errorReturn "No Result Returned!"
 			hashSET NODE:"${NODE_ID}" GIT_USER "$RESULT"
-			writeENV GIT_USER "$RESULT" /"$USERDIR"/cfg/.node
+			writeENV GIT_USER "$RESULT" "$USERDIR"/cfg/.node
 			git config --global user.name "$RESULT"
 			;;
 	esac
@@ -93,7 +93,7 @@ git::config()
 		0)
 			[[ -z "$RESULT" ]] && errorReturn "No Result Returned!"
 			hashSET NODE:"${NODE_ID}" GIT_EMAIL "$RESULT"
-			writeENV GIT_EMAIL "$RESULT" /"$USERDIR"/cfg/.node
+			writeENV GIT_EMAIL "$RESULT" "$USERDIR"/cfg/.node
 			git config --global user.email "$RESULT"
 			;;
 	esac
@@ -117,7 +117,7 @@ git::config()
 		0)
 			[[ -z "$RESULT" ]] && errorReturn "No Result Returned!"
 			hashSET NODE:"${NODE_ID}" GIT_EMAIL "$RESULT"
-			writeENV GIT_EMAIL "$RESULT" /"$USERDIR"/cfg/.node
+			writeENV GIT_EMAIL "$RESULT" "$USERDIR"/cfg/.node
 			git config --global user.email "$RESULT"
 			;;
 	esac

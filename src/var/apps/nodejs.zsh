@@ -88,10 +88,10 @@ nodejs::remove()
 	rm -rf /usr/local/bin/npm
 	rm -rf /usr/local/share/man/man1/node*
 	rm -rf /usr/local/lib/dtrace/node.d
-	rm -rf /"$USERDIR"/.npm
-	rm -rf /"$USERDIR"/.node-gyp
+	rm -rf "$USERDIR"/.npm
+	rm -rf "$USERDIR"/.node-gyp
 	rm -rf /opt/local/bin/node
-	rm -rf opt/local/include/node
+	rm -rf /opt/local/include/node
 	rm -rf /opt/local/lib/node_modules
 
 	rm -rf /usr/local/lib/node*

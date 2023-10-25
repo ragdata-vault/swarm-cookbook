@@ -56,7 +56,7 @@ fail2ban::config()
     sed -ri "/^\[DEFAULT\]$/,/^# JAILS$/ s/^ignoreip[[:blank:]]*=.*/ignoreip = ${ignore//\//\\/}" /etc/fail2ban/jail.local
 
     cp /etc/fail2ban/jail.d/defaults-debian.conf /etc/fail2ban/jail.d/defaults-debian.conf~
-    cp /"$SWARMDIR"/inc/fail2ban/defaults-debian.conf /etc/fail2ban/jail.d/defaults-debian.conf
+    cp "$SWARMDIR"/inc/fail2ban/defaults-debian.conf /etc/fail2ban/jail.d/defaults-debian.conf
 
 	echo
 	echo "DONE!"

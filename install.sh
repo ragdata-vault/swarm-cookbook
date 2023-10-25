@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 # shellcheck disable=SC1090,SC2031,SC2034,SC2154,SC2155,SC2181,SC2260
 # ==================================================================
 # install.sh
@@ -15,19 +15,20 @@
 # ==================================================================
 # set debug mode = false
 if [[ -z "$DEBUG" ]]; then declare -gx DEBUG=0; fi
+if [[ -z "$LOG_VERBOSE" ]]; then declare -gx LOG_VERBOSE=0; fi
 # if script is called with 'debug' as an argument, then set debug mode
 if [[ "${1:l}" == "debug" ]] || [[ "$DEBUG" == 1 ]]; then shift; DEBUG=1; set -- "${@}"; set -axeET; else set -aeET; fi
 if [[ "${1:l}" == "verbose" ]] || [[ "$LOG_VERBOSE" == 1 ]]; then shift; LOG_VERBOSE=1; else LOG_VERBOSE=0; fi
 # ==================================================================
 # VARIABLES
 # ==================================================================
-if [[ -z "$REPO" ]]; then export REPO="$(dirname "$(realpath "${BASH_SOURCE[${#BASH_SOURCE[@]} - 1]}")")"; fi
+if [[ -z "$REPO" ]]; then export REPO="$(realpath "${0:h}")"; fi
 SOURCE_DIRS=("$REPO/src/var/apps" "$REPO/install")
 logFile="$(mktemp -t INSTALL-XXXXXX)"
 # ==================================================================
 # DEPENDENCIES
 # ==================================================================
-if [[ ! -f .env ]]; then cp "$REPO"/.env.dist "$REPO"/.env; fi
+if [[ ! -f "$REPO"/.env ]]; then cp "$REPO"/.env.dist "$REPO"/.env; fi
 chown "$USERNAME":"$USERNAME" "$REPO"/.env
 source "$REPO"/.env
 # ==================================================================
@@ -102,8 +103,6 @@ install::report()
 
 	[[ -z "$logFile" ]] && { echo "No logFile passed for reporting!"; exit 1; }
 
-	clear
-
 	echo "The previous operation was logged and details are available to view"
 	echo "Please select from the following options:"
 	echo -e "\t (V)iew Logs"
@@ -148,13 +147,13 @@ S		install::loadSource "$pkg" "$logFile" -i
 # ------------------------------------------------------------------
 install::checkRoot()
 {
-	local tmpFile="$(mktemp)" ID
+#	local tmpFile="$(mktemp)" ID
 
-	id -u > "$tmpFile"
+#	id -u > "$tmpFile"
 
-	ID="$(cat "$tmpFile")"
+#	ID="$(id -u)"
 
-	if [[ $ID != 0 ]]; then
+	if id -u != 0; then
 		echo "This script MUST be run as root!"
 		exit 1
 	fi
@@ -164,19 +163,15 @@ install::checkRoot()
 # ------------------------------------------------------------------
 install::checkShell()
 {
-	declare -gx SHELL_TYPE
-	declare -gx SHELL_VERSION
+	local SHELL_VERSION
 
-	SHELL_TYPE="$SHELL"
-	SHELL_TYPE="${SHELL_TYPE##*/}"
-
-	if [[ "$SHELL_TYPE" == "zsh" ]]; then
-		SHELL_VERSION="$ZSH_VERSION"
+	if [[ "${SHELL##*/}" == "zsh" ]]; then
+		SHELL_VERSION="${ZSH_VERSION}"
 	else
-		SHELL_VERSION="$BASH_VERSION"
+		SHELL_VERSION="${BASH_VERSION}"
 	fi
 
-	if [ "${SHELL_VERSION:0:1}" -lt 4 ]; then
+	if [[ ${SHELL_VERSION:0:1} -lt 4 ]]; then
 		echo "This script requires a minimum Bash / ZSH version of 4!"
 		exit 1
 	fi
@@ -253,7 +248,7 @@ install::loadSource()
 		fullPath="$app"
 	else
 		if [[ $DEBUG -eq 1 ]]; then install::log "Finding '$app'" "$logFile"; fi
-		if [[ ! "$file" = *.* ]]; then thisFile="$file".zsh; else thisFile="$file"; fi
+		if [[ ! "$app" = *.* ]]; then thisFile="$app".zsh; else thisFile="$app"; fi
 		for dir in "${SOURCE_DIRS[@]}"
 		do
 			if [[ $DEBUG -eq 1 ]]; then install::log "Searching '$dir'" "$logFile"; fi
@@ -307,7 +302,7 @@ install::log()
 	[[ ! -f "$log" ]] && { echo "LogFile '$log' Not Found!"; exit 1; }
 
 	if [[ "$LOG_VERBOSE" -eq 1 ]]; then echo "$msg"; fi
-	echo "$timestamp :: $USERNAME - $msg" >>"$log"
+	echo "$timestamp :: $USERNAME - $msg" | sudo tee -a "$log" > /dev/null
 }
 # ------------------------------------------------------------------
 # install::log::redis
@@ -359,6 +354,7 @@ do
 			;;
 		config)
 			install::loadSource config.sh "$logFile" -i
+			exit 0
 			;;
 		rmConfig|configRemove)
 			install::loadSource config.sh "$logFile" -r

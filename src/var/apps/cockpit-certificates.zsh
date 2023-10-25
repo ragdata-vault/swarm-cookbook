@@ -30,13 +30,13 @@ cockpit-certificates::install()
 	echo "===================================================================="
 	echo
 
-	[[ ! -d /"$USERDIR"/downloads ]] && mkdir -p /"$USERDIR"/downloads
+	[[ ! -d "$USERDIR"/downloads ]] && mkdir -p "$USERDIR"/downloads
 
 	apt install -y certmonger
 
-	git clone git@github.com:skobyda/cockpit-certificates /"$USERDIR"/downloads/cockpit-certificates
+	git clone git@github.com:skobyda/cockpit-certificates "$USERDIR"/downloads/cockpit-certificates
 
-	cd /"$USERDIR"/downloads/cockpit-certificates || return 1
+	cd "$USERDIR"/downloads/cockpit-certificates || return 1
 
 	make
 

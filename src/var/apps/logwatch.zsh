@@ -62,7 +62,7 @@ logwatch::config()
 	sed -i "/^MailFrom.*/c\MailFrom = ${SYSTEM_EMAIL}" /usr/share/logwatch/default.conf/logwatch.conf
 	sed -i "/^Detail.*/c\Detail = High" /usr/share/logwatch/default.conf/logwatch.conf
 
-	install -v -m 0755 -C -D -t /etc/cron.daily /"$SWARMDIR"/inc/cron/logwatch
+	install -v -m 0755 -C -D -t /etc/cron.daily "$SWARMDIR"/inc/cron/logwatch
 
 	echo
 	echo "DONE!"

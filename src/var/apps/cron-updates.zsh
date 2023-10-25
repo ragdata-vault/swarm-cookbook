@@ -30,7 +30,7 @@ cron-updates::install()
 	echo "===================================================================="
 	echo
 
-	install -v -m 0755 -C -D -t /etc/cron.daily /"$SWARMDIR"/inc/cron/apt-update
+	install -v -m 0755 -C -D -t /etc/cron.daily "$SWARMDIR"/inc/cron/apt-update
 
 	echo
 	echo "DONE!"

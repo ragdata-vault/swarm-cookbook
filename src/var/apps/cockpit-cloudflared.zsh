@@ -30,9 +30,9 @@ cockpit-cloudflared::install()
 	echo "===================================================================="
 	echo
 
-	[[ ! -d /"$USERDIR"/downloads ]] && mkdir -p /"$USERDIR"/downloads
+	[[ ! -d "$USERDIR"/downloads ]] && mkdir -p "$USERDIR"/downloads
 
-	wget -O /"$USERDIR"/downloads/cockpit-cloudflared-v0.0.2-1.fc38.noarch.rpm https://github.com/spotsnel/cockpit-cloudflared/releases/download/v0.0.2/cockpit-cloudflared-v0.0.2-1.fc38.noarch.rpm
+	wget -O "$USERDIR"/downloads/cockpit-cloudflared-v0.0.2-1.fc38.noarch.rpm https://github.com/spotsnel/cockpit-cloudflared/releases/download/v0.0.2/cockpit-cloudflared-v0.0.2-1.fc38.noarch.rpm
 
 	systemctl restart cockpit.socket
 
