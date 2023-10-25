@@ -26,9 +26,7 @@ dotfiles::installed() { return 1; }
 #
 dotfiles::install()
 {
-	local logFile fileDir stub source
-
-	logFile="${1:-}"
+	local fileDir stub source
 
 	echo
 	echo "===================================================================="
@@ -119,10 +117,6 @@ dotfiles::install()
 #
 dotfiles::config()
 {
-	local logFile
-
-	logFile="${1:-}"
-
 	echo
 	echo "===================================================================="
 	echo "CONFIGURING :: DOTFILES"
@@ -140,9 +134,8 @@ dotfiles::config()
 #
 dotfiles::remove()
 {
-	local logFile tmpFile
+	local tmpFile
 
-	logFile="${1:-}"
 	tmpFile="$(mktemp -t zshrc-XXXXXX)"
 
 	echo
@@ -168,10 +161,6 @@ dotfiles::remove()
 #
 dotfiles::test()
 {
-	local logFile
-
-	logFile="${1:-}"
-
 	echo
 	echo "===================================================================="
 	echo "TESTING :: DOTFILES"

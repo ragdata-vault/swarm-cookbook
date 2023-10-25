@@ -26,15 +26,13 @@ config::installed() { return 1; }
 #
 config::install()
 {
-	local logFile
-
-	logFile="${1:-}"
-
 	echo
 	echo "===================================================================="
 	echo "INSTALLING :: CONFIG FILES"
 	echo "===================================================================="
 	echo
+
+	source="$REPO"
 
 	install::log "Installing distribution versions of config files" "$logFile"
 
@@ -57,10 +55,6 @@ config::install()
 #
 config::config()
 {
-	local logFile
-
-	logFile="${1:-}"
-
 	echo
 	echo "===================================================================="
 	echo "CONFIGURING :: CONFIG FILES"
@@ -78,11 +72,6 @@ config::config()
 #
 config::remove()
 {
-	local logFile
-
-	logFile="${1:-}"
-	source="$REPO"
-
 	echo
 	echo "===================================================================="
 	echo "UNINSTALLING :: CONFIG FILES"
@@ -102,10 +91,6 @@ config::remove()
 #
 config::test()
 {
-	local logFile
-
-	logFile="${1:-}"
-
 	echo
 	echo "===================================================================="
 	echo "TESTING :: CONFIG FILES"

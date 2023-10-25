@@ -26,10 +26,7 @@ bin::installed() { return 1; }
 #
 bin::install()
 {
-	local logFile source
-
-	logFile="${1:-}"
-	source="$REPO"/src/bin
+	local source
 
 	echo
 	echo "===================================================================="
@@ -37,6 +34,7 @@ bin::install()
 	echo "===================================================================="
 	echo
 
+	source="$REPO"/src/bin
 	while IFS= read -r file
 	do
 		install -v -C -m 0755 -D -t /usr/local/bin "$file"
@@ -56,10 +54,6 @@ bin::install()
 #
 bin::config()
 {
-	local logFile
-
-	logFile="${1:-}"
-
 	echo
 	echo "===================================================================="
 	echo "CONFIGURING BIN"
@@ -77,10 +71,6 @@ bin::config()
 #
 bin::remove()
 {
-	local logFile
-
-	logFile="${1:-}"
-
 	echo
 	echo "===================================================================="
 	echo "UNINSTALLING BIN"
@@ -100,10 +90,6 @@ bin::remove()
 #
 bin::test()
 {
-	local logFile
-
-	logFile="${1:-}"
-
 	echo
 	echo "===================================================================="
 	echo "TESTING BIN"

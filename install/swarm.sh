@@ -26,10 +26,6 @@ swarm::installed() { return 1; }
 #
 swarm::install()
 {
-	local logFile
-
-	logFile="${1:-}"
-
 	echo
 	echo "===================================================================="
 	echo "INSTALLING :: SWARM FILES"
@@ -98,10 +94,6 @@ swarm::install()
 #
 swarm::config()
 {
-	local logFile
-
-	logFile="${1:-}"
-
 	echo
 	echo "===================================================================="
 	echo "CONFIGURING :: SWARM FILES"
@@ -119,10 +111,6 @@ swarm::config()
 #
 swarm::remove()
 {
-	local logFile
-
-	logFile="${1:-}"
-
 	echo
 	echo "===================================================================="
 	echo "UNINSTALLING :: SWARM FILES"
@@ -141,10 +129,6 @@ swarm::remove()
 #
 swarm::test()
 {
-	local logFile
-
-	logFile="${1:-}"
-
 	echo
 	echo "===================================================================="
 	echo "TESTING :: SWARM FILES"

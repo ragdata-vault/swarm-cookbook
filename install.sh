@@ -3,7 +3,7 @@
 # ==================================================================
 # install.sh
 # ==================================================================
-# Dialog Dojo Installer
+# Swarm Cookbook Installer
 #
 # File:         install.sh
 # Author:       Ragdata
@@ -23,8 +23,8 @@ if [[ "${1:l}" == "verbose" ]] || [[ "$LOG_VERBOSE" == 1 ]]; then shift; LOG_VER
 # VARIABLES
 # ==================================================================
 if [[ -z "$REPO" ]]; then export REPO="$(realpath "${0:h}")"; fi
-SOURCE_DIRS=("$REPO/src/var/apps" "$REPO/install")
-logFile="$(mktemp -t INSTALL-XXXXXX)"
+declare -gx SOURCE_DIRS=("$REPO/src/var/apps" "$REPO/install")
+declare -gx logFile="$(mktemp -t INSTALL-XXXXXX)"
 # ==================================================================
 # DEPENDENCIES
 # ==================================================================
@@ -39,19 +39,16 @@ source "$REPO"/.env
 # ------------------------------------------------------------------
 install::install()
 {
-	local logFile="${1:-}"
-	local logFile source
-
 	echo
 	echo "=================================================================="
 	echo "FULL INSTALLATION"
 	echo "=================================================================="
 	echo
 
-	install::loadSource config.sh "$logFile" -i
-	install::loadSource dotfiles.sh "$logFile" -i
-	install::loadSource bin.sh "$logFile" -i
-	install::loadSource swarm.sh "$logFile" -i
+	install::loadSource config.sh -i
+	install::loadSource dotfiles.sh -i
+	install::loadSource bin.sh -i
+	install::loadSource swarm.sh -i
 
 	echo
 	echo "FULL INSTALLATION - DONE!"
@@ -63,25 +60,20 @@ install::install()
 # ------------------------------------------------------------------
 install::init()
 {
-	local logFile="${1:-}"
-	local -A PACKAGES
-
 	echo
 	echo "=================================================================="
 	echo "SYSTEM INITIALIZATION"
 	echo "=================================================================="
 	echo
 
-	install::checkPkg "jq" "JQ" "$logFile"
-	install::checkPkg "redis" "Redis" "$logFile"
-	install::checkPkg "dialog" "Dialog" "$logFile"
+	install::checkPkg "jq" "JQ"
+	install::checkPkg "redis" "Redis"
+	install::checkPkg "dialog" "Dialog"
 
 	echo
 	echo "SYSTEM INITIALIZATION - DONE!"
 	echo "=================================================================="
 	echo
-
-	install::report "$logFile"
 }
 # ------------------------------------------------------------------
 # install::uninstall
@@ -98,7 +90,6 @@ install::uninstall()
 # ------------------------------------------------------------------
 install::report()
 {
-	local logFile="${1:-}"
 	local resp
 
 	[[ -z "$logFile" ]] && { echo "No logFile passed for reporting!"; exit 1; }
@@ -113,14 +104,14 @@ install::report()
 	case "${resp:l}" in
 		v)
 			echo
-			cat "$logFile"
+			sudo cat "$logFile"
 			exit 0
 			;;
 		r)
 			reboot
 			;;
-		*)
-			clear
+		q)
+			exit 0
 			;;
 	esac
 }
@@ -131,15 +122,14 @@ install::checkPkg()
 {
 	local pkg="${1:-}"
 	local name="${2:-}"
-	local logFile="${3:-}"
 
-	if [[ -z "$pkg" ]] || [[ -z "$name" ]] || [[ -z "$logFile" ]]; then echo "Missing Argument(s)!"; exit 1; fi
+	if [[ -z "$pkg" ]] || [[ -z "$name" ]]; then echo "Missing Argument(s)!"; exit 1; fi
 
-	if install::loadSource "$pkg" "$logFile" -d; then
-		install::log "Found '$name'" "$logFile"
+	if install::loadSource "$pkg" -d; then
+		install::log "Found '$name'"
 	else
-S		install::loadSource "$pkg" "$logFile" -i
-		if [ "$?" -ne 0 ]; then install::log "Failed installing '$name' - exiting ..." "$logFile"; exit 1; fi
+		install::loadSource "$pkg" -i
+		if [ "$?" -ne 0 ]; then install::log "Failed installing '$name' - exiting ..."; exit 1; fi
 	fi
 }
 # ------------------------------------------------------------------
@@ -147,13 +137,7 @@ S		install::loadSource "$pkg" "$logFile" -i
 # ------------------------------------------------------------------
 install::checkRoot()
 {
-#	local tmpFile="$(mktemp)" ID
-
-#	id -u > "$tmpFile"
-
-#	ID="$(id -u)"
-
-	if id -u != 0; then
+	if [ $EUID -ne 0 ]; then
 		echo "This script MUST be run as root!"
 		exit 1
 	fi
@@ -203,11 +187,10 @@ install::getPassword()
 install::loadSource()
 {
 	local app="${1:-}"
-	local logFile="${2:-}"
 	local options dir fileName fullPath filePath pathName
 	local -A FILEOPTS
 
-	if [[ -z "$app" ]] || [[ -z "$logFile" ]]; then echo "Missing Argument(s)!"; exit 1; fi
+	if [[ -z "$app" ]]; then echo "Missing Argument!"; exit 1; fi
 
 	shift 2
 
@@ -237,7 +220,7 @@ install::loadSource()
 				break
 				;;
 			*)
-				echo "loadSource :: Invalid Option '$1'" "$logFile"
+				echo "loadSource :: Invalid Option '$1'"
 				exit 1
 				;;
 		esac
@@ -247,44 +230,44 @@ install::loadSource()
 	if [[ -f "$app" ]]; then
 		fullPath="$app"
 	else
-		if [[ $DEBUG -eq 1 ]]; then install::log "Finding '$app'" "$logFile"; fi
+		if [[ $DEBUG -eq 1 ]]; then install::log "Finding '$app'"; fi
 		if [[ ! "$app" = *.* ]]; then thisFile="$app".zsh; else thisFile="$app"; fi
 		for dir in "${SOURCE_DIRS[@]}"
 		do
-			if [[ $DEBUG -eq 1 ]]; then install::log "Searching '$dir'" "$logFile"; fi
+			if [[ $DEBUG -eq 1 ]]; then install::log "Searching '$dir'"; fi
 			if [[ -f "$dir/$thisFile" ]]; then fullPath="$dir/$thisFile"; break; fi
 		done
 	fi
 
-	if [[ -z "$fullPath" ]] || [[ ! -f "$fullPath" ]]; then install::log "File '$app' Not Found!" "$logFile"; exit 1; fi
+	if [[ -z "$fullPath" ]] || [[ ! -f "$fullPath" ]]; then install::log "File '$app' Not Found!"; exit 1; fi
 
 	source "$fullPath"
 
 	# INSTALLED
 	if [[ "${FILEOPTS[installed]}" -eq 1 ]]; then
-		install::log "Checking if '$fileName' installed" "$logFile"
+		install::log "Checking if '$fileName' installed"
 		eval "$fileName::installed"
 		return $?
 	fi
 	# INSTALL & REMOVE
 	if [[ "${FILEOPTS[install]}" -eq 1 ]]; then
-		install::log "Installing '$fileName'" "$logFile"
+		install::log "Installing '$fileName'"
 		eval "$fileName::install $logFile"
 		return $?
 	elif [[ "${FILEOPTS[remove]}" -eq 1 ]]; then
-		install::log "Uninstalling '$fileName'" "$logFile"
+		install::log "Uninstalling '$fileName'"
 		eval "$fileName::remove $logFile"
 		return $?
 	fi
 	# CONFIGURE
 	if [[ "${FILEOPTS[config]}" -eq 1 ]]; then
-		install::log "Configuring '$fileName'" "$logFile"
+		install::log "Configuring '$fileName'"
 		eval "$fileName::config $logFile"
 		return $?
 	fi
 	# TEST
 	if [[ "${FILEOPTS[test]}" -eq 1 ]]; then
-		install::log "Testing '$fileName'" "$logFile"
+		install::log "Testing '$fileName'"
 		eval "$fileName::test $logFile"
 		return $?
 	fi
@@ -295,14 +278,13 @@ install::loadSource()
 install::log()
 {
 	local msg="${1:-}" timestamp
-	local log="${2:-}"
 
 	timestamp="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 
-	[[ ! -f "$log" ]] && { echo "LogFile '$log' Not Found!"; exit 1; }
+	[[ ! -f "$logFile" ]] && { echo "LogFile '$logFile' Not Found!"; exit 1; }
 
 	if [[ "$LOG_VERBOSE" -eq 1 ]]; then echo "$msg"; fi
-	echo "$timestamp :: $USERNAME - $msg" | sudo tee -a "$log" > /dev/null
+	echo "$timestamp :: $USERNAME - $msg" | sudo tee -a "$logFile" > /dev/null
 }
 # ------------------------------------------------------------------
 # install::log::redis
@@ -314,7 +296,7 @@ install::log::redis()
 
 	timestamp="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 
-	[[ ! -f "$log" ]] && { echo "LogFile '$log' Not Found!"; exit 1; }
+	[[ ! -f "$logFile" ]] && { echo "LogFile '$logFile' Not Found!"; exit 1; }
 
 	if [[ "$LOG_VERBOSE" -eq 1 ]]; then echo "$msg"; fi
 
@@ -333,54 +315,50 @@ install::redis::passGET()
 # ==================================================================
 clear
 install::checkShell
-install::checkRoot
+#install::checkRoot
 
-install::init "$logFile"
+install::init
 
 if [[ "$#" == 0 ]]; then set -- "all"; fi
 
-while true
+while [[ "$#" -gt 0 ]]
 do
 	case "$1" in
 		all)
-			install::install "$logFile"
+			install::install
 			;;
 		bin)
-			install::loadSource bin.sh "$logFile" -i
+			install::loadSource bin.sh -i
 			;;
 		rmBin|binRemove)
-			install::loadSource bin.sh "$logFile" -r
+			install::loadSource bin.sh -r
 			;;
 		config)
-			install::loadSource config.sh "$logFile" -i
+			install::loadSource config.sh -i
 			;;
 		rmConfig|configRemove)
-			install::loadSource config.sh "$logFile" -r
+			install::loadSource config.sh -r
 			;;
 		dotfiles)
-			install::loadSource dotfiles.sh "$logFile" -i
+			install::loadSource dotfiles.sh -i
 			;;
 		rmDotfiles|dotfilesRemove)
-			install::loadSource dotfiles.sh "$logFile" -r
+			install::loadSource dotfiles.sh -r
 			;;
 		init)
 			install::init
 			;;
 		swarm)
-			install::loadSource swarm.sh "$logFile" -i
+			install::loadSource swarm.sh -i
 			;;
 		rmSwarm|swarmRemove)
-			install::loadSource swarm.sh "$logFile" -r
+			install::loadSource swarm.sh -r
 			;;
 		node)
-			install::loadSource node.sh "$logFile" -i -c
-			;;
-		*)
-			echo "Invalid Option '$1'"
-			exit 1
+			install::loadSource node.sh -i -c
 			;;
 	esac
 	shift
 done
 
-install::report "$logFile"
+install::report
