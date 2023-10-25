@@ -344,7 +344,6 @@ do
 	case "$1" in
 		all)
 			install::install "$logFile"
-			exit 0
 			;;
 		bin)
 			install::loadSource bin.sh "$logFile" -i
@@ -354,7 +353,6 @@ do
 			;;
 		config)
 			install::loadSource config.sh "$logFile" -i
-			exit 0
 			;;
 		rmConfig|configRemove)
 			install::loadSource config.sh "$logFile" -r

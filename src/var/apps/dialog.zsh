@@ -15,6 +15,28 @@
 # ==================================================================
 
 # ==================================================================
+# HELPER FUNCTIONS
+# ==================================================================
+# ------------------------------------------------------------------
+# dialog::theme::config
+# ------------------------------------------------------------------
+dialog::theme::config()
+{
+	local theme="${1:-}"
+
+	if [[ -z "$theme" ]] && [[ -f "$USERDIR"/.dialogrc ]]; then
+		echo "Resetting Theme"
+		rm -f "$USERDIR"/.dialogrc
+	fi
+
+	[[ "${theme:0:1}" != "." ]] && theme=".$theme"
+
+	if [[ -n "$theme" ]] && [[ -f "$SWARMDIR"/etc/dialog/"$theme" ]]; then
+		[[ -f "$USERDIR"/.dialogrc ]] && rm -f "$USERDIR"/.dialogrc
+		install -m 0644 -T "$SWARMDIR"/etc/dialog/"$theme" "$USERDIR"/.dialogrc
+	fi
+}
+# ==================================================================
 # FUNCTIONS
 # ==================================================================
 #
@@ -66,12 +88,12 @@ dialog::config()
 	done
 
 	case "$RESP" in
-		1) dialogConfig debianrc;;
-		2) dialogConfig redeyedrc;;
-		3) dialogConfig slackwarerc;;
-		4) dialogConfig sourcemagerc;;
-		5) dialogConfig suserc;;
-		6) dialogConfig whiptailrc;;
+		1) dialog::theme::config debianrc;;
+		2) dialog::theme::config redeyedrc;;
+		3) dialog::theme::config slackwarerc;;
+		4) dialog::theme::config sourcemagerc;;
+		5) dialog::theme::config suserc;;
+		6) dialog::theme::config whiptailrc;;
 		q|Q) exit 0;;
 		*) errorExit "Invalid Option!";;
 	esac
