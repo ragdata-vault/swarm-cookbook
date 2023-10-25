@@ -8,4 +8,4 @@ zstyle 'completion:*:*:git:*' script "$ZSHDIR"/completion/_git
 
 fpath=("$ZSHDIR"/completion "$fpath")
 
-autoload -Uz compinit && compinit
+#autoload -Uz compinit && compinit
