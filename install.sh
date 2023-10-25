@@ -25,6 +25,7 @@ if [[ "${1:l}" == "verbose" ]] || [[ "$LOG_VERBOSE" == 1 ]]; then shift; LOG_VER
 if [[ -z "$REPO" ]]; then export REPO="$(realpath "${0:h}")"; fi
 declare -gx SOURCE_DIRS=("$REPO/src/var/apps" "$REPO/install")
 declare -gx logFile="$(mktemp -t INSTALL-XXXXXX)"
+declare -gx USERNAME="${SUDO_USER:-$(whoami)}"
 # ==================================================================
 # DEPENDENCIES
 # ==================================================================
