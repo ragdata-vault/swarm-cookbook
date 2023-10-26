@@ -1,5 +1,5 @@
- #!/usr/bin/env zsh
-# shellcheck disable=SC2155
+#!/usr/bin/env zsh
+# shellcheck disable=SC1090,SC2034,SC2154,SC2155,SC2181
 # ==================================================================
 # ansi::misc.zsh
 # ==================================================================
@@ -11,10 +11,33 @@
 # License:      MIT License
 # Copyright:    Copyright © 2023 Darren (Ragdata) Poulton
 # ==================================================================
+# LOADERS
+# ==================================================================
+# ------------------------------------------------------------------
+# loadLib
+# ------------------------------------------------------------------
+if ! typeset -f loadLib > /dev/null; then
+	loadLib()
+	{
+		local file="${1:-}"
+
+		if [[ "${1:0:1}" == "/" ]] && [[ -f "$file" ]]; then
+			source "$file"
+		elif [[ -f /usr/local/lib/"$file" ]]; then
+			source /usr/local/lib/"$file"
+		elif [[ -f "$REPO"/src/lib/"$file" ]]; then
+			source "$REPO"/src/lib/"$file"
+		else
+			echo "Library File '$file' Not Found!"
+			exit 1
+		fi
+	}
+fi
+# ==================================================================
 # DEPENDENCIES
 # ==================================================================
-[[ -z "$ANSI_CSI" ]] && source "$ZSHDIR"/functions/ansi_color.zsh
-source "$ZSHDIR"/functions/regex_aliases.zsh
+[[ -z "$ANSI_CSI" ]] && loadLib ansi_color.zsh
+loadLib regex_aliases.zsh
 # ==================================================================
 # FUNCTION ALIASES
 # ==================================================================
@@ -55,8 +78,84 @@ errorExitReturn() { echoError "$1"; exitReturn "${2:-1}"; }
 #
 mkcd() { mkdir -p "$@"; cd "$1" || return 1; }
 mkcp() { mkdir -p "$(dirname "$2")"; cp "$1" "$2"; }
+# ------------------------------------------------------------------
+# checkFunc
+# ------------------------------------------------------------------
+checkFunc() { if typeset -f "$1" > /dev/null; then return 0; else return 1; fi; }
+# ------------------------------------------------------------------
+# checkPkg
+# ------------------------------------------------------------------
+checkPkg()
+{
+	local pkg="${1:-}"
+	local name="${2:-}"
 
-history_stats()
+	if [[ -z "$pkg" ]] || [[ -z "$name" ]]; then echo "Missing Argument(s)!"; exit 1; fi
+
+	if loadSource "$pkg" -d; then
+		log::file "Found '$name'"
+	else
+		loadSource "$pkg" -i
+		if [ "$?" -ne 0 ]; then log::file "Failed installing '$name' - exiting ..."; exit 1; fi
+	fi
+}
+# ------------------------------------------------------------------
+# checkRoot
+# ------------------------------------------------------------------
+checkRoot()
+{
+	if [ $EUID -ne 0 ]; then
+		echo "This script MUST be run as root!"
+		exit 1
+	fi
+}
+# ------------------------------------------------------------------
+# checkShell
+# ------------------------------------------------------------------
+checkShell()
+{
+	local SHELL_VERSION
+
+	if [[ "${SHELL##*/}" == "zsh" ]]; then
+		SHELL_VERSION="${ZSH_VERSION}"
+	else
+		SHELL_VERSION="${BASH_VERSION}"
+	fi
+
+	if [[ ${SHELL_VERSION:0:1} -lt 4 ]]; then
+		echo "This script requires a minimum Bash / ZSH version of 4!"
+		exit 1
+	fi
+}
+# ------------------------------------------------------------------
+# colorGrid
+# ------------------------------------------------------------------
+colorGrid() { for i in {0..255}; do print -Pn "%K{$i}  %k%F{$i}${(l:3::0:)i}%f " ${${(M)$((i%6)):#3}:+$'\n'}; done; }
+# ------------------------------------------------------------------
+# getPassword
+# ------------------------------------------------------------------
+getPassword()
+{
+	local len="${1:-16}"
+	local NUM_REGEX CAP_REGEX SML_REGEX SYM_REGEX
+	local passwd=""
+
+	NUM_REGEX='^.*[0-9]+.*$'
+	CAP_REGEX='^.*[A-Z]+.*$'
+	SML_REGEX='^.*[a-z]+.*$'
+	SYM_REGEX='^[A-Za-z0-9]+[@#%_+=][A-Za-z0-9]+$'
+
+	while [[ ! $passwd =~ $NUM_REGEX ]] && [[ ! $passwd =~ $CAP_REGEX ]] && [[ ! $passwd =~ $SML_REGEX ]] && [[ ! $passwd =~ $SYM_REGEX ]]
+	do
+		passwd=$(tr </dev/urandom -dc 'A-Za-z0-9@#%_+=' | head -c "$len")
+	done
+
+	echo "$passwd"
+}
+# ------------------------------------------------------------------
+# historyStats
+# ------------------------------------------------------------------
+historyStats()
 {
 	if [ -z "$1" ]; then
 		entries=1000
@@ -71,7 +170,134 @@ history_stats()
 			| nl \
 			| head -n"$entries"
 }
+# ------------------------------------------------------------------
+# loadSource
+# ------------------------------------------------------------------
+loadSource()
+{
+	local app="${1:-}"
+	local options dir fileName fullPath filePath pathName
+	local -A FILEOPTS
 
+	if [[ -z "$app" ]]; then echo "Missing Argument!"; exit 1; fi
+
+	shift
+
+	fileName="${app##*/}"
+	fileName="${fileName%%.*}"
+
+	FILEOPTS[installed]=0
+	FILEOPTS[install]=0
+	FILEOPTS[config]=0
+	FILEOPTS[remove]=0
+	FILEOPTS[test]=0
+
+	options=$(getopt -o "cdirt" -a -- "$@")
+
+	eval set -- "$options"
+
+	while true
+	do
+		case "$1" in
+			-c) FILEOPTS[config]=1;;
+			-d) FILEOPTS[installed]=1;;
+			-i) FILEOPTS[install]=1;;
+			-r) FILEOPTS[remove]=1;;
+			-t) FILEOPTS[test]=1;;
+			--)
+				shift
+				break
+				;;
+			*)
+				echo "loadSource :: Invalid Option '$1'"
+				exit 1
+				;;
+		esac
+		shift
+	done
+
+	if [[ -f "$app" ]]; then
+		fullPath="$app"
+	else
+		if [[ $DEBUG -eq 1 ]]; then log::file "Finding '$app'"; fi
+		if [[ ! "$app" = *.* ]]; then thisFile="$app".zsh; else thisFile="$app"; fi
+		for dir in "${SOURCE_DIRS[@]}"
+		do
+			if [[ $DEBUG -eq 1 ]]; then log::file "Searching '$dir'"; fi
+			if [[ -f "$dir/$thisFile" ]]; then fullPath="$dir/$thisFile"; break; fi
+		done
+	fi
+
+	if [[ -z "$fullPath" ]] || [[ ! -f "$fullPath" ]]; then log::file "File '$app' Not Found!"; exit 1; fi
+
+	source "$fullPath"
+
+	# INSTALLED
+	if [[ "${FILEOPTS[installed]}" -eq 1 ]]; then
+		log::file "Checking if '$fileName' installed"
+		eval "$fileName::installed"
+		return $?
+	fi
+	# INSTALL & REMOVE
+	if [[ "${FILEOPTS[install]}" -eq 1 ]]; then
+		log::file "Installing '$fileName'"
+		eval "$fileName::install $logFile"
+		return $?
+	elif [[ "${FILEOPTS[remove]}" -eq 1 ]]; then
+		log::file "Uninstalling '$fileName'"
+		eval "$fileName::remove $logFile"
+		return $?
+	fi
+	# CONFIGURE
+	if [[ "${FILEOPTS[config]}" -eq 1 ]]; then
+		log::file "Configuring '$fileName'"
+		eval "$fileName::config $logFile"
+		return $?
+	fi
+	# TEST
+	if [[ "${FILEOPTS[test]}" -eq 1 ]]; then
+		log::file "Testing '$fileName'"
+		eval "$fileName::test $logFile"
+		return $?
+	fi
+}
+# ------------------------------------------------------------------
+# log::file
+# ------------------------------------------------------------------
+log::file()
+{
+	local msg="${1:-}" timestamp
+
+	timestamp="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+
+	[[ ! -f "$logFile" ]] && { echo "LogFile '$logFile' Not Found!"; exit 1; }
+
+	if [[ "$LOG_VERBOSE" -eq 1 ]]; then echo "$msg"; fi
+	echo "$timestamp :: $USERNAME - $msg" | sudo tee -a "$logFile" > /dev/null
+}
+# ------------------------------------------------------------------
+# log::redis
+# ------------------------------------------------------------------
+log::redis()
+{
+	local key="${1:-}" timestamp
+	local val="${2:-}"
+
+	timestamp="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+
+	[[ -z "$REDISCLI_AUTH" ]] && { echo "Redis Authentication Missing!"; exit 1; }
+
+	if [[ "$LOG_VERBOSE" -eq 1 ]]; then echo "$msg"; fi
+
+	redis-cli "$logFile" "$key" "$val" > /dev/null
+}
+# ------------------------------------------------------------------
+# redis::passGET
+# ------------------------------------------------------------------
+redis::passGET() { sudo sed -n -e '/^requirepass.*/p' /etc/redis/redis.conf | awk '{print $2}'; }
+# ------------------------------------------------------------------
+# pf
+# ------------------------------------------------------------------
 pf()
 {
 	pid="$(ps -ef | sed 1d | fzf -m | awk '{print $2}')"
@@ -80,7 +306,9 @@ pf()
 		echo "$pid"
 	fi
 }
-
+# ------------------------------------------------------------------
+# pfu
+# ------------------------------------------------------------------
 # list only killable processes
 pfu()
 {
@@ -95,7 +323,9 @@ pfu()
 		echo "$pid"
 	fi
 }
-
+# ------------------------------------------------------------------
+# fkill
+# ------------------------------------------------------------------
 fkill()
 {
 	if [ $# -eq 0 ]; then
@@ -105,7 +335,9 @@ fkill()
 	fi
 	pfu "$2" | xargs kill -"$signal"
 }
-
+# ------------------------------------------------------------------
+# jqy
+# ------------------------------------------------------------------
 if command -v jq && command -v yq; then
 	# JQ FOR YAML
 	# [YQ](https://github.com/mikefarah/yq) uses unfamiliar syntax
@@ -116,18 +348,27 @@ if command -v jq && command -v yq; then
 		yq r -j "$1" | jq "$2" | yq - r
 	}
 fi
-
-ghsearch_repos()
+# ------------------------------------------------------------------
+# ghsearchRepos
+# ------------------------------------------------------------------
+ghsearchRepos()
 {
 	formatstr="$(echo "$*" | tr ' ' '+')"
 	printf 'https://github.com/search?q=%s&type=Repositories' "$formatstr"
 }
-
-ghsearch_starred()
+# ------------------------------------------------------------------
+# ghsearchStarred
+# ------------------------------------------------------------------
+ghsearchStarred()
 {
-	baseurl="$(ghsearch_repos "$*")"
+	baseurl="$(ghsearchRepos "$*")"
 	echo "${baseurl}&o=desc&s=starred"
 }
-
-ghsearch() { $BROWSER "$(ghsearch_repos "$*")"; }
-ghssearch() { $BROWSER "$(ghsearch_starred "$*")"; }
+# ------------------------------------------------------------------
+# ghsearch
+# ------------------------------------------------------------------
+ghsearch() { $BROWSER "$(ghsearchRepos "$*")"; }
+# ------------------------------------------------------------------
+# ghssearch
+# ------------------------------------------------------------------
+ghssearch() { $BROWSER "$(ghsearchStarred "$*")"; }

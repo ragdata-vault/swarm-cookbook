@@ -37,9 +37,9 @@ lib::install()
 	do
 		sudo install -v -C -m 0755 -D -t /usr/local/lib "$file"
 		if [[ $? -ne 0 ]]; then
-			install::log "Possible problem installing '$file' to /usr/local/lib - exit code $?"
+			log::file "Possible problem installing '$file' to /usr/local/lib - exit code $?"
 		else
-			install::log "Installed '$file' to /usr/local/lib OK!"
+			log::file "Installed '$file' to /usr/local/lib OK!"
 		fi
 	done < <(find "$source" -type f)
 

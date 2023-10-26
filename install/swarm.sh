@@ -32,7 +32,7 @@ swarm::install()
 	echo "===================================================================="
 	echo
 
-	install::log "Installing App Installer Files to '$SWARMDIR/apps'"
+	log::file "Installing App Installer Files to '$SWARMDIR/apps'"
 
 	source="$REPO"/src/apps
 	while IFS= read -r file
@@ -40,7 +40,7 @@ swarm::install()
 		install -v -C -m 0755 -D -t "$SWARMDIR"/apps "$file"
 	done < <(find "$source" -type f)
 
-	install::log "Installing Script Files to '$SWARMDIR/scripts'"
+	log::file "Installing Script Files to '$SWARMDIR/scripts'"
 
 	source="$REPO"/src/scripts
 	while IFS= read -r file
@@ -48,7 +48,7 @@ swarm::install()
 		install -v -C -m 0755 -D -t "$SWARMDIR"/scripts "$file"
 	done < <(find "$source" -type f)
 
-	install::log "Installing Stack Files to '$SWARMDIR/stacks'"
+	log::file "Installing Stack Files to '$SWARMDIR/stacks'"
 
 	source="$REPO"/src/stacks
 	len="${#source}"
@@ -71,7 +71,7 @@ swarm::install()
 		fi
 	done < <(find "$source" -type f)
 
-	install::log "Installing /etc files to '$SWARMDIR/etc'"
+	log::file "Installing /etc files to '$SWARMDIR/etc'"
 
 	source="$REPO"/src/etc
 	len="${#source}"
@@ -117,7 +117,7 @@ swarm::remove()
 	echo "===================================================================="
 	echo
 
-	install::log "Removing files from '$SWARMDIR'"
+	log::file "Removing files from '$SWARMDIR'"
 	rm -Rf "$SWARMDIR"
 
 	echo

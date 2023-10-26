@@ -1,0 +1,18 @@
+# undefined
+builtin autoload -X
+
+file="${1:-}"
+
+if [[ "${1:0:1}" == "/" ]] && [[ -f "$file" ]]; then
+	# shellcheck disable=SC1090
+	source "$file"
+elif [[ -f /usr/local/lib/"$file" ]]; then
+	# shellcheck disable=SC1090
+	source /usr/local/lib/"$file"
+elif [[ -f "$REPO"/src/lib/"$file" ]]; then
+	# shellcheck disable=SC1090
+	source "$REPO"/src/lib/"$file"
+else
+	echo "Library File '$file' Not Found!"
+	exit 1
+fi

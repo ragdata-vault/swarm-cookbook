@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
 
 # ==================================================================
-# src/apps/ufw
+# src/apps/pm2
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/ufw
+# File:         src/apps/pm2
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -18,17 +18,23 @@
 # FUNCTIONS
 # ==================================================================
 #
+# INSTALLED FUNCTION
+#
+pm2::installed() { command -v pm2; }
+#
 # INSTALL FUNCTION
 #
-ufw::install()
+pm2::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING UFW"
+	echo "INSTALLING PM2"
 	echo "===================================================================="
 	echo
 
-	sudo apt install -y ufw
+	if ! command -v npm; then echo "Requires npm to be installed first!"; exit 1; fi
+
+	sudo npm i -g pm2
 
 	echo
 	echo "DONE!"
@@ -37,32 +43,15 @@ ufw::install()
 #
 # CONFIG FUNCTION
 #
-ufw::config()
+pm2::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING UFW"
+	echo "CONFIGURING PM2"
 	echo "===================================================================="
 	echo
 
-	ufw allow 2376/tcp			# docker
-	ufw allow 7946/udp
-	ufw allow 7946/tcp
-	ufw allow 80/tcp			# http
-	ufw allow 8080/tcp			# http
-	ufw allow 9090/tcp			# cockpit
-	ufw allow 443/tcp			# https
-	ufw allow 2377/tcp			# docker
-	ufw allow 3000/tcp			# pm2
-	ufw allow 3001/tcp			# pm2
-
-	ufw allow 53/udp			# dns
-	ufw allow 4789/udp
-
-	ufw allow samba
-
-	ufw reload
-	ufw enable
+	echo
 
 	echo
 	echo "DONE!"
@@ -71,15 +60,33 @@ ufw::config()
 #
 # REMOVE FUNCTION
 #
-ufw::remove()
+pm2::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING UFW"
+	echo "UNINSTALLING PM2"
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y --autoremove ufw
+	pm2 kill
+	npm remove pm2 -g
+
+	echo
+	echo "DONE!"
+	echo
+}
+#
+# TEST FUNCTION
+#
+pm2::test()
+{
+	echo
+	echo "===================================================================="
+	echo "TESTING PM2"
+	echo "===================================================================="
+	echo
+
+	echo
 
 	echo
 	echo "DONE!"

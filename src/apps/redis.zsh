@@ -53,11 +53,11 @@ redis::config()
 	echo
 
 	if grep -q "^# requirepass.*$" /etc/redis/redis.conf; then
-		REDIS_PWD="$(install::getPassword | base64)"
+		REDIS_PWD="$(getPassword | base64)"
 		sed -i "/^supervised.*/c\supervised systemd" /etc/redis/redis.conf
 		sed -i "/^# requirepass.*/c\requirepass ${REDIS_PWD}" /etc/redis/redis.conf
 	elif grep -E -q "^requirepass.*$" /etc/redis/redis.conf; then
-		REDIS_PWD="$(install::redis::passGET)"
+		REDIS_PWD="$(redis::passGET)"
 		if [[ -f "/home/$USERNAME/.zshenv" ]]; then
 			ENV_FILE="/home/$USERNAME/.zshenv"
 		elif [[ -f "/home/$USERNAME/.swarm/.env" ]]; then
