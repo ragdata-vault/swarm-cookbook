@@ -188,10 +188,6 @@ dotfiles::config()
 #
 dotfiles::remove()
 {
-	local tmpFile
-
-	tmpFile="$(mktemp -t zshrc-XXXXXX)"
-
 	echo
 	echo "===================================================================="
 	echo "UNINSTALLING :: DOTFILES"
