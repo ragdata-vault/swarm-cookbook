@@ -55,6 +55,15 @@ fpath=("$fpath" "$ZSHDIR/functions")
 autoload -Uz "$ZSHDIR/functions/**/*"
 
 # ------------------------------------------------------------------
+# RESOURCE PATHS
+# ------------------------------------------------------------------
+fpath=("$fpath" "/usr/share/zsh/functions/Completion")
+fpath=("$fpath" "/usr/share/zsh/functions/Zle")
+
+# Uncomment the line below to initialise the ZSH Completion System
+autoload -U compinit; compinit
+
+# ------------------------------------------------------------------
 # THEME
 # ------------------------------------------------------------------
 # If set to "random", then a random theme will be loaded each time oh-my-zsh is loaded.
@@ -196,41 +205,42 @@ plugins=(
 # CORE COMPLETIONS
 zstyle ':completion:*' completer _expand _complete _ignored _approximate
 zstyle ':completion:*' max-errors 3 numeric
-# Don't complete backup files as commands
-zstyle ':completion:*:complete:-command-::*' ignored-patterns '*\~'
 
-# USERNAME COMPLETION
-# Delete old definitions
-zstyle -d users
-# For SSH & RSYNC, use remote users set in SSH config, plus root
-zstyle ':completion:*:*:(scp|ssh|rsync):*' users root $(awk '$1 == "User" {print $2}' "$USERDIR"/.ssh/config | sort -u)
-# For everything else, use non-system users from /etc/passwd, plus root
-zstyle ':completion:*:*:*:*' users root $(awk -F: '$3 > 1000 && $3 < 65000 {print $1}' /etc/passwd)
-
-# HOSTNAME COMPLETION
-zstyle ':completion:*' hosts $(grep -h '\.' /etc/hosts)
-
-# URL COMPLETION
-# use URLs from history
-zstyle -e ':completion:*:*:urls' urls 'reply=( ${${(f)"$(grep -E --only-matching \(ftp\|https\?\)://\[A-Za-z0-9\].\* $HISTFILE)"}%%[# ]*} )'
-
-# FILENAME SUFFIXES TO IGNORE
-zstyle ':completion::complete:*:*:files' ignored-patterns '*.o' '*.old' '*.bak' '*.retry' '*~'
-zstyle ':completion::complete:*:*:globbed-files' ignored-patterns '*.o' '*.old' '*.bak' '*.retry' '*~'
-zstyle ':completion::complete:rm:*:globbed-files' ignored-patterns
-zstyle ':completion::complete:emacs:*:globbed-files' ignored-patterns '*.o' '*.old' '*.bak' '*.retry' '*~' '*.asis'
-zstyle '*' single-ignored show
-
-# Finenames to prefer/limit during completion
-zstyle ':completion:*:*:loffice:*' file-patterns '*.(doc|docx|dot|dotx|xls|xlsx|xlt|xltx|odt|ods|csv|tsv|txt):documents *(-/):directories' '%p:all-files'
-zstyle ':completion:*:*:rmdir:*' file-sort time
-
-# CD to never select parent directory
-zstyle ':completion:*:cd:*' ignore-parents parent pwd
-
-# USE CACHE
-zstyle ':completion:*' use-cache on
-zstyle ':completion:*' cache-path "$USERDIR"/.zsh/cache
+# # Don't complete backup files as commands
+# zstyle ':completion:*:complete:-command-::*' ignored-patterns '*\~'
+#
+# # USERNAME COMPLETION
+# # Delete old definitions
+# zstyle -d users
+# # For SSH & RSYNC, use remote users set in SSH config, plus root
+# zstyle ':completion:*:*:(scp|ssh|rsync):*' users root $(awk '$1 == "User" {print $2}' "$USERDIR"/.ssh/config | sort -u)
+# # For everything else, use non-system users from /etc/passwd, plus root
+# zstyle ':completion:*:*:*:*' users root $(awk -F: '$3 > 1000 && $3 < 65000 {print $1}' /etc/passwd)
+#
+# # HOSTNAME COMPLETION
+# zstyle ':completion:*' hosts $(grep -h '\.' /etc/hosts)
+#
+# # URL COMPLETION
+# # use URLs from history
+# zstyle -e ':completion:*:*:urls' urls 'reply=( ${${(f)"$(grep -E --only-matching \(ftp\|https\?\)://\[A-Za-z0-9\].\* $HISTFILE)"}%%[# ]*} )'
+#
+# # FILENAME SUFFIXES TO IGNORE
+# zstyle ':completion::complete:*:*:files' ignored-patterns '*.o' '*.old' '*.bak' '*.retry' '*~'
+# zstyle ':completion::complete:*:*:globbed-files' ignored-patterns '*.o' '*.old' '*.bak' '*.retry' '*~'
+# zstyle ':completion::complete:rm:*:globbed-files' ignored-patterns
+# zstyle ':completion::complete:emacs:*:globbed-files' ignored-patterns '*.o' '*.old' '*.bak' '*.retry' '*~' '*.asis'
+# zstyle '*' single-ignored show
+#
+# # Finenames to prefer/limit during completion
+# zstyle ':completion:*:*:loffice:*' file-patterns '*.(doc|docx|dot|dotx|xls|xlsx|xlt|xltx|odt|ods|csv|tsv|txt):documents *(-/):directories' '%p:all-files'
+# zstyle ':completion:*:*:rmdir:*' file-sort time
+#
+# # CD to never select parent directory
+# zstyle ':completion:*:cd:*' ignore-parents parent pwd
+#
+# # USE CACHE
+# zstyle ':completion:*' use-cache on
+# zstyle ':completion:*' cache-path "$USERDIR"/.zsh/cache
 
 # ------------------------------------------------------------------
 # CASE-SENSITIVE COMPLETION
@@ -254,80 +264,77 @@ zstyle ':completion:*' cache-path "$USERDIR"/.zsh/cache
 # Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
 COMPLETION_WAITING_DOTS="true"
 
-# Uncomment the line below to initialise the ZSH Completion System
-autoload -U compinit; compinit
-
-# ==================================================================
-# KEYBINDINGS & FUNCTIONS
-# ==================================================================
-
-# PREFERENCES
-export _ZL_MATCH_MODE=1
-export _ZL_ECHO=0				# my prompt shows the PWD
-export _ZL_NO_CHECK=1			# unmounting and re-mounting drives shouldn't mess up history
-
-# Bind CTRL+Z to "fg" so the same keybind suspends and resumes
-fancy_ctrl_z()
-{
-	if [[ "$#BUFFER" -eq 0 ]]; then
-		export BUFFER='fg'
-		zle accept-line
-	else
-		zle push-input
-		zle clear-screen
-	fi
-}
-zle -N fancy_ctrl_z
-
-bindkey ' ' magic-space			# history expansion
-
-autoload edit-command-line
-zle -N edit-command-line
-bindkey -M vicmd v edit-command-line
-
-# copy the active line from the command line buffer
-copybuffer() { printf '%s' "$BUFFER" | wl-copy -n; }
-zle -N copybuffer
-bindkey "^O" copybuffer
-
-# print previous command with ALT-N, where N is the number of arguments
-bindkey -s '\e1' "!:0 \t"
-bindkey -s '\e2' "!:0-1 \t"
-bindkey -s '\e3' "!:0-2 \t"
-bindkey -s '\e4' "!:0-3 \t"
-bindkey -s '\e5' "!:0-4 \t"
-bindkey -s '\e`' "!:0- \t"		# all but the last word
-
-# automatically escape pasted URLs
-autoload -Uz bracketed-paste-magic
-zle -N bracketed-paste bracketed-paste-magic
+# # ==================================================================
+# # KEYBINDINGS & FUNCTIONS
+# # ==================================================================
+#
+# # PREFERENCES
+# export _ZL_MATCH_MODE=1
+# export _ZL_ECHO=0				# my prompt shows the PWD
+# export _ZL_NO_CHECK=1			# unmounting and re-mounting drives shouldn't mess up history
+#
+# # Bind CTRL+Z to "fg" so the same keybind suspends and resumes
+# fancy_ctrl_z()
+# {
+# 	if [[ "$#BUFFER" -eq 0 ]]; then
+# 		export BUFFER='fg'
+# 		zle accept-line
+# 	else
+# 		zle push-input
+# 		zle clear-screen
+# 	fi
+# }
+# zle -N fancy_ctrl_z
+#
+# bindkey ' ' magic-space			# history expansion
+#
+# autoload edit-command-line
+# zle -N edit-command-line
+# bindkey -M vicmd v edit-command-line
+#
+# # copy the active line from the command line buffer
+# copybuffer() { printf '%s' "$BUFFER" | wl-copy -n; }
+# zle -N copybuffer
+# bindkey "^O" copybuffer
+#
+# # print previous command with ALT-N, where N is the number of arguments
+# bindkey -s '\e1' "!:0 \t"
+# bindkey -s '\e2' "!:0-1 \t"
+# bindkey -s '\e3' "!:0-2 \t"
+# bindkey -s '\e4' "!:0-3 \t"
+# bindkey -s '\e5' "!:0-4 \t"
+# bindkey -s '\e`' "!:0- \t"		# all but the last word
+#
+# # automatically escape pasted URLs
+# autoload -Uz bracketed-paste-magic
+# zle -N bracketed-paste bracketed-paste-magic
 # autoload -Uz url-quote-magic
 # zle -N self-insert url-quote-magic
-
-# Use fd (https://github.com/sharkdp/fd) instead of the default find
-# command for listing path candidates.
-# The first argument to the function ($1) is the base path to start traversal
-# See the source code (completion.{bash,zsh}) for the details
-_fzf_compgen_path() { fd --hidden --follow --exclude ".git" . "$1"; }
-
-# Use fd to generate the list for directory completion
-_fzf_compgen_dir() { fd --type d --hidden --follow --exclude ".git" . "$1"; }
-
-# reload the zsh session - from OMZ:plugins/zsh_reload
-zreload()
-{
-	local cache="$ZSH_CACHE_DIR"
-	autoload -U compinit zrecompile
-	compinit -i -d "$cache/zcomp-$HOST"
-
-	for f in "${ZDOTDIR:-~}/.zshrc" "$cache/zcomp-$HOST"
-	do
-		zrecompile -p $f && command rm -f $f.zwc.old
-	done
-
-	# use $SHELL if available; remove leading dash if login shell
-	[[ -n "$SHELL" ]] && exec "${SHELL#-}" || exec zsh
-}
+#
+# # Use fd (https://github.com/sharkdp/fd) instead of the default find
+# # command for listing path candidates.
+# # The first argument to the function ($1) is the base path to start traversal
+# # See the source code (completion.{bash,zsh}) for the details
+# _fzf_compgen_path() { fd --hidden --follow --exclude ".git" . "$1"; }
+#
+# # Use fd to generate the list for directory completion
+# _fzf_compgen_dir() { fd --type d --hidden --follow --exclude ".git" . "$1"; }
+#
+# # reload the zsh session - from OMZ:plugins/zsh_reload
+# zreload()
+# {
+# 	local cache="$ZSH_CACHE_DIR"
+# 	autoload -U compinit zrecompile
+# 	compinit -i -d "$cache/zcomp-$HOST"
+#
+# 	for f in "${ZDOTDIR:-~}/.zshrc" "$cache/zcomp-$HOST"
+# 	do
+# 		zrecompile -p $f && command rm -f $f.zwc.old
+# 	done
+#
+# 	# use $SHELL if available; remove leading dash if login shell
+# 	[[ -n "$SHELL" ]] && exec "${SHELL#-}" || exec zsh
+# }
 
 # ------------------------------------------------------------------
 # CUSTOM INSULTS

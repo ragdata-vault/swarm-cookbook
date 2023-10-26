@@ -7,5 +7,6 @@ zstyle 'completion:*:*:git:*' script "$ZSHDIR"/completion/git-completion.bash
 zstyle 'completion:*:*:git:*' script "$ZSHDIR"/completion/_git
 
 fpath=("$ZSHDIR"/completion "$fpath")
+fpath=("$fpath" "/usr/share/zsh/functions/Completion")
 
-#autoload -Uz compinit && compinit
+autoload -U compinit; compinit
