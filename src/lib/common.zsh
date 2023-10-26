@@ -380,3 +380,18 @@ ghsearch() { $BROWSER "$(ghsearchRepos "$*")"; }
 # ghssearch
 # ------------------------------------------------------------------
 ghssearch() { $BROWSER "$(ghsearchStarred "$*")"; }
+# ------------------------------------------------------------------
+# setPerms
+# ------------------------------------------------------------------
+setPerms()
+{
+	while IFS= read -r dir
+	do
+		chmod 0755 "$dir"
+	done < <(find "$PWD" -type d)
+
+	while IFS= read -r file
+	do
+		chmod 0644 "$file"
+	done < <(find "$PWD" -type f)
+}
