@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
 
 # ==================================================================
-# src/var/apps/python
+# src/var/apps/devdash
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/var/apps/python
+# File:         src/var/apps/devdash
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -18,18 +18,29 @@
 # FUNCTIONS
 # ==================================================================
 #
+# INSTALLED FUNCTION
+#
+devdash::installed() { command -v devdash; }
+#
 # INSTALL FUNCTION
 #
-python::install()
+devdash::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING PYTHON"
+	echo "INSTALLING DEVDASH"
 	echo "===================================================================="
 	echo
 
-	sudo apt install -y python3-full python3-dev python3-pip python3.11-full python3-certbot-nginx
-	sudo apt install -y python3-software-properties python3-dateutil python3-debconf python3-debian python3-venv python3-django
+	cd "$XDG_DOWNLOAD_DIR" || return 1
+
+	curl -LO https://raw.githubusercontent.com/Phantas0s/devdash/master/install/linux.sh
+
+	mv linux.sh install-devdash.sh
+
+	sh ./install-devdash.sh
+
+	cd - || return 1
 
 	echo
 	echo "DONE!"
@@ -38,22 +49,16 @@ python::install()
 #
 # CONFIG FUNCTION
 #
-python::config()
+devdash::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING PYTHON"
+	echo "CONFIGURING DEVDASH"
 	echo "===================================================================="
 	echo
 
-	if [[ ! -f /usr/bin/python2 ]]; then ln -s /usr/bin/python2.7 /usr/bin/python2; fi
-	if [[ ! -f /usr/bin/python3 ]]; then ln -s /usr/bin/python3.11 /usr/bin/python3; fi
-
-	sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.11 99
-
-	if [[ -f /usr/bin/python3.8 ]]; then update-alternatives --install /usr/bin/python python /usr/bin/python3.8 80; fi
-
-	sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 20
+	# default location for config file is:
+	# $XDG_CONFIG_HOME/devdash/default.yml
 
 	echo
 	echo "DONE!"
@@ -62,15 +67,15 @@ python::config()
 #
 # REMOVE FUNCTION
 #
-python::remove()
+devdash::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING PYTHON"
+	echo "UNINSTALLING DEVDASH"
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y --autoremove python3-full python3-pip python3.11-full
+	rm -f "$XDG_DOWNLOAD_DIR/install-devdash.sh"
 
 	echo
 	echo "DONE!"
@@ -79,11 +84,11 @@ python::remove()
 #
 # TEST FUNCTION
 #
-python::test()
+devdash::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING PYTHON"
+	echo "TESTING DEVDASH"
 	echo "===================================================================="
 	echo
 

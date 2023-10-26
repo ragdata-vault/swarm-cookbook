@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
 
 # ==================================================================
-# help-launch
+# help-app
 # ==================================================================
 # Swarm Cookbook Installer
 #
-# File:         help-launch
+# File:         help-app
 # Author:       Ragdata
 # Date:         15/04/2023
 # License:      MIT License
@@ -18,7 +18,7 @@
 # MAIN
 # ==================================================================
 echo
-echoGold "======================================================"
-echoGold "/usr/local/bin/${WHITE}launch${RESET} COMMAND USAGE"
-echoGold "======================================================"
+echo "${GOLD}======================================================${RESET}"
+echo "${GOLD}/usr/local/bin/${RESET}${WHITE}app${RESET} ${GOLD}COMMAND USAGE${RESET}"
+echo "${GOLD}======================================================${RESET}"
 echo

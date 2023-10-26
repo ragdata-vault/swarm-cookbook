@@ -1,13 +1,13 @@
 #!/usr/bin/env zsh
 
 # ==================================================================
-# help-launch
+# help-cluster
 # ==================================================================
 # Swarm Cookbook Installer
 #
-# File:         help-launch
+# File:         help-cluster
 # Author:       Ragdata
-# Date:         17/09/2023
+# Date:         15/04/2023
 # License:      MIT License
 # Copyright:    Copyright © 2023 Darren (Ragdata) Poulton
 # ==================================================================
@@ -19,6 +19,6 @@
 # ==================================================================
 echo
 echo "${GOLD}======================================================${RESET}"
-echo "${WHITE}SWARM COOKBOOK INSTALLER${RESET}"
+echo "${GOLD}/usr/local/bin/${RESET}${WHITE}cluster${RESET} ${GOLD}COMMAND USAGE${RESET}"
 echo "${GOLD}======================================================${RESET}"
 echo

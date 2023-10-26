@@ -18,7 +18,7 @@
 # MAIN
 # ==================================================================
 echo
-echoGold "======================================================"
-echoGold "/usr/local/bin/${WHITE}stack${RESET} COMMAND USAGE"
-echoGold "======================================================"
+echo "${GOLD}======================================================${RESET}"
+echo "${GOLD}/usr/local/bin/${RESET}${WHITE}stack${RESET} ${GOLD}COMMAND USAGE${RESET}"
+echo "${GOLD}======================================================${RESET}"
 echo
