@@ -35,7 +35,7 @@ dotfiles::install()
 	echo "===================================================================="
 	echo
 
-	if [ ! "$(getent group zshusers)" ]; then sudo groupadd zshusers; fi
+	if ! [ "$(getent group zshusers)" ]; then sudo groupadd zshusers; fi
 
 	if [[ ! -f "$ZSHSHARE/zshenv" ]]; then
 		log::file "Installing ZSH Dotfiles to '$ZSHSHARE'"
