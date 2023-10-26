@@ -9,33 +9,7 @@
 # OH MY ZSH!
 # ------------------------------------------------------------------
 # Uncomment below to load 'Oh My ZSH' on startup
-source $ZSH/oh-my-zsh.sh
-
-# ------------------------------------------------------------------
-# POWERLEVEL10K THEME
-# ------------------------------------------------------------------
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
-
-if [[ -r "$XDG_CACHE_HOME/p10k-instant-prompt-$USERNAME.zsh" ]]; then
-	source "$XDG_CACHE_HOME/p10k-instant-prompt-$USERNAME.zsh"
-fi
-
-# ------------------------------------------------------------------
-# USER VARIABLES
-# ------------------------------------------------------------------
-export COLUMS ROWS
-
-# Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-	export EDITOR='nano'
-else
-	export EDITOR='pico'
-fi
-
-if [ -z "$PROFILE_SET" ]; then
-	source "$USERDIR/.profile"
-	export PROFILE_SET='zshrc'
-fi
+source "$ZSH"/oh-my-zsh.sh
 
 # ------------------------------------------------------------------
 # LAZY AUTOLOAD
@@ -58,14 +32,6 @@ autoload -Uz "$ZSHDIR/functions/**/*"
 
 # Uncomment the line below to initialise the ZSH Completion System
 autoload -U compinit; compinit
-
-# ------------------------------------------------------------------
-# THEME
-# ------------------------------------------------------------------
-# If set to "random", then a random theme will be loaded each time oh-my-zsh is loaded.
-# If you need to know which theme was randomly loaded, run: `echo $RANDOM_THEME`
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # ------------------------------------------------------------------
 # RANDOM THEMES LIST
