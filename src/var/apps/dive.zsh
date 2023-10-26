@@ -22,7 +22,7 @@
 #
 dive::install()
 {
-	local USERNAME="${SUDO_USER:-$(whoami)}" DIVE_VERSION
+	local DIVE_VERSION
 
 	echo
 	echo "===================================================================="

@@ -22,8 +22,6 @@
 #
 cockpit-cloudflared::install()
 {
-	local USERNAME="${SUDO_USER:-$(whoami)}"
-
 	echo
 	echo "===================================================================="
 	echo "INSTALLING COCKPIT-CLOUDFLARED"

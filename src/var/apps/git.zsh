@@ -38,8 +38,6 @@ git::install() {
 #
 git::config()
 {
-	local USERNAME="${SUDO_USER:-$(whoami)}"
-
 	local RESULT OK_LABEL CANCEL_LABEL DIALOG_BACKTITLE DIALOG_TITLE DIALOG_TEXT HEIGHT WIDTH DIALOG_INIT
 	local GIT_USER GIT_USER_DEFAULT GIT_EMAIL_DEFAULT status
 	local NODE_ID="$(docker info -f '{{.Swarm.NodeID}}')"

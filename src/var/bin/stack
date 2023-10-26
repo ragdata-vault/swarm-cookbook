@@ -38,7 +38,7 @@ declare -gx STACK_BUILD_DATE="20230718-0033"
 # ------------------------------------------------------------------
 stack::deploy()
 {
-	local USERNAME="${SUDO_USER:-$(whoami)}" stackFolder stackName name c serviceName
+	local stackFolder stackName name c serviceName
 
 	[[ -z "$1" ]] && errorExit "Missing Arguments!"
 

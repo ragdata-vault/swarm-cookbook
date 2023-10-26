@@ -306,24 +306,23 @@ install::log()
 # ------------------------------------------------------------------
 install::log::redis()
 {
-	local msg="${1:-}" timestamp
-	local key="${2:-}"
+	local key="${1:-}" timestamp
+	local val="${2:-}"
 
 	timestamp="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 
-	[[ ! -f "$logFile" ]] && { echo "LogFile '$logFile' Not Found!"; exit 1; }
+	[[ -z "$REDISCLI_AUTH" ]] && { echo "Redis Authentication Missing!"; exit 1; }
 
 	if [[ "$LOG_VERBOSE" -eq 1 ]]; then echo "$msg"; fi
 
-	redis-cli
-	# echo "$timestamp :: $USERNAME - $msg" >>"$log"
+	redis-cli "$logFile" "$key" "$val" > /dev/null
 }
 # ------------------------------------------------------------------
 # install::redis::passGET
 # ------------------------------------------------------------------
 install::redis::passGET()
 {
-	sed -n -e '/^requirepass.*/p' /etc/redis/redis.conf | awk '{print $2}'
+	sudo sed -n -e '/^requirepass.*/p' /etc/redis/redis.conf | awk '{print $2}'
 }
 # ==================================================================
 # MAIN

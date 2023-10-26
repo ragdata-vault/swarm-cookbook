@@ -22,8 +22,6 @@
 #
 cockpit-file-sharing::install()
 {
-	local USERNAME="${SUDO_USER:-$(whoami)}"
-
 	echo
 	echo "===================================================================="
 	echo "INSTALLING COCKPIT-FILE-SHARING"

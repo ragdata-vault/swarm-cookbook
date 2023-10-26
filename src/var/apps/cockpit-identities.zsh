@@ -22,8 +22,6 @@
 #
 cockpit-identities::install()
 {
-	local USERNAME="${SUDO_USER:-$(whoami)}"
-
 	echo
 	echo "===================================================================="
 	echo "INSTALLING COCKPIT-IDENTITIES"

@@ -39,8 +39,6 @@ logrotate::install()
 #
 logrotate::config()
 {
-	local USERNAME="${SUDO_USER:-$(whoami)}"
-
 	echo
 	echo "===================================================================="
 	echo "CONFIGURING LOGROTATE"

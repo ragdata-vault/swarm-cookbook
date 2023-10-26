@@ -39,8 +39,6 @@ fail2ban::install()
 #
 fail2ban::config()
 {
-	local USERNAME="${SUDO_USER:-$(whoami)}"
-
 	echo
 	echo "===================================================================="
 	echo "CONFIGURING FAIL2BAN"

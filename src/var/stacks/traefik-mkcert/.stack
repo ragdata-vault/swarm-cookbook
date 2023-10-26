@@ -26,8 +26,6 @@
 # ------------------------------------------------------------------
 stackInit()
 {
-	local USERNAME="${SUDO_USER:-$(whoami)}"
-
 	local NODE_ID SCRIPT_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]:-${(%):-%x}}")")"
 
 	if [[ ! -f "$SCRIPT_DIR"/.env ]]; then

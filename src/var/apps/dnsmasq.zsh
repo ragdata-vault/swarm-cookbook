@@ -22,15 +22,13 @@
 #
 dnsmasq::install()
 {
-	local USERNAME="${SUDO_USER:-$(whoami)}"
-
 	echo
 	echo "===================================================================="
 	echo "INSTALLING DNSMASQ"
 	echo "===================================================================="
 	echo
 
-	local USERNAME NODE_ID NODE_DOMAIN
+	local NODE_ID NODE_DOMAIN
 
 	NODE_ID="$(docker info -f '{{.Swarm.NodeID}}')"
 
