@@ -53,7 +53,7 @@ zsh::install()
 
 		sudo chsh -s "$(which zsh)" "$USERNAME"
 
-		if [[ -f "$USERDIR"/.zshrc ]]; then
+		if [[ -L "$USERDIR"/.zshrc ]]; then
 			echo "sudo bash -c ./$REPO/install/zsh.sh cont" >> "$USERDIR"/.zshrc
 		else
 

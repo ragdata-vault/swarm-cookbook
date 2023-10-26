@@ -108,7 +108,7 @@ dotfiles::install()
 		install::log "Linking user '$username' to ZSH Dotfiles in '$ZSHSHARE'"
 		[[ ! -L "$userdir/.zshenv" ]] && ln -sf "$ZSHSHARE/zshenv" "$userdir/.zshenv"
 		[[ ! -L "$userdir/.zprofile" ]] && ln -sf "$ZSHSHARE/zprofile" "$userdir/.zprofile"
-		[[ ! -L "$userdir/.zshrc" ]] && ln -sf "$ZSHSHARE/zshrc" "$userdir/.zshrc"
+		[[ ! -f "$userdir/.zshrc" ]] && install -v -C -m 0644 -D -t "$ZSHSHARE/usr_zshrc" "$userdir/.zshrc"
 		[[ ! -L "$userdir/.zlogin" ]] && ln -sf "$ZSHSHARE/zlogin" "$userdir/.zlogin"
 		[[ ! -L "$userdir/.zlogout" ]] && ln -sf "$ZSHSHARE/zlogout" "$userdir/.zlogout"
 
@@ -211,7 +211,7 @@ dotfiles::remove()
 		userdir="${userinfo##*:}"
 		userzsh="$userdir/.zsh"
 		# remove all symbolic links
-		install::log "Removing symbolic links for user '$username''"
+		install::log "Removing symbolic links & files for user '$username''"
 		rm -Rf "$userzsh"
 		rm -f "$userdir/.z*"
 		if [[ -d "$userdir/.bash_archive" ]]; then
