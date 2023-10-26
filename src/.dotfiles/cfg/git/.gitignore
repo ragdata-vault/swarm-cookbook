@@ -1,0 +1,43 @@
+# ##################################################################
+# GLOBAL GITIGNORE
+# ##################################################################
+
+# BACKUPS
+*.bak
+
+# CERTIFICATES
+*.pem
+
+# CONFIG FILES
+.env
+.node
+.paths
+.defaults
+.ignore
+
+# DEPENDENCY FOLDERS
+vendor/
+node_modules/
+
+# HIDDEN FILES & FOLDERS
+.archive/
+.scratch*
+
+# IDEs
+.idea/
+*.iml
+
+# PACKAGE MANAGERS
+composer.lock
+package-lock.json
+
+# RELEASE MANAGER CONFIGS
+.releaserc
+.releaserc.yml
+
+# SECRETS
+secret/
+secrets/
+.secret
+.gpg
+.key

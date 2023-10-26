@@ -69,13 +69,13 @@ ssh::config()
     sed -i '/X11Forwarding.*/c\#X11Forwarding no' /etc/ssh/sshd_config
 
 	if ! grep -q "Protocol 2" /etc/ssh/sshd_config; then
-		echo >> /etc/ssh/sshd_config
-		echo "Protocol 2" >> /etc/ssh/sshd_config
+		echo | sudo tee /etc/ssh/sshd_config
+		echo "Protocol 2" | sudo tee /etc/ssh/sshd_config
 	fi
 
 	if ! grep -q "$MY_USER" /etc/ssh/sshd_config; then
-		echo >> /etc/ssh/sshd_config
-		echo "AllowUsers $MY_USER" >> /etc/ssh/sshd_config
+		echo | sudo tee /etc/ssh/sshd_config
+		echo "AllowUsers $MY_USER" | sudo tee /etc/ssh/sshd_config
 	fi
 
 	sudo systemctl restart ssh
