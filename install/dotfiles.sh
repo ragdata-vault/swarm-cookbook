@@ -56,8 +56,8 @@ dotfiles::install()
 	fi
 
 	log::file "Installing .zsh_ssh & .zsh_ware directly to '$ZSHDIR'"
-	if [[ ! -f "$ZSHDIR/.zsh_ssh" ]]; then install -v -b -C -m 0660 -T "$source/.zsh_ssh" "$ZSHDIR/.zsh_ssh"; fi
-	if [[ ! -f "$ZSHDIR/.zsh_ware" ]]; then install -v -b -C -m 0660 -T "$source/.zsh_ware.dist" "$ZSHDIR/.zsh_ware"; fi
+	if [[ ! -f "$ZSHDIR/.zsh_ssh" ]]; then install -v -b -C -m 0660 -T "$source/zsh_ssh" "$ZSHDIR/.zsh_ssh"; fi
+	if [[ ! -f "$ZSHDIR/.zsh_ware" ]]; then install -v -b -C -m 0660 -T "$source/zsh_ware.dist" "$ZSHDIR/.zsh_ware"; fi
 
 	log::file "Installing ZSH Aliases to '$ZSHSHARE/aliases'"
 	source="$REPO"/src/.dotfiles/.zsh/aliases

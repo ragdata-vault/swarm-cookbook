@@ -13,8 +13,7 @@
 # ==================================================================
 # DEPENDENCIES
 # ==================================================================
-if ! grep -q 'function' <<< "$(type ansi::cursor::restore)"; then loadLib ansi_cursor.zsh; fi
-if ! grep -q 'function' <<< "$(type ansi::column)"; then loadLib ansi_format.zsh; fi
+
 # ==================================================================
 # VARIABLES
 # ==================================================================
@@ -82,14 +81,14 @@ ansi::bg::hvy::yellow()		{ printf '%s43m' "$ANSI_CSI"; }
 # ------------------------------------------------------------------
 # Reset all escape codes
 # ------------------------------------------------------------------
-ansi::reset()
-{
-	ansi::color::reset
-	ansi::font::reset
-	ansi::erase::display 2
-	ansi::position "1;1"
-	ansi::cursor::show
-}
+#ansi::reset()
+#{
+#	ansi::color::reset
+#	ansi::font::reset
+#	ansi::erase::display 2
+#	ansi::position "1;1"
+#	ansi::cursor::show
+#}
 # ==================================================================
 # FUNCTION ALIASES
 # ==================================================================
