@@ -31,6 +31,7 @@ if ! typeset -f loadLib > /dev/null; then
 	}
 fi
 if ! typeset -f ansi::color > /dev/null; then loadLib ansi_color.zsh; fi
+if ! typeset -f ansi::blink > /dev/null; then loadLib ansi_effect.zsh; fi
 # ==================================================================
 # FUNCTIONS
 # ==================================================================
