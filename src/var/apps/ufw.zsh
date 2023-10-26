@@ -28,7 +28,7 @@ ufw::install()
 	echo "===================================================================="
 	echo
 
-	apt install -y ufw
+	sudo apt install -y ufw
 
 	echo
 	echo "DONE!"
@@ -77,7 +77,7 @@ ufw::remove()
 	echo "===================================================================="
 	echo
 
-	apt purge -y ufw
+	sudo apt purge -y ufw
 
 	echo
 	echo "DONE!"

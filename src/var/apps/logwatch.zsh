@@ -28,7 +28,7 @@ logwatch::install()
 	echo "===================================================================="
 	echo
 
-	apt install -y logwatch
+	sudo apt install -y logwatch
 
 	echo
 	echo "DONE!"
@@ -79,7 +79,7 @@ logwatch::remove()
 	echo "===================================================================="
 	echo
 
-	apt purge -y logwatch
+	sudo apt purge -y logwatch
 
 	echo
 	echo "DONE!"

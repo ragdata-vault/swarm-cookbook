@@ -30,8 +30,8 @@ toolset-dev::install()
 
 	export DEBIAN_FRONTEND=noninteractive
 
-	apt install -y mkcert libffi-dev libgdbm-dev libncurses5-dev automake libtool gcc g++ make colordiff
-	apt install -y zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libxml2-dev libxslt1-dev libcurl4-openssl-dev libc-bin
+	sudo apt install -y mkcert libffi-dev libgdbm-dev libncurses5-dev automake libtool gcc g++ make colordiff
+	sudo apt install -y zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libxml2-dev libxslt1-dev libcurl4-openssl-dev libc-bin
 
 	echo
 	echo "DONE!"

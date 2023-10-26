@@ -28,7 +28,7 @@ sysstat::install()
 	echo "===================================================================="
 	echo
 
-	apt install -y sysstat
+	sudo apt install -y sysstat
 
 	echo
 	echo "DONE!"
@@ -65,7 +65,7 @@ sysstat::remove()
 	echo "===================================================================="
 	echo
 
-	apt install -y sysstat
+	sudo apt install -y sysstat
 
 	echo
 	echo "DONE!"

@@ -28,7 +28,7 @@ rkhunter::install()
 	echo "===================================================================="
 	echo
 
-	apt install -y rkhunter
+	sudo apt install -y rkhunter
 
 	echo
 	echo "DONE!"

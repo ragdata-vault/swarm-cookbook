@@ -1,6 +1,6 @@
 NODE_TYPE=Manager
 NIC_ID=eth0
-NODE_HOSTNAME=ragdata
+NODE_HOSTNAME=node-1
 NODE_DOMAIN=local
 MY_USER=ragdata
 ADMIN_EMAIL=admin@redeyed.au

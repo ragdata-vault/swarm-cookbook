@@ -28,9 +28,9 @@ cockpit-machines::install()
 	echo "===================================================================="
 	echo
 
-	apt install -y gettext nodejs make
+	sudo apt install -y gettext nodejs make
 
-	apt install -y cockpit-machines libvirt-dbus
+	sudo apt install -y cockpit-machines libvirt-dbus
 
 	systemctl restart cockpit.socket
 
@@ -66,7 +66,7 @@ cockpit-machines::remove()
 	echo "===================================================================="
 	echo
 
-	apt purge -y cockpit-machines libvirt-dbus
+	sudo apt purge -y cockpit-machines libvirt-dbus
 
 	systemctl restart cockpit.socket
 

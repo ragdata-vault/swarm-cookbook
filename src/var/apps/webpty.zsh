@@ -34,7 +34,7 @@ webpty::install()
 
 	wget -O "$USERDIR"/downloads/webpty.bin https://github.com/mickael-kerjean/webpty/releases/download/stable/webpty_linux_amd64.bin
 
-	install -v -m 0755 -C -D -t /usr/local/bin "$USERDIR"/downloads/webpty.bin
+	sudo install -v -m 0755 -C -D -t /usr/local/bin "$USERDIR"/downloads/webpty.bin
 
 	echo
 	echo "DONE!"

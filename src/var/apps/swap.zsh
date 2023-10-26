@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
 
 # ==================================================================
-# src/var/apps/php-8
+# src/var/apps/swap
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/var/apps/php-8
+# File:         src/var/apps/swap
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -18,18 +18,21 @@
 # FUNCTIONS
 # ==================================================================
 #
+# INSTALLED FUNCTION
+#
+swap::installed() { command -v swap; }
+#
 # INSTALL FUNCTION
 #
-php-8::install()
+swap::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING PHP-8"
+	echo "INSTALLING SWAP"
 	echo "===================================================================="
 	echo
 
-	sudo apt install -y php8.1 php-sass php-cli php-pear
-	sudo apt install -y php8.1-{amqp,cli,common,curl,fpm,gd,gnupg,imagick,imap,intl,mailparse,mbstring,memcached,mongodb,oauth,opcache,pgsql,psr,readline,redis,smbclient,ssh2,sqlite3,uploadprogress,xdebug,xml,yaml,zip}
+	echo
 
 	echo
 	echo "DONE!"
@@ -38,42 +41,54 @@ php-8::install()
 #
 # CONFIG FUNCTION
 #
-php-8::config()
+swap::config()
 {
+	autoload -Uz regexResponse
+
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING PHP-8"
+	echo "CONFIGURING SWAP"
 	echo "===================================================================="
 	echo
 
-	cp /etc/php/8.0/cli/php.ini /etc/php/8.0/cli/php.ini~
+    SWAP_TOTAL=$(awk '/^SwapTotal:/ {print $2}' /proc/meminfo)
+    SWAP_MiB=$(( SWAP_TOTAL / 1024))
+    SWAP_MB=$(awk -vr=$SWAP_MiB 'BEGIN{printf "%.0f", r * 1.049}')
+    SWAP_GiB=$(( SWAP_MB / 1024 ))
+    PRINT_SWAP_MiB=$(printf "%'d" $SWAP_MiB)
+    PRINT_SWAP_MB=$(printf "%'d" "$SWAP_MB")
+    PRINT_SWAP_GiB=$(printf "%'d" $SWAP_GiB)
 
-    sed -i '/^short_open_tag.*/c\short_open_tag=On' /etc/php/8.0/cli/php.ini
-    sed -i '/^;highlight.*/c\highlight' /etc/php/8.0/cli/php.ini
-    sed -i '/^error_reporting.*/c\error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE' /etc/php/8.0/cli/php.ini
-    sed -i '/^enable_dl.*/c\enable_dl = On' /etc/php/8.0/cli/php.ini
-    sed -i '/^;cgi.fix_pathinfo.*/c\cgi.fix_pathinfo=0' /etc/php/8.0/cli/php.ini
-    sed -i '/^upload_max_filesize.*/c\upload_max_filesize = 25M' /etc/php/8.0/cli/php.ini
-    sed -i "/^;date.timezone.*/c\date.timezone=\"${TIMEZONE}\"" /etc/php/8.0/cli/php.ini
-    sed -i "/^memory_limit.*/c\memory_limit = 512M" /etc/php/8.0/cli/php.ini
+	# shellcheck disable=SC2028
+	echo "TOTAL SWAP: ${SWAP_TOTAL} (${PRINT_SWAP_MiB} MiB)\n"
+
+	echo -e -n "Do you want to configure swap space for this server? (${WHITE}Y${RESET}/n) "
+
+	read -rsq SWAPYN
+
+	if [[ "${SWAPYN:l}" == "n" ]]; then echo "User elected not to configure swap space"; fi
+
+	if [[ ! $SWAPYN =~ $NEGAT ]]; then
+		if [[ $SWAP_TOTAL -lt 4194000 ]]
+	fi
 
 	echo
 	echo "DONE!"
 	echo
 }
+}
 #
 # REMOVE FUNCTION
 #
-php-8::remove()
+swap::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING PHP-8"
+	echo "UNINSTALLING SWAP"
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y php8.1 php-sass
-	sudo apt purge -y php8.1-{amqp,cli,common,curl,fpm,gd,gnupg,imagick,imap,intl,mailparse,mbstring,memcached,mongodb,oauth,opcache,pgsql,psr,readline,redis,smbclient,ssh2,sqlite3,uploadprogress,xdebug,xml,yaml,zip}
+	echo
 
 	echo
 	echo "DONE!"
@@ -82,11 +97,11 @@ php-8::remove()
 #
 # TEST FUNCTION
 #
-php-8::test()
+swap::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING PHP-8"
+	echo "TESTING SWAP"
 	echo "===================================================================="
 	echo
 

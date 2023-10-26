@@ -28,7 +28,7 @@ logrotate::install()
 	echo "===================================================================="
 	echo
 
-	apt install -y logrotate
+	sudo apt install -y logrotate
 
 	echo
 	echo "DONE!"
@@ -64,7 +64,7 @@ logrotate::remove()
 	echo "===================================================================="
 	echo
 
-	apt purge -y logrotate
+	sudo apt purge -y logrotate
 
 	echo
 	echo "DONE!"

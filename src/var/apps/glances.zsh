@@ -28,7 +28,7 @@ glances::install()
 	echo "===================================================================="
 	echo
 
-	apt install -y python3-defusedxml python3-ujson python3-future
+	sudo apt install -y python3-defusedxml python3-ujson python3-future
 
 	pip install glances
 

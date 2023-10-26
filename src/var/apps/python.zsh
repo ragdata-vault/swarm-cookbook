@@ -28,8 +28,8 @@ python::install()
 	echo "===================================================================="
 	echo
 
-	apt install -y python3-full python3-dev python3-pip python3.11-full python3-certbot-nginx
-	apt install -y python3-software-properties python3-dateutil python3-debconf python3-debian python3-venv python3-django
+	sudo apt install -y python3-full python3-dev python3-pip python3.11-full python3-certbot-nginx
+	sudo apt install -y python3-software-properties python3-dateutil python3-debconf python3-debian python3-venv python3-django
 
 	echo
 	echo "DONE!"
@@ -49,11 +49,11 @@ python::config()
 	if [[ ! -f /usr/bin/python2 ]]; then ln -s /usr/bin/python2.7 /usr/bin/python2
 	if [[ ! -f /usr/bin/python3 ]]; then ln -s /usr/bin/python3.11 /usr/bin/python3
 
-	update-alternatives --install /usr/bin/python python /usr/bin/python3.11 99
+	sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.11 99
 
 	if [[ -f /usr/bin/python3.8 ]]; then update-alternatives --install /usr/bin/python python /usr/bin/python3.8 80
 
-	update-alternatives --install /usr/bin/python python /usr/bin/python2.7 20
+	sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 20
 
 	echo
 	echo "DONE!"
@@ -70,7 +70,7 @@ python::remove()
 	echo "===================================================================="
 	echo
 
-	apt purge -y python3-full python3-pip python3.11-full
+	sudo apt purge -y python3-full python3-pip python3.11-full
 
 	echo
 	echo "DONE!"

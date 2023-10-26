@@ -54,7 +54,7 @@ dialog::install()
 	echo "===================================================================="
 	echo
 
-	apt install -y dialog
+	sudo apt install -y dialog
 
 	echo
 	echo "DONE!"
@@ -113,7 +113,7 @@ dialog::remove()
 	echo "===================================================================="
 	echo
 
-	apt purge -y dialog
+	sudo apt purge -y dialog
 
 	echo
 	echo "DONE!"

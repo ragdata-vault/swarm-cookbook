@@ -28,7 +28,7 @@ cockpit::install()
 	echo "===================================================================="
 	echo
 
-	apt install -y cockpit
+	sudo apt install -y cockpit
 
 	echo
 	echo "DONE!"
@@ -66,7 +66,7 @@ cockpit::remove()
 	echo "===================================================================="
 	echo
 
-	apt purge -y cockpit
+	sudo apt purge -y cockpit
 
 	echo
 	echo "DONE!"

@@ -28,7 +28,7 @@ fail2ban::install()
 	echo "===================================================================="
 	echo
 
-	apt install -y fail2ban
+	sudo apt install -y fail2ban
 
 	echo
 	echo "DONE!"

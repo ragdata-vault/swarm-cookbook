@@ -30,7 +30,7 @@ nodejs::install()
 
 	export DEBIAN_FRONTEND=noninteractive
 
-	add-apt-repository -y -r ppa:chris-lea/node.js
+	add-sudo apt-repository -y -r ppa:chris-lea/node.js
 
 	local NODEREPO="node_18.x" DISTRO="jammy"
 	local keyring="/usr/share/keyrings" local_node_key="$keyring/nodesource.gpg"
@@ -38,18 +38,18 @@ nodejs::install()
 
 	wget -q -O - $node_key_url | gpg --dearmor | tee $local_node_key >/dev/null
 
-	echo 'deb [signed-by=$local_node_key] https://deb.nodesource.com/${NODEREPO} ${DISTRO} main' > /etc/apt/sources.list.d/nodesource.list
-	echo 'deb-src [signed-by=$local_node_key] https://deb.nodesource.com/${NODEREPO} ${DISTRO} main' >> /etc/apt/sources.list.d/nodesource.list
+	echo 'deb [signed-by=$local_node_key] https://deb.nodesource.com/${NODEREPO} ${DISTRO} main' | sudo tee /etc/apt/sources.list.d/nodesource.list
+	echo 'deb-src [signed-by=$local_node_key] https://deb.nodesource.com/${NODEREPO} ${DISTRO} main' | sudo tee /etc/apt/sources.list.d/nodesource.list
 
-	apt update -y && apt install -y nodejs
+	sudo apt update -y && sudo apt install -y nodejs
 
 	# Uncomment below to install the Yarn package manager
 	# yarn_site='https://dl.yarnpkg.com/debian'
 	# yarn_key_url="$yarn_site/pubkey.gpg"
 	# local_yarn_key="$keyring/yarnkey.gpg"
 	# wget -q -O - $yarn_key_url | gpg --dearmor | tee $local_yarn_key >/dev/null
-	# echo "deb [signed-by=$local_yarn_key] $yarn_site stable main" | tee /etc/apt/sources.list.d/yarn.list
-	# apt update -y && apt install -y yarn
+	# echo "deb [signed-by=$local_yarn_key] $yarn_site stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+	# sudo apt update -y && sudo apt install -y yarn
 
 	echo
 	echo "DONE!"

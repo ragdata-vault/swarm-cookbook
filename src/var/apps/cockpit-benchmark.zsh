@@ -28,7 +28,7 @@ cockpit-benchmark::install()
 	echo "===================================================================="
 	echo
 
-	apt install -y cockpit-benchmark
+	sudo apt install -y cockpit-benchmark
 
 	systemctl restart cockpit.socket
 
@@ -64,7 +64,7 @@ cockpit-benchmark::remove()
 	echo "===================================================================="
 	echo
 
-	apt purge -y cockpit-benchmark
+	sudo apt purge -y cockpit-benchmark
 
 	systemctl restart cockpit.socket
 

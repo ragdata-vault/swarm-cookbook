@@ -28,7 +28,7 @@ go::install()
 	echo "===================================================================="
 	echo
 
-	apt install -y golang
+	sudo apt install -y golang
 
 	echo
 	echo "DONE!"
@@ -62,7 +62,7 @@ go::remove()
 	echo "===================================================================="
 	echo
 
-	apt purge -y golang
+	sudo apt purge -y golang
 
 	echo
 	echo "DONE!"

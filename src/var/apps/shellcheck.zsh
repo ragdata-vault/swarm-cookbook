@@ -28,7 +28,7 @@ shellcheck::install()
 	echo "===================================================================="
 	echo
 
-	apt install -y shellcheck
+	sudo apt install -y shellcheck
 
 	echo
 	echo "DONE!"
@@ -62,7 +62,7 @@ shellcheck::remove()
 	echo "===================================================================="
 	echo
 
-	apt purge -y shellcheck
+	sudo apt purge -y shellcheck
 
 	echo
 	echo "DONE!"

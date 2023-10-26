@@ -32,7 +32,7 @@ jq::install()
 	echo "===================================================================="
 	echo
 
-	apt install -y jq
+	sudo apt install -y jq
 
 	echo
 	echo "DONE!"
@@ -66,7 +66,7 @@ jq::remove()
 	echo "===================================================================="
 	echo
 
-	apt purge -y jq
+	sudo apt purge -y jq
 
 	echo
 	echo "DONE!"

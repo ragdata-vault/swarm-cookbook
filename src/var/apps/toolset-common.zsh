@@ -30,12 +30,12 @@ toolset-common::install()
 
 	export DEBIAN_FRONTEND=noninteractive
 
-	apt install -y apt-transport-https apt-listchanges apt-utils rpm ca-certificates
-	apt install -y curl wget mcrypt dialog attr coreutils software-properties-common certbot
-	apt install -y bash-completion unattended-upgrades software-properties-common nano lsb-release
-	apt install -y id-utils uuid net-tools apache2-utils daemon passwd psmisc util-linux openssh-client
-	apt install -y bison arj bzip2 nomarch lzop unzip zip cabextract
-	apt install -y debconf-utils binutils lsb-core net-tools nfs-common nfs-kernel-server samba samba-common-bin winbind gawk
+	sudo apt install -y apt-transport-https apt-listchanges apt-utils rpm ca-certificates
+	sudo apt install -y curl wget mcrypt dialog attr coreutils software-properties-common certbot
+	sudo apt install -y bash-completion unattended-upgrades software-properties-common nano lsb-release
+	sudo apt install -y id-utils uuid net-tools apache2-utils daemon passwd psmisc util-linux openssh-client
+	sudo apt install -y bison arj bzip2 nomarch lzop unzip zip cabextract
+	sudo apt install -y debconf-utils binutils lsb-core net-tools nfs-common nfs-kernel-server samba samba-common-bin winbind gawk
 
 	echo
 	echo "DONE!"
@@ -69,7 +69,7 @@ toolset-common::remove()
 	echo "===================================================================="
 	echo
 
-	apt purge -y apt-transport-https apt-listchanges apt-utils rpm ca-certificates
+	sudo apt purge -y apt-transport-https apt-listchanges apt-utils rpm ca-certificates
 	apt purge -y gpg curl wget mcrypt jq mkcert dialog attr coreutils
 	apt purge -y bash-completion unattended-upgrades software-properties-common nano
 	apt purge -y id-utils uuid net-tools apache2-utils daemon passwd psmisc util-linux openssh-client

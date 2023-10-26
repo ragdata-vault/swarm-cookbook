@@ -32,7 +32,7 @@ cockpit-certificates::install()
 
 	[[ ! -d "$USERDIR"/downloads ]] && mkdir -p "$USERDIR"/downloads
 
-	apt install -y certmonger
+	sudo apt install -y certmonger
 
 	git clone git@github.com:skobyda/cockpit-certificates "$USERDIR"/downloads/cockpit-certificates
 
@@ -80,7 +80,7 @@ cockpit-certificates::remove()
 
 	systemctl restart cockpit.socket
 
-	apt purge -y cockpit-certificates
+	sudo apt purge -y cockpit-certificates
 
 	echo
 	echo "DONE!"

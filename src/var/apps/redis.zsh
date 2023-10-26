@@ -32,7 +32,7 @@ redis::install()
 	echo "===================================================================="
 	echo
 
-	apt install -y redis-server redis-tools
+	sudo apt install -y redis-server redis-tools
 
 	echo
 	echo "DONE!"
@@ -90,7 +90,7 @@ redis::remove()
 	echo "===================================================================="
 	echo
 
-	apt purge -y redis-server redis-tools
+	sudo apt purge -y redis-server redis-tools
 
 	echo
 	echo "DONE!"

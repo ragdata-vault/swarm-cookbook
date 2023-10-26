@@ -47,7 +47,7 @@ dnsmasq::install()
 	echo "nameserver 127.0.0.1" > /etc/resolv.conf
 	echo "nameserver 1.1.1.1" >> /etc/resolv.conf
 
-	apt install -y dnsmasq
+	sudo apt install -y dnsmasq
 
 	echo "address=/.${NODE_DOMAIN}/127.0.0.1" >> /etc/dnsmasq.conf
 
@@ -88,7 +88,7 @@ dnsmasq::remove()
 	echo "===================================================================="
 	echo
 
-	apt purge -y dnsmasq
+	sudo apt purge -y dnsmasq
 
 	echo
 	echo "DONE!"

@@ -36,9 +36,9 @@ cockpit-identities::install()
 
 	bash "$USERDIR"/downloads/cockpit_identities-setup.zsh
 
-	apt update
+	sudo apt update
 
-	apt install -y cockpit-identities
+	sudo apt install -y cockpit-identities
 
 	systemctl restart cockpit.socket
 
@@ -74,7 +74,7 @@ cockpit-identities::remove()
 	echo "===================================================================="
 	echo
 
-	apt purge -y cockpit-identities
+	sudo apt purge -y cockpit-identities
 
 	systemctl restart cockpit.socket
 

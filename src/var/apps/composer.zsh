@@ -28,7 +28,7 @@ composer::install()
 	echo "===================================================================="
 	echo
 
-	apt install -y composer
+	sudo apt install -y composer
 
 	echo
 	echo "DONE!"

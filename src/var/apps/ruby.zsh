@@ -28,7 +28,7 @@ ruby::install()
 	echo "===================================================================="
 	echo
 
-	apt install -y build-essential libyaml-dev ruby-dev
+	sudo apt install -y build-essential libyaml-dev ruby-dev
 
 	# Uncomment to install Bashly
 	# gem install bashly

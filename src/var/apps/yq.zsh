@@ -28,7 +28,7 @@ yq::install()
 	echo "===================================================================="
 	echo
 
-	apt install -y yq
+	sudo apt install -y yq
 
 	echo
 	echo "DONE!"

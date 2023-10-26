@@ -28,7 +28,7 @@ cockpit-navigator::install()
 	echo "===================================================================="
 	echo
 
-	apt install -y cockpit-navigator
+	sudo apt install -y cockpit-navigator
 
 	systemctl restart cockpit.socket
 
@@ -64,7 +64,7 @@ cockpit-navigator::remove()
 	echo "===================================================================="
 	echo
 
-	apt purge -y cockpit-navigator
+	sudo apt purge -y cockpit-navigator
 
 	systemctl restart cockpit.socket
 

@@ -27,7 +27,7 @@ git::install() {
 	echo "===================================================================="
 	echo
 
-	apt install -y git
+	sudo apt install -y git
 
 	echo
 	echo "DONE!"
@@ -138,7 +138,7 @@ git::remove() {
 	echo "===================================================================="
 	echo
 
-	apt purge -y git
+	sudo apt purge -y git
 
 	echo
 	echo "DONE!"

@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
 
 # ==================================================================
-# src/var/apps/php-8
+# src/var/apps/docker-ctop
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/var/apps/php-8
+# File:         src/var/apps/docker-ctop
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -18,18 +18,26 @@
 # FUNCTIONS
 # ==================================================================
 #
+# INSTALLED FUNCTION
+#
+docker-ctop::installed() { command -v docker-ctop; }
+#
 # INSTALL FUNCTION
 #
-php-8::install()
+docker-ctop::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING PHP-8"
+	echo "INSTALLING DOCKER-CTOP"
 	echo "===================================================================="
 	echo
 
-	sudo apt install -y php8.1 php-sass php-cli php-pear
-	sudo apt install -y php8.1-{amqp,cli,common,curl,fpm,gd,gnupg,imagick,imap,intl,mailparse,mbstring,memcached,mongodb,oauth,opcache,pgsql,psr,readline,redis,smbclient,ssh2,sqlite3,uploadprogress,xdebug,xml,yaml,zip}
+	curl -fsSL https://azlux.fr/repo.gpg.key | gpg --dearmor -o /usr/share/keyrings/azlux-archive-keyring.gpg
+	echo \
+        "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/azlux-archive-keyring.gpg] http://packages.azlux.fr/debian \
+        $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/azlux.list >/dev/null
+	sudo apt update
+	sudo apt install -y docker-ctop
 
 	echo
 	echo "DONE!"
@@ -38,24 +46,15 @@ php-8::install()
 #
 # CONFIG FUNCTION
 #
-php-8::config()
+docker-ctop::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING PHP-8"
+	echo "CONFIGURING DOCKER-CTOP"
 	echo "===================================================================="
 	echo
 
-	cp /etc/php/8.0/cli/php.ini /etc/php/8.0/cli/php.ini~
-
-    sed -i '/^short_open_tag.*/c\short_open_tag=On' /etc/php/8.0/cli/php.ini
-    sed -i '/^;highlight.*/c\highlight' /etc/php/8.0/cli/php.ini
-    sed -i '/^error_reporting.*/c\error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT & ~E_NOTICE' /etc/php/8.0/cli/php.ini
-    sed -i '/^enable_dl.*/c\enable_dl = On' /etc/php/8.0/cli/php.ini
-    sed -i '/^;cgi.fix_pathinfo.*/c\cgi.fix_pathinfo=0' /etc/php/8.0/cli/php.ini
-    sed -i '/^upload_max_filesize.*/c\upload_max_filesize = 25M' /etc/php/8.0/cli/php.ini
-    sed -i "/^;date.timezone.*/c\date.timezone=\"${TIMEZONE}\"" /etc/php/8.0/cli/php.ini
-    sed -i "/^memory_limit.*/c\memory_limit = 512M" /etc/php/8.0/cli/php.ini
+	echo
 
 	echo
 	echo "DONE!"
@@ -64,16 +63,15 @@ php-8::config()
 #
 # REMOVE FUNCTION
 #
-php-8::remove()
+docker-ctop::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING PHP-8"
+	echo "UNINSTALLING DOCKER-CTOP"
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y php8.1 php-sass
-	sudo apt purge -y php8.1-{amqp,cli,common,curl,fpm,gd,gnupg,imagick,imap,intl,mailparse,mbstring,memcached,mongodb,oauth,opcache,pgsql,psr,readline,redis,smbclient,ssh2,sqlite3,uploadprogress,xdebug,xml,yaml,zip}
+	sudo apt purge -y docker-ctop
 
 	echo
 	echo "DONE!"
@@ -82,11 +80,11 @@ php-8::remove()
 #
 # TEST FUNCTION
 #
-php-8::test()
+docker-ctop::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING PHP-8"
+	echo "TESTING DOCKER-CTOP"
 	echo "===================================================================="
 	echo
 

@@ -37,7 +37,7 @@ dive::install()
 	# download latest Debian package
 	wget -O "$USERDIR"/downloads/dive.deb https://github.com/wagoodman/dive/releases/latest/download/dive_${DIVE_VERSION}_linux_amd64.deb
 
-	apt install -y "$USERDIR"/downloads/dive.deb
+	sudo apt install -y "$USERDIR"/downloads/dive.deb
 
 	echo
 	echo "DONE!"
@@ -71,7 +71,7 @@ dive::remove()
 	echo "===================================================================="
 	echo
 
-	apt purge -y dive
+	sudo apt purge -y dive
 
 	echo
 	echo "DONE!"

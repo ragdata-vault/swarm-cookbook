@@ -28,7 +28,7 @@ gpg::install()
 	echo "===================================================================="
 	echo
 
-	apt install -y gpg
+	sudo apt install -y gpg
 
 	echo
 	echo "DONE!"
@@ -62,7 +62,7 @@ gpg::remove()
 	echo "===================================================================="
 	echo
 
-	apt purge -y gpg
+	sudo apt purge -y gpg
 
 	echo
 	echo "DONE!"
