@@ -52,13 +52,16 @@ fi
 # you're loading all required functions up-front.  This method loads
 # functions the first time they are called, and only IF they are called.
 fpath=("$fpath" "$ZSHDIR/functions")
+FPATH="$FPATH:$ZSHDIR/functions"
 autoload -Uz "$ZSHDIR/functions/**/*"
 
 # ------------------------------------------------------------------
 # RESOURCE PATHS
 # ------------------------------------------------------------------
-fpath=("$fpath" "/usr/share/zsh/functions/Completion")
-fpath=("$fpath" "/usr/share/zsh/functions/Zle")
+# fpath+=("/usr/share/zsh/functions/Completion")
+# fpath+=("/usr/share/zsh/functions/Zle")
+# FPATH="$FPATH:/usr/share/zsh/functions/Completion"
+# FPATH="$FPATH:/usr/share/zsh/functions/Zle"
 
 # Uncomment the line below to initialise the ZSH Completion System
 autoload -U compinit; compinit
