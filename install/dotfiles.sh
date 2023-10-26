@@ -13,7 +13,7 @@
 # ==================================================================
 # DEPENDENCIES
 # ==================================================================
-
+export ZSHSHARE="${XDG_DATA_DIRS%%:*}"
 # ==================================================================
 # FUNCTIONS
 # ==================================================================
@@ -34,63 +34,133 @@ dotfiles::install()
 	echo "===================================================================="
 	echo
 
-	if [[ ! -f "$USERDIR/.zshenv" ]]; then
-		install::log "Installing ZSH Profile Files to '$USERDIR'"
+	sudo groupadd zshusers
+
+	if [[ ! -f "$ZSHSHARE/zshenv" ]]; then
+		install::log "Installing ZSH Dotfiles to '$ZSHSHARE'"
 		source="$REPO"/src/.dotfiles
-		install -v -b -C -m 0644 -D -t "$USERDIR" "$source"/.zshenv
-		install -v -b -C -m 0644 -D -t "$USERDIR" "$source"/.zprofile
-		install -v -b -C -m 0644 -D -t "$USERDIR" "$source"/.zshrc
-		install -v -b -C -m 0644 -D -t "$USERDIR" "$source"/.zlogin
-		install -v -b -C -m 0644 -D -t "$USERDIR" "$source"/.zlogout
+		sudo install -v -b -C -m 0644 -D -t "$ZSHSHARE" "$source/zshenv"
+		sudo install -v -b -C -m 0644 -D -t "$ZSHSHARE" "$source/zprofile"
+		sudo install -v -b -C -m 0644 -D -t "$ZSHSHARE" "$source/zshrc"
+		sudo install -v -b -C -m 0644 -D -t "$ZSHSHARE" "$source/zlogin"
+		sudo install -v -b -C -m 0644 -D -t "$ZSHSHARE" "$source/zlogout"
 	fi
 
-	install::log "Installing ZSH Loaders / Utility Files to '$ZSHDIR'"
+	if [[ ! -f "$ZSHSHARE/zsh_functions" ]]; then
+		install::log "Installing ZSH Loaders / Utility Files to '$ZSHSHARE'"
+		source="$REPO"/src/.dotfiles/.zsh
+		sudo install -v -b -C -m 0644 -D -t "$ZSHSHARE" "$source/zsh_aliases"
+		sudo install -v -b -C -m 0644 -D -t "$ZSHSHARE" "$source/zsh_completion"
+		sudo install -v -b -C -m 0644 -D -t "$ZSHSHARE" "$source/zsh_functions"
+	fi
 
-	source="$REPO"/src/.dotfiles/.zsh/
-	install -v -C -m 0644 -D -t "$ZSHDIR" "$source"/.zsh_aliases
-	install -v -C -m 0644 -D -t "$ZSHDIR" "$source"/.zsh_completion
-	install -v -C -m 0644 -D -t "$ZSHDIR" "$source"/.zsh_functions
-	if [[ ! -f "$source"/.zsh_ssh ]]; then install -v -C -m 0644 -T "$source"/.zsh_ssh "$ZSHDIR"/.zsh_ssh;
-	else install -v -C -m 0644 -D -t "$ZSHDIR" "$source"/.zsh_ssh; fi
-	if [[ ! -f "$source"/.zsh_ssh ]]; then install -v -C -m 0644 -T "$source"/.zsh_ware.dist "$ZSHDIR"/.zsh_ware;
-	else install -v -C -m 0644 -D -t "$ZSHDIR" "$source"/.zsh_ware; fi
+	install::log "Installing .zsh_ssh & .zsh_ware directly to '$ZSHDIR'"
+	if [[ ! -f "$ZSHDIR/.zsh_ssh" ]]; then install -v -b -C -m 0644 -T "$source/.zsh_ssh" "$ZSHDIR/.zsh_ssh"; fi
+	if [[ ! -f "$ZSHDIR/.zsh_ware" ]]; then install -v -b -C -m 0644 -T "$source/.zsh_ware.dist" "$ZSHDIR/.zsh_ware"; fi
 
-	install::log "Installing ZSH Aliases to '$ZSHDIR/aliases'"
-
+	install::log "Installing ZSH Aliases to '$ZSHSHARE/aliases'"
 	source="$REPO"/src/.dotfiles/.zsh/aliases
 	while IFS= read -r file
 	do
-		install -v -C -m 0644 -D -t "$ZSHDIR"/aliases "$file"
+		sudo install -v -b -C -m 0644 -D -t "$ZSHSHARE/aliases" "$file"
 	done < <(find "$source" -type f)
 
-	install::log "Installing ZSH Completion Files to '$ZSHDIR/completion'"
-
+	install::log "Installing ZSH Completion Files to '$ZSHSHARE/completion'"
 	source="$REPO"/src/.dotfiles/.zsh/completion
-	mkdir -p "$ZSHDIR"/completion
-	install -v -C -m 0644 -T "$source"/git-completion.bash "$ZSHDIR"/completion/git-completion.bash
-	install -v -C -m 0644 -T "$source"/_git "$ZSHDIR"/completion/_git
+	mkdir -p "$ZSHSHARE/completion"
+	sudo install -v -b -C -m 0644 -T "$source/git-completion.bash" "$ZSHSHARE/git-completion.bash"
+	sudo install -v -b -C -m 0644 -T "$source/_git" "$ZSHSHARE/_git"
 
-	install::log "Installing ZSH Autoload Functions to '$ZSHDIR/functions'"
-
+	install::log "Installing ZSH Autoload Functions to '$ZSHSHARE/functions'"
 	source="$REPO"/src/.dotfiles/.zsh/functions
 	len="${#source}"
 	while IFS= read -r file
 	do
 		fileDir="${file%/*}"
 		stub="${fileDir:$len}"
-		install -v -C -m 0644 -D -t "$ZSHDIR/functions${stub}" "$file"
+		sudo install -v -b -C -m 0644 -D -t "$ZSHSHARE/functions${stub}" "$file"
 	done < <(find "$source" -type f)
 
-	install::log "Installing ZSH Includes to '$ZSHDIR/includes'"
-
+	install::log "Installing ZSH Includes to '$ZSHSHARE/includes'"
 	source="$REPO"/src/.dotfiles/.zsh/includes
 	while IFS= read -r file
 	do
-		install -v -C -m 0644 -D -t "$ZSHDIR/includes" "$file"
+		sudo install -v -b -C -m 0644 -D -t "$ZSHSHARE/includes" "$file"
 	done < <(find "$source" -type f)
 
-	chown -R "$USERNAME":"$USERNAME" "$ZSHDIR"
-	chown "$USERNAME":"$USERNAME" "$USERDIR"/*
+	chown -R root:zshusers "$ZSHSHARE"
+
+	local users=("root:/root")
+
+	for username in /home/*
+	do
+		users+=("$username:/home/$username")
+	done
+
+	for userinfo in "${users[@]}"
+	do
+		username="${userinfo%:*}"
+		userdir="${userinfo##*:}"
+		userzsh="$userdir/.zsh"
+		# add to zshusers group
+		sudo usermod -aG zshusers "$username"
+
+		install::log "Linking user '$username' to ZSH Dotfiles in '$ZSHSHARE'"
+		[[ ! -L "$userdir/.zshenv" ]] && ln -sf "$ZSHSHARE/zshenv" "$userdir/.zshenv"
+		[[ ! -L "$userdir/.zprofile" ]] && ln -sf "$ZSHSHARE/zprofile" "$userdir/.zprofile"
+		[[ ! -L "$userdir/.zshrc" ]] && ln -sf "$ZSHSHARE/zshrc" "$userdir/.zshrc"
+		[[ ! -L "$userdir/.zlogin" ]] && ln -sf "$ZSHSHARE/zlogin" "$userdir/.zlogin"
+		[[ ! -L "$userdir/.zlogout" ]] && ln -sf "$ZSHSHARE/zlogout" "$userdir/.zlogout"
+
+		install::log "Linking user '$username' to ZSH Loader / Utility Files in '$ZSHSHARE'"
+		[[ ! -L "$userdir/.zsh_aliases" ]] && ln -sf "$ZSHSHARE/zsh_aliases" "$userzsh/.zsh_aliases"
+		[[ ! -L "$userdir/.zsh_completion" ]] && ln -sf "$ZSHSHARE/zsh_completion" "$userzsh/.zsh_completion"
+		[[ ! -L "$userdir/.zsh_functions" ]] && ln -sf "$ZSHSHARE/zsh_functions" "$userzsh/.zsh_functions"
+
+		chown "$username":"$username" "$userdir/.z*"
+
+		install::log "Linking user '$username' to ZSH Aliases in '$ZSHSHARE/aliases'"
+		mkdir -p "$userzsh/aliases"
+		while IFS= read -r file
+		do
+			filename="${file%%*/}"
+			[[ ! -L "$userzsh/aliases/$filename" ]] && ln -sf "$file" "$userzsh/aliases/$filename"
+		done < <(find "$ZSHSHARE/aliases" -type f)
+
+		chown "$username":"$username" "$userzsh/aliases/*"
+
+		install::log "Linking user '$username' to ZSH Completion Files in '$ZSHSHARE/completion'"
+		mkdir -p "$userzsh/completion"
+		while IFS= read -r file
+		do
+			[[ ! -L "$userzsh/completion/$filename" ]] && ln -sf "$file" "$userzsh/completion/$filename"
+		done < <(find "$ZSHSHARE/completion" -type f)
+
+		chown "$username":"$username" "$userzsh/completion/*"
+
+		install::log "Linking user '$username' to ZSH Functions in '$ZSHSHARE/functions'"
+		mkdir -p "$userzsh/completion"
+		source="$ZSHSHARE/functions"
+		len="${#source}"
+		while IFS= read -r file
+		do
+			filedir="${file%/*}"
+			stub="${filedir:$len}"
+			[[ ! -d "$userzsh/functions${stub}" ]] && mkdir -p "$userzsh/functions${stub}"
+			[[ ! -L "$userzsh/functions${stub}/$filename" ]] && ln -sf "$file" "$userzsh/functions${stub}/$filename"
+		done < <(find "$ZSHSHARE/functions" -type f)
+
+		chown -R "$username":"$username" "$userzsh/functions/*"
+
+		install::log "Linking user '$username' to ZSH Include Files in '$ZSHSHARE/includes'"
+		mkdir -p "$userzsh/includes"
+		while IFS= read -r file
+		do
+			[[ ! -L "$userzsh/includes/$filename" ]] && ln -sf "$file" "$userzsh/includes/$filename"
+		done < <(find "$ZSHSHARE/includes" -type f)
+
+		chown "$username":"$username" "$userzsh/includes/*"
+	done
 
 	echo
 	echo "DONE!"
@@ -128,13 +198,34 @@ dotfiles::remove()
 	echo "===================================================================="
 	echo
 
-	rm -Rf "$ZSHDIR"
-	if grep -q "Load .zsh_ssh" "$USERDIR"/.zshrc; then
-		cp "$USERDIR"/.zshrc "$USERDIR"/.zshrc.bak
-		sed '/^# Load .zsh_aliases.*$|^# Load .zsh_completion.*$|^# Load .zsh_functions.*$|^# Load .zsh_ssh.*$|^# Load .zsh_ware.*$/d' "$USERDIR"/.zshrc > "$tmpFile"
-		sed '/^.* source .*/.zsh_aliases$|^.* source .*/.zsh_completion$|^.* source .*/.zsh_functions$|^.* source .*/.zsh_ssh$|^.* source .*/.zsh_ware$/d' "$tmpFile" > "$USERDIR"/.zshrc
-		sed -i -e :a -e '/^\n*$/{$d;N;ba' -e '}' "$USERDIR"/.zshrc
-	fi
+	local users=("root:/root")
+
+	for username in /home/*
+	do
+		users+=("$username:/home/$username")
+	done
+
+	for userinfo in "${users[@]}"
+	do
+		username="${userinfo%:*}"
+		userdir="${userinfo##*:}"
+		userzsh="$userdir/.zsh"
+		# remove all symbolic links
+		install::log "Removing symbolic links for user '$username''"
+		rm -Rf "$userzsh"
+		rm -f "$userdir/.z*"
+		if [[ -d "$userdir/.bash_archive" ]]; then
+			install::log "Restoring .bash* files for user '$username'"
+			for file in "$userdir"/.bash_archive/*
+			do
+				filename="${file##*/}"
+				mv "$file" "$userdir/$filename"
+			done
+		fi
+	done
+
+	install::log "Removing '$ZSHSHARE' folder and contents"
+	rm -Rf "$ZSHSHARE"
 
 	echo
 	echo "DONE!"

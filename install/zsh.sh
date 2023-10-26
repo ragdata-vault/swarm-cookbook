@@ -1,5 +1,5 @@
-#!/usr/bin/env zsh
-
+#!/usr/bin/env bash
+# shellcheck disable=SC2155
 # ==================================================================
 # install/zsh
 # ==================================================================
@@ -12,6 +12,13 @@
 # Copyright:    Copyright © 2023 Darren Poulton (Ragdata)
 # ==================================================================
 # DEPENDENCIES
+# ==================================================================
+if [[ -z "$REPO" ]]; then export REPO="$(dirname "$(realpath "${0:h}")")"; fi
+if [[ ! -f "$REPO"/.env ]]; then cp "$REPO"/.env.dist "$REPO"/.env; fi
+# include environment file
+source "$REPO"/.env
+# ==================================================================
+# HELPER FUNCTIONS
 # ==================================================================
 
 # ==================================================================
@@ -32,7 +39,31 @@ zsh::install()
 	echo "===================================================================="
 	echo
 
-	echo
+	if [[ -z "$1" ]]; then
+		sudo apt update && sudo apt upgrade -y
+
+		mkdir -p "$USERDIR"/.bash_archive
+
+		while IFS= read -r file; do filename="${file##*/}"; mv "$file" "$USERDIR"/.bash_archive/"$filename"; done < <(find "$USERDIR" -maxdepth 1 -name ".bash*" -type f)
+
+		mv "$USERDIR/.bash*" "$USERDIR/.bash_archive/."
+		mv "$USERDIR/.profile" "$USERDIR/.bash_archive/."
+
+		sudo apt install -y zsh
+
+		sudo chsh -s "$(which zsh)" "$USERNAME"
+
+		if [[ -f "$USERDIR"/.zshrc ]]; then
+			echo "sudo bash -c ./$REPO/install/zsh.sh cont" >> "$USERDIR"/.zshrc
+		else
+
+		fi
+
+		sudo reboot
+	elif [[ "${1,,}" == "cont" ]]; then
+
+	fi
+
 
 	echo
 	echo "DONE!"
@@ -89,3 +120,27 @@ zsh::test()
 	echo "DONE!"
 	echo
 }
+#
+# REPORT FUNCTION
+#
+zsh::report()
+{
+	echo
+	echo "===================================================================="
+	echo "REPORTING :: ZSH"
+	echo "===================================================================="
+	echo
+
+	echo
+
+	echo
+	echo "DONE!"
+	echo
+}
+# ==================================================================
+# MAIN
+# ==================================================================
+clear
+
+zsh::install
+zsh::report

@@ -23,8 +23,8 @@ if [[ "${1:l}" == "verbose" ]] || [[ "$LOG_VERBOSE" == 1 ]]; then shift; LOG_VER
 # VARIABLES
 # ==================================================================
 if [[ -z "$REPO" ]]; then export REPO="$(realpath "${0:h}")"; fi
+if [[ "${1:l}" == "logfile" ]]; then declare -gx logFile="${2:-}"; shift 2; else declare -gx logFile="$(mktemp -t INSTALL-XXXXXX)"; fi
 declare -gx SOURCE_DIRS=("$REPO/src/var/apps" "$REPO/install")
-declare -gx logFile="$(mktemp -t INSTALL-XXXXXX)"
 declare -gx USERNAME="${SUDO_USER:-$(whoami)}"
 # ==================================================================
 # DEPENDENCIES
@@ -370,6 +370,9 @@ do
 			;;
 		node)
 			install::loadSource node.sh -i -c
+			;;
+		zsh)
+			sudo bash -c "$REPO"/install/zsh.sh
 			;;
 		plugins)
 			install::loadSource zsh-plugins.sh -i
