@@ -190,19 +190,23 @@ loadSource()
 	fileName="${app##*/}"
 	fileName="${fileName%%.*}"
 
+	FILEOPTS[help]=0
+	FILEOPTS[requires]=0
 	FILEOPTS[installed]=0
 	FILEOPTS[install]=0
 	FILEOPTS[config]=0
 	FILEOPTS[remove]=0
 	FILEOPTS[test]=0
 
-	options=$(getopt -o "cdirt" -a -- "$@")
+	options=$(getopt -o "hRcdirt" -a -- "$@")
 
 	eval set -- "$options"
 
 	while true
 	do
 		case "$1" in
+			-h) FILEOPTS[help]=1;;
+			-R) FILEOPTS[requires]=1;;
 			-c) FILEOPTS[config]=1;;
 			-d) FILEOPTS[installed]=1;;
 			-i) FILEOPTS[install]=1;;

@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
 
 # ==================================================================
-# src/apps/template
+# src/apps/exa
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/template
+# File:         src/apps/exa
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -18,17 +18,21 @@
 # FUNCTIONS
 # ==================================================================
 #
+# REQUIRES FUNCTION
+#
+exa::requires() { echo; }
+#
 # INSTALLED FUNCTION
 #
-template::installed() { command -v template; }
+exa::installed() { command -v exa; }
 #
 # INSTALL FUNCTION
 #
-template::install()
+exa::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING TEMPLATE"
+	echo "INSTALLING EXA"
 	echo "===================================================================="
 	echo
 
@@ -41,11 +45,11 @@ template::install()
 #
 # CONFIG FUNCTION
 #
-template::config()
+exa::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING TEMPLATE"
+	echo "CONFIGURING EXA"
 	echo "===================================================================="
 	echo
 
@@ -58,11 +62,11 @@ template::config()
 #
 # REMOVE FUNCTION
 #
-template::remove()
+exa::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING TEMPLATE"
+	echo "UNINSTALLING EXA"
 	echo "===================================================================="
 	echo
 
@@ -75,11 +79,11 @@ template::remove()
 #
 # TEST FUNCTION
 #
-template::test()
+exa::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING TEMPLATE"
+	echo "TESTING EXA"
 	echo "===================================================================="
 	echo
 

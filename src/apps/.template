@@ -18,9 +18,30 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+template::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}TEMPLATE HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+template::requires() { echo; }
+#
 # INSTALLED FUNCTION
 #
-template::installed() { command -v template; }
+template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
 #
 # INSTALL FUNCTION
 #
