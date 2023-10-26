@@ -108,7 +108,7 @@ dotfiles::install()
 		install::log "Linking user '$username' to ZSH Dotfiles in '$ZSHSHARE'"
 		[[ ! -L "$userdir/.zshenv" ]] && ln -sf "$ZSHSHARE/zshenv" "$userdir/.zshenv"
 		[[ ! -L "$userdir/.zprofile" ]] && ln -sf "$ZSHSHARE/zprofile" "$userdir/.zprofile"
-		[[ ! -f "$userdir/.zshrc" ]] && install -v -C -m 0644 -D -t "$ZSHSHARE/usr_zshrc" "$userdir/.zshrc"
+		[[ ! -f "$userdir/.zshrc" ]] && install -v -C -m 0644 -D -t "$ZSHSHARE/zshrc_usr" "$userdir/.zshrc"
 		[[ ! -L "$userdir/.zlogin" ]] && ln -sf "$ZSHSHARE/zlogin" "$userdir/.zlogin"
 		[[ ! -L "$userdir/.zlogout" ]] && ln -sf "$ZSHSHARE/zlogout" "$userdir/.zlogout"
 
