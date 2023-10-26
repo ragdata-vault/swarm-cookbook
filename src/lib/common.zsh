@@ -342,7 +342,7 @@ fkill()
 # ------------------------------------------------------------------
 # jqy
 # ------------------------------------------------------------------
-if command -v jq && command -v yq; then
+if command -v jq > /dev/null && command -v yq; then
 	# JQ FOR YAML
 	# [YQ](https://github.com/mikefarah/yq) uses unfamiliar syntax
 	# So, just convert the YAML to JSON, run it through JQ, then convert back to YAML
