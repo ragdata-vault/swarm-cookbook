@@ -50,6 +50,7 @@ install::install()
 	install::loadSource dotfiles.sh -i
 	install::loadSource zsh-plugins.sh -i
 	install::loadSource bin.sh -i
+	install::loadSource lib.sh -i
 	install::loadSource swarm.sh -i
 	install::loadSource cron-updates.sh -i
 
@@ -369,6 +370,12 @@ do
 			;;
 		init)
 			install::init
+			;;
+		lib)
+			install::loadSource lib.sh -i
+			;;
+		rmLib|libRemove)
+			install::loadSource lib.sh -r
 			;;
 		swarm)
 			install::loadSource swarm.sh -i
