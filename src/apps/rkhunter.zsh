@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
-# shellcheck disable=SC2154,SC2181
+
 # ==================================================================
-# install/bin
+# src/apps/rkhunter
 # ==================================================================
-# Swarm Cookbook - Installer Source File
+# Swarm Cookbook - App Installer
 #
-# File:         install/bin
+# File:         src/apps/rkhunter
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -18,32 +18,17 @@
 # FUNCTIONS
 # ==================================================================
 #
-# INSTALLED FUNCTION
-#
-bin::installed() { return 1; }
-#
 # INSTALL FUNCTION
 #
-bin::install()
+rkhunter::install()
 {
-	local source
-
 	echo
 	echo "===================================================================="
-	echo "INSTALLING :: BIN FILES"
+	echo "INSTALLING RKHUNTER"
 	echo "===================================================================="
 	echo
 
-	source="$REPO"/src/bin
-	while IFS= read -r file
-	do
-		sudo install -v -C -m 0755 -D -t /usr/local/bin "$file"
-		if [[ $? -ne 0 ]]; then
-			install::log "Possible problem installing '$file' to /usr/local/bin - exit code $?"
-		else
-			install::log "Installed '$file' to /usr/local/bin OK!"
-		fi
-	done < <(find "$source" -type f)
+	sudo apt install -y rkhunter
 
 	echo
 	echo "DONE!"
@@ -52,15 +37,24 @@ bin::install()
 #
 # CONFIG FUNCTION
 #
-bin::config()
+rkhunter::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING BIN"
+	echo "CONFIGURING RKHUNTER"
 	echo "===================================================================="
 	echo
 
-	echo
+    sed -i '/UPDATE_MIRRORS.*/c\UPDATE_MIRRORS=1' /etc/rkhunter.conf
+    sed -i '/MIRRORS_MODE.*/c\MIRRORS_MODE=0' /etc/rkhunter.conf
+    sed -i '/WEB_CMD.*/c\WEB_CMD=""' /etc/rkhunter.conf
+
+    sed -i '/CRON_DAILY_RUN.*/c\CRON_DAILY_RUN="true"' /etc/default/rkhunter
+    sed -i '/CRON_DB_UPDATE.*/c\CRON_DB_UPDATE="true"' /etc/default/rkhunter
+    sed -i '/APT_AUTOGEN.*/c\APT_AUTOGEN="true"' /etc/default/rkhunter
+
+    rkhunter --update
+    rkhunter --propupd
 
 	echo
 	echo "DONE!"
@@ -69,17 +63,15 @@ bin::config()
 #
 # REMOVE FUNCTION
 #
-bin::remove()
+rkhunter::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING BIN"
+	echo "UNINSTALLING RKHUNTER"
 	echo "===================================================================="
 	echo
 
-	cd /usr/local/bin || return 1
-	rm -f app* stack* swarm* cluster*
-	cd - || return 1
+	apt purge -y --autoremove rkhunter
 
 	echo
 	echo "DONE!"
@@ -88,11 +80,11 @@ bin::remove()
 #
 # TEST FUNCTION
 #
-bin::test()
+rkhunter::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING BIN"
+	echo "TESTING RKHUNTER"
 	echo "===================================================================="
 	echo
 

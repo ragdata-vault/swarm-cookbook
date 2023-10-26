@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
-# shellcheck disable=SC2154,SC2181
+
 # ==================================================================
-# install/bin
+# src/apps/dive
 # ==================================================================
-# Swarm Cookbook - Installer Source File
+# Swarm Cookbook - App Installer
 #
-# File:         install/bin
+# File:         src/apps/dive
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -18,32 +18,26 @@
 # FUNCTIONS
 # ==================================================================
 #
-# INSTALLED FUNCTION
-#
-bin::installed() { return 1; }
-#
 # INSTALL FUNCTION
 #
-bin::install()
+dive::install()
 {
-	local source
+	local DIVE_VERSION
 
 	echo
 	echo "===================================================================="
-	echo "INSTALLING :: BIN FILES"
+	echo "INSTALLING DIVE"
 	echo "===================================================================="
 	echo
 
-	source="$REPO"/src/bin
-	while IFS= read -r file
-	do
-		sudo install -v -C -m 0755 -D -t /usr/local/bin "$file"
-		if [[ $? -ne 0 ]]; then
-			install::log "Possible problem installing '$file' to /usr/local/bin - exit code $?"
-		else
-			install::log "Installed '$file' to /usr/local/bin OK!"
-		fi
-	done < <(find "$source" -type f)
+	[[ ! -d "$USERDIR"/downloads ]] && mkdir -p "$USERDIR"/downloads
+
+	# get latest version tag
+	DIVE_VERSION=$(curl -s "https://api.github.com/repos/wagoodman/dive/releases/latest" | grep -Po '"tag_name": "v\K[0-9.]+')
+	# download latest Debian package
+	wget -O "$USERDIR"/downloads/dive.deb https://github.com/wagoodman/dive/releases/latest/download/dive_${DIVE_VERSION}_linux_amd64.deb
+
+	sudo apt install -y "$USERDIR"/downloads/dive.deb
 
 	echo
 	echo "DONE!"
@@ -52,11 +46,11 @@ bin::install()
 #
 # CONFIG FUNCTION
 #
-bin::config()
+dive::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING BIN"
+	echo "CONFIGURING DIVE"
 	echo "===================================================================="
 	echo
 
@@ -69,34 +63,15 @@ bin::config()
 #
 # REMOVE FUNCTION
 #
-bin::remove()
+dive::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING BIN"
+	echo "UNINSTALLING DIVE"
 	echo "===================================================================="
 	echo
 
-	cd /usr/local/bin || return 1
-	rm -f app* stack* swarm* cluster*
-	cd - || return 1
-
-	echo
-	echo "DONE!"
-	echo
-}
-#
-# TEST FUNCTION
-#
-bin::test()
-{
-	echo
-	echo "===================================================================="
-	echo "TESTING BIN"
-	echo "===================================================================="
-	echo
-
-	echo
+	sudo apt purge -y --autoremove dive
 
 	echo
 	echo "DONE!"

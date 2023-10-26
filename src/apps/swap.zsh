@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
-# shellcheck disable=SC2154,SC2181
+
 # ==================================================================
-# install/bin
+# src/apps/swap
 # ==================================================================
-# Swarm Cookbook - Installer Source File
+# Swarm Cookbook - App Installer
 #
-# File:         install/bin
+# File:         src/apps/swap
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -20,30 +20,19 @@
 #
 # INSTALLED FUNCTION
 #
-bin::installed() { return 1; }
+swap::installed() { command -v swap; }
 #
 # INSTALL FUNCTION
 #
-bin::install()
+swap::install()
 {
-	local source
-
 	echo
 	echo "===================================================================="
-	echo "INSTALLING :: BIN FILES"
+	echo "INSTALLING SWAP"
 	echo "===================================================================="
 	echo
 
-	source="$REPO"/src/bin
-	while IFS= read -r file
-	do
-		sudo install -v -C -m 0755 -D -t /usr/local/bin "$file"
-		if [[ $? -ne 0 ]]; then
-			install::log "Possible problem installing '$file' to /usr/local/bin - exit code $?"
-		else
-			install::log "Installed '$file' to /usr/local/bin OK!"
-		fi
-	done < <(find "$source" -type f)
+	echo
 
 	echo
 	echo "DONE!"
@@ -52,34 +41,54 @@ bin::install()
 #
 # CONFIG FUNCTION
 #
-bin::config()
+swap::config()
 {
+	autoload -Uz regexResponse
+
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING BIN"
+	echo "CONFIGURING SWAP"
 	echo "===================================================================="
 	echo
 
-	echo
+    SWAP_TOTAL=$(awk '/^SwapTotal:/ {print $2}' /proc/meminfo)
+    SWAP_MiB=$(( SWAP_TOTAL / 1024))
+    SWAP_MB=$(awk -vr=$SWAP_MiB 'BEGIN{printf "%.0f", r * 1.049}')
+    SWAP_GiB=$(( SWAP_MB / 1024 ))
+    PRINT_SWAP_MiB=$(printf "%'d" $SWAP_MiB)
+    PRINT_SWAP_MB=$(printf "%'d" "$SWAP_MB")
+    PRINT_SWAP_GiB=$(printf "%'d" $SWAP_GiB)
+
+	# shellcheck disable=SC2028
+	echo "TOTAL SWAP: ${SWAP_TOTAL} (${PRINT_SWAP_MiB} MiB)\n"
+
+	echo -e -n "Do you want to configure swap space for this server? (${WHITE}Y${RESET}/n) "
+
+	read -rsq SWAPYN
+
+	if [[ "${SWAPYN:l}" == "n" ]]; then echo "User elected not to configure swap space"; fi
+
+	if [[ ! $SWAPYN =~ $NEGAT ]]; then
+		if [[ $SWAP_TOTAL -lt 4194000 ]]
+	fi
 
 	echo
 	echo "DONE!"
 	echo
 }
+}
 #
 # REMOVE FUNCTION
 #
-bin::remove()
+swap::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING BIN"
+	echo "UNINSTALLING SWAP"
 	echo "===================================================================="
 	echo
 
-	cd /usr/local/bin || return 1
-	rm -f app* stack* swarm* cluster*
-	cd - || return 1
+	echo
 
 	echo
 	echo "DONE!"
@@ -88,11 +97,11 @@ bin::remove()
 #
 # TEST FUNCTION
 #
-bin::test()
+swap::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING BIN"
+	echo "TESTING SWAP"
 	echo "===================================================================="
 	echo
 

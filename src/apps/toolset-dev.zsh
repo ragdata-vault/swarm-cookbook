@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
-# shellcheck disable=SC2154,SC2181
+
 # ==================================================================
-# install/bin
+# src/apps/toolset-dev
 # ==================================================================
-# Swarm Cookbook - Installer Source File
+# Swarm Cookbook - App Installer
 #
-# File:         install/bin
+# File:         src/apps/toolset-dev
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -18,32 +18,20 @@
 # FUNCTIONS
 # ==================================================================
 #
-# INSTALLED FUNCTION
-#
-bin::installed() { return 1; }
-#
 # INSTALL FUNCTION
 #
-bin::install()
+toolset-dev::install()
 {
-	local source
-
 	echo
 	echo "===================================================================="
-	echo "INSTALLING :: BIN FILES"
+	echo "INSTALLING TOOLSET-DEV"
 	echo "===================================================================="
 	echo
 
-	source="$REPO"/src/bin
-	while IFS= read -r file
-	do
-		sudo install -v -C -m 0755 -D -t /usr/local/bin "$file"
-		if [[ $? -ne 0 ]]; then
-			install::log "Possible problem installing '$file' to /usr/local/bin - exit code $?"
-		else
-			install::log "Installed '$file' to /usr/local/bin OK!"
-		fi
-	done < <(find "$source" -type f)
+	export DEBIAN_FRONTEND=noninteractive
+
+	sudo apt install -y mkcert libffi-dev libgdbm-dev libncurses5-dev automake libtool gcc g++ make colordiff
+	sudo apt install -y zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libxml2-dev libxslt1-dev libcurl4-openssl-dev libc-bin
 
 	echo
 	echo "DONE!"
@@ -52,11 +40,11 @@ bin::install()
 #
 # CONFIG FUNCTION
 #
-bin::config()
+toolset-dev::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING BIN"
+	echo "CONFIGURING TOOLSET-DEV"
 	echo "===================================================================="
 	echo
 
@@ -69,17 +57,15 @@ bin::config()
 #
 # REMOVE FUNCTION
 #
-bin::remove()
+toolset-dev::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING BIN"
+	echo "UNINSTALLING TOOLSET-DEV"
 	echo "===================================================================="
 	echo
 
-	cd /usr/local/bin || return 1
-	rm -f app* stack* swarm* cluster*
-	cd - || return 1
+	echo
 
 	echo
 	echo "DONE!"
@@ -88,11 +74,11 @@ bin::remove()
 #
 # TEST FUNCTION
 #
-bin::test()
+toolset-dev::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING BIN"
+	echo "TESTING TOOLSET-DEV"
 	echo "===================================================================="
 	echo
 

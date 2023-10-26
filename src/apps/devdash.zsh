@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
-# shellcheck disable=SC2154,SC2181
+
 # ==================================================================
-# install/bin
+# src/apps/devdash
 # ==================================================================
-# Swarm Cookbook - Installer Source File
+# Swarm Cookbook - App Installer
 #
-# File:         install/bin
+# File:         src/apps/devdash
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -20,30 +20,27 @@
 #
 # INSTALLED FUNCTION
 #
-bin::installed() { return 1; }
+devdash::installed() { command -v devdash; }
 #
 # INSTALL FUNCTION
 #
-bin::install()
+devdash::install()
 {
-	local source
-
 	echo
 	echo "===================================================================="
-	echo "INSTALLING :: BIN FILES"
+	echo "INSTALLING DEVDASH"
 	echo "===================================================================="
 	echo
 
-	source="$REPO"/src/bin
-	while IFS= read -r file
-	do
-		sudo install -v -C -m 0755 -D -t /usr/local/bin "$file"
-		if [[ $? -ne 0 ]]; then
-			install::log "Possible problem installing '$file' to /usr/local/bin - exit code $?"
-		else
-			install::log "Installed '$file' to /usr/local/bin OK!"
-		fi
-	done < <(find "$source" -type f)
+	cd "$XDG_DOWNLOAD_DIR" || return 1
+
+	curl -LO https://raw.githubusercontent.com/Phantas0s/devdash/master/install/linux.sh
+
+	mv linux.sh install-devdash.sh
+
+	sh ./install-devdash.sh
+
+	cd - || return 1
 
 	echo
 	echo "DONE!"
@@ -52,15 +49,16 @@ bin::install()
 #
 # CONFIG FUNCTION
 #
-bin::config()
+devdash::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING BIN"
+	echo "CONFIGURING DEVDASH"
 	echo "===================================================================="
 	echo
 
-	echo
+	# default location for config file is:
+	# $XDG_CONFIG_HOME/devdash/default.yml
 
 	echo
 	echo "DONE!"
@@ -69,17 +67,15 @@ bin::config()
 #
 # REMOVE FUNCTION
 #
-bin::remove()
+devdash::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING BIN"
+	echo "UNINSTALLING DEVDASH"
 	echo "===================================================================="
 	echo
 
-	cd /usr/local/bin || return 1
-	rm -f app* stack* swarm* cluster*
-	cd - || return 1
+	rm -f "$XDG_DOWNLOAD_DIR/install-devdash.sh"
 
 	echo
 	echo "DONE!"
@@ -88,11 +84,11 @@ bin::remove()
 #
 # TEST FUNCTION
 #
-bin::test()
+devdash::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING BIN"
+	echo "TESTING DEVDASH"
 	echo "===================================================================="
 	echo
 

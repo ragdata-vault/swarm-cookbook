@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
-# shellcheck disable=SC2154,SC2181
+
 # ==================================================================
-# install/bin
+# src/apps/logwatch
 # ==================================================================
-# Swarm Cookbook - Installer Source File
+# Swarm Cookbook - App Installer
 #
-# File:         install/bin
+# File:         src/apps/logwatch
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -18,32 +18,17 @@
 # FUNCTIONS
 # ==================================================================
 #
-# INSTALLED FUNCTION
-#
-bin::installed() { return 1; }
-#
 # INSTALL FUNCTION
 #
-bin::install()
+logwatch::install()
 {
-	local source
-
 	echo
 	echo "===================================================================="
-	echo "INSTALLING :: BIN FILES"
+	echo "INSTALLING LOGWATCH"
 	echo "===================================================================="
 	echo
 
-	source="$REPO"/src/bin
-	while IFS= read -r file
-	do
-		sudo install -v -C -m 0755 -D -t /usr/local/bin "$file"
-		if [[ $? -ne 0 ]]; then
-			install::log "Possible problem installing '$file' to /usr/local/bin - exit code $?"
-		else
-			install::log "Installed '$file' to /usr/local/bin OK!"
-		fi
-	done < <(find "$source" -type f)
+	sudo apt install -y logwatch
 
 	echo
 	echo "DONE!"
@@ -52,15 +37,30 @@ bin::install()
 #
 # CONFIG FUNCTION
 #
-bin::config()
+logwatch::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING BIN"
+	echo "CONFIGURING LOGWATCH"
 	echo "===================================================================="
 	echo
 
-	echo
+	local ADMIN_EMAIL SYSTEM_EMAIL NODE_ID
+
+	NODE_ID="$(docker info -f '{{.Swarm.NodeID}}')"
+
+	ADMIN_EMAIL="$(hashGET NODE:"${NODE_ID}" ADMIN_EMAIL)"
+	SYSTEM_EMAIL="$(hashGET NODE:"${NODE_ID}" SYSTEM_EMAIL)"
+
+	cp /usr/share/logwatch/default.conf/logwatch.conf /usr/share/logwatch/default.conf/logwatch.conf~
+
+	sed -i "/^Output.*/c\Output = mail" /usr/share/logwatch/default.conf/logwatch.conf
+	sed -i "/^Format.*/c\Format = html" /usr/share/logwatch/default.conf/logwatch.conf
+	sed -i "/^MailTo.*/c\MailTo = ${ADMIN_EMAIL}" /usr/share/logwatch/default.conf/logwatch.conf
+	sed -i "/^MailFrom.*/c\MailFrom = ${SYSTEM_EMAIL}" /usr/share/logwatch/default.conf/logwatch.conf
+	sed -i "/^Detail.*/c\Detail = High" /usr/share/logwatch/default.conf/logwatch.conf
+
+	install -v -m 0755 -C -D -t /etc/cron.daily "$SWARMDIR"/inc/cron/logwatch
 
 	echo
 	echo "DONE!"
@@ -69,34 +69,15 @@ bin::config()
 #
 # REMOVE FUNCTION
 #
-bin::remove()
+logwatch::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING BIN"
+	echo "UNINSTALLING LOGWATCH"
 	echo "===================================================================="
 	echo
 
-	cd /usr/local/bin || return 1
-	rm -f app* stack* swarm* cluster*
-	cd - || return 1
-
-	echo
-	echo "DONE!"
-	echo
-}
-#
-# TEST FUNCTION
-#
-bin::test()
-{
-	echo
-	echo "===================================================================="
-	echo "TESTING BIN"
-	echo "===================================================================="
-	echo
-
-	echo
+	sudo apt purge -y --autoremove logwatch
 
 	echo
 	echo "DONE!"

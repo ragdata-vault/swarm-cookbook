@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
-# shellcheck disable=SC2154,SC2181
+
 # ==================================================================
-# install/bin
+# src/apps/fail2ban
 # ==================================================================
-# Swarm Cookbook - Installer Source File
+# Swarm Cookbook - App Installer
 #
-# File:         install/bin
+# File:         src/apps/fail2ban
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -18,32 +18,17 @@
 # FUNCTIONS
 # ==================================================================
 #
-# INSTALLED FUNCTION
-#
-bin::installed() { return 1; }
-#
 # INSTALL FUNCTION
 #
-bin::install()
+fail2ban::install()
 {
-	local source
-
 	echo
 	echo "===================================================================="
-	echo "INSTALLING :: BIN FILES"
+	echo "INSTALLING FAIL2BAN"
 	echo "===================================================================="
 	echo
 
-	source="$REPO"/src/bin
-	while IFS= read -r file
-	do
-		sudo install -v -C -m 0755 -D -t /usr/local/bin "$file"
-		if [[ $? -ne 0 ]]; then
-			install::log "Possible problem installing '$file' to /usr/local/bin - exit code $?"
-		else
-			install::log "Installed '$file' to /usr/local/bin OK!"
-		fi
-	done < <(find "$source" -type f)
+	sudo apt install -y fail2ban
 
 	echo
 	echo "DONE!"
@@ -52,15 +37,24 @@ bin::install()
 #
 # CONFIG FUNCTION
 #
-bin::config()
+fail2ban::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING BIN"
+	echo "CONFIGURING FAIL2BAN"
 	echo "===================================================================="
 	echo
 
-	echo
+	cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+
+	ignore="${TRUSTED[*]}"
+
+    sed -ri "/^\[DEFAULT\]$/,/^# JAILS$/ s/^bantime[[:blank:]]*= .*/bantime = 18000/" /etc/fail2ban/jail.local
+    sed -ri "/^\[DEFAULT\]$/,/^# JAILS$/ s/^backend[[:blank:]]*=.*/backend = polling/" /etc/fail2ban/jail.local
+    sed -ri "/^\[DEFAULT\]$/,/^# JAILS$/ s/^ignoreip[[:blank:]]*=.*/ignoreip = ${ignore//\//\\/}" /etc/fail2ban/jail.local
+
+    cp /etc/fail2ban/jail.d/defaults-debian.conf /etc/fail2ban/jail.d/defaults-debian.conf~
+    cp "$SWARMDIR"/inc/fail2ban/defaults-debian.conf /etc/fail2ban/jail.d/defaults-debian.conf
 
 	echo
 	echo "DONE!"
@@ -69,17 +63,15 @@ bin::config()
 #
 # REMOVE FUNCTION
 #
-bin::remove()
+fail2ban::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING BIN"
+	echo "UNINSTALLING FAIL2BAN"
 	echo "===================================================================="
 	echo
 
-	cd /usr/local/bin || return 1
-	rm -f app* stack* swarm* cluster*
-	cd - || return 1
+	apt purge -y --autoremove fail2ban
 
 	echo
 	echo "DONE!"
@@ -88,11 +80,11 @@ bin::remove()
 #
 # TEST FUNCTION
 #
-bin::test()
+fail2ban::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING BIN"
+	echo "TESTING FAIL2BAN"
 	echo "===================================================================="
 	echo
 

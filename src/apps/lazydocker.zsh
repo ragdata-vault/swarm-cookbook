@@ -1,13 +1,13 @@
 #!/usr/bin/env zsh
-# shellcheck disable=SC2154,SC2181
-# ==================================================================
-# install/bin
-# ==================================================================
-# Swarm Cookbook - Installer Source File
 #
-# File:         install/bin
+# ==================================================================
+# src/apps/lazydocker
+# ==================================================================
+# Swarm Cookbook - App Installer
+#
+# File:         src/apps/lazydocker
 # Author:       Ragdata
-# Date:         09/10/2023
+# Date:         25/09/2023
 # License:      MIT License
 # Copyright:    Copyright © 2023 Darren Poulton (Ragdata)
 # ==================================================================
@@ -18,32 +18,27 @@
 # FUNCTIONS
 # ==================================================================
 #
-# INSTALLED FUNCTION
-#
-bin::installed() { return 1; }
-#
 # INSTALL FUNCTION
 #
-bin::install()
+lazydocker::install()
 {
-	local source
-
 	echo
 	echo "===================================================================="
-	echo "INSTALLING :: BIN FILES"
+	echo "INSTALLING LAZYDOCKER"
 	echo "===================================================================="
 	echo
 
-	source="$REPO"/src/bin
-	while IFS= read -r file
-	do
-		sudo install -v -C -m 0755 -D -t /usr/local/bin "$file"
-		if [[ $? -ne 0 ]]; then
-			install::log "Possible problem installing '$file' to /usr/local/bin - exit code $?"
-		else
-			install::log "Installed '$file' to /usr/local/bin OK!"
-		fi
-	done < <(find "$source" -type f)
+	export DIR=/usr/local/bin
+
+	[[ ! -d "$HOME"/downloads ]] && mkdir -p "$HOME"/downloads
+
+	cd "$HOME"/downloads || return 1
+
+	wget https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.zsh
+
+	chmod 0755 install_update_linux.zsh
+
+	sudo ./install_update_linux.zsh
 
 	echo
 	echo "DONE!"
@@ -52,11 +47,11 @@ bin::install()
 #
 # CONFIG FUNCTION
 #
-bin::config()
+lazydocker::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING BIN"
+	echo "CONFIGURING LAZYDOCKER"
 	echo "===================================================================="
 	echo
 
@@ -69,34 +64,15 @@ bin::config()
 #
 # REMOVE FUNCTION
 #
-bin::remove()
+lazydocker::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING BIN"
+	echo "UNINSTALLING LAZYDOCKER"
 	echo "===================================================================="
 	echo
 
-	cd /usr/local/bin || return 1
-	rm -f app* stack* swarm* cluster*
-	cd - || return 1
-
-	echo
-	echo "DONE!"
-	echo
-}
-#
-# TEST FUNCTION
-#
-bin::test()
-{
-	echo
-	echo "===================================================================="
-	echo "TESTING BIN"
-	echo "===================================================================="
-	echo
-
-	echo
+	rm -f /usr/local/bin/lazydocker
 
 	echo
 	echo "DONE!"

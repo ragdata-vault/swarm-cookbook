@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
-# shellcheck disable=SC2154,SC2181
+
 # ==================================================================
-# install/bin
+# install/lib
 # ==================================================================
 # Swarm Cookbook - Installer Source File
 #
-# File:         install/bin
+# File:         install/lib
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -20,28 +20,26 @@
 #
 # INSTALLED FUNCTION
 #
-bin::installed() { return 1; }
+lib::installed() { return 1; }
 #
 # INSTALL FUNCTION
 #
-bin::install()
+lib::install()
 {
-	local source
-
 	echo
 	echo "===================================================================="
-	echo "INSTALLING :: BIN FILES"
+	echo "INSTALLING :: LIBRARY FILES"
 	echo "===================================================================="
 	echo
 
-	source="$REPO"/src/bin
+	source="$REPO"/src/lib
 	while IFS= read -r file
 	do
-		sudo install -v -C -m 0755 -D -t /usr/local/bin "$file"
+		sudo install -v -C -m 0755 -D -t /usr/local/lib "$file"
 		if [[ $? -ne 0 ]]; then
-			install::log "Possible problem installing '$file' to /usr/local/bin - exit code $?"
+			install::log "Possible problem installing '$file' to /usr/local/lib - exit code $?"
 		else
-			install::log "Installed '$file' to /usr/local/bin OK!"
+			install::log "Installed '$file' to /usr/local/lib OK!"
 		fi
 	done < <(find "$source" -type f)
 
@@ -52,11 +50,11 @@ bin::install()
 #
 # CONFIG FUNCTION
 #
-bin::config()
+lib::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING BIN"
+	echo "CONFIGURING :: LIBRARY FILES"
 	echo "===================================================================="
 	echo
 
@@ -69,16 +67,16 @@ bin::config()
 #
 # REMOVE FUNCTION
 #
-bin::remove()
+lib::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING BIN"
+	echo "UNINSTALLING :: LIBRARY FILES"
 	echo "===================================================================="
 	echo
 
-	cd /usr/local/bin || return 1
-	rm -f app* stack* swarm* cluster*
+	cd /usr/local/lib || return 1
+	rm -f ./*.zsh
 	cd - || return 1
 
 	echo
@@ -88,11 +86,11 @@ bin::remove()
 #
 # TEST FUNCTION
 #
-bin::test()
+lib::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING BIN"
+	echo "TESTING :: LIBRARY FILES"
 	echo "===================================================================="
 	echo
 

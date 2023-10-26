@@ -1,13 +1,13 @@
 #!/usr/bin/env zsh
-# shellcheck disable=SC2154,SC2181
+#shellcheck disable=SC1090
 # ==================================================================
-# install/bin
+# src/apps/dnsmasq
 # ==================================================================
-# Swarm Cookbook - Installer Source File
+# Swarm Cookbook - App Installer
 #
-# File:         install/bin
+# File:         src/apps/dnsmasq
 # Author:       Ragdata
-# Date:         09/10/2023
+# Date:         25/09/2023
 # License:      MIT License
 # Copyright:    Copyright © 2023 Darren Poulton (Ragdata)
 # ==================================================================
@@ -18,32 +18,41 @@
 # FUNCTIONS
 # ==================================================================
 #
-# INSTALLED FUNCTION
-#
-bin::installed() { return 1; }
-#
 # INSTALL FUNCTION
 #
-bin::install()
+dnsmasq::install()
 {
-	local source
-
 	echo
 	echo "===================================================================="
-	echo "INSTALLING :: BIN FILES"
+	echo "INSTALLING DNSMASQ"
 	echo "===================================================================="
 	echo
 
-	source="$REPO"/src/bin
-	while IFS= read -r file
-	do
-		sudo install -v -C -m 0755 -D -t /usr/local/bin "$file"
-		if [[ $? -ne 0 ]]; then
-			install::log "Possible problem installing '$file' to /usr/local/bin - exit code $?"
-		else
-			install::log "Installed '$file' to /usr/local/bin OK!"
-		fi
-	done < <(find "$source" -type f)
+	local NODE_ID NODE_DOMAIN
+
+	NODE_ID="$(docker info -f '{{.Swarm.NodeID}}')"
+
+	source "$SWARMDIR"/.env
+
+	NODE_DOMAIN="$(hashGET NODE:"${NODE_ID}" NODE_DOMAIN)"
+
+	systemctl disable systemd-resolved
+	systemctl stop systemd-resolved
+
+	ls -lh /etc/resolv.conf
+	rm /etc/resolv.conf
+
+	echo "nameserver 127.0.0.1" > /etc/resolv.conf
+	echo "nameserver 1.1.1.1" >> /etc/resolv.conf
+
+	sudo apt install -y dnsmasq
+
+	echo "address=/.${NODE_DOMAIN}/127.0.0.1" >> /etc/dnsmasq.conf
+
+	mkdir -v /etc/resolver && echo "nameserver 127.0.0.1" > /etc/resolver/"${NODE_DOMAIN}"
+
+	systemctl enable dnsmasq
+	systemctl restart dnsmasq
 
 	echo
 	echo "DONE!"
@@ -52,11 +61,11 @@ bin::install()
 #
 # CONFIG FUNCTION
 #
-bin::config()
+dnsmasq::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING BIN"
+	echo "CONFIGURING DNSMASQ"
 	echo "===================================================================="
 	echo
 
@@ -69,34 +78,15 @@ bin::config()
 #
 # REMOVE FUNCTION
 #
-bin::remove()
+dnsmasq::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING BIN"
+	echo "UNINSTALLING DNSMASQ"
 	echo "===================================================================="
 	echo
 
-	cd /usr/local/bin || return 1
-	rm -f app* stack* swarm* cluster*
-	cd - || return 1
-
-	echo
-	echo "DONE!"
-	echo
-}
-#
-# TEST FUNCTION
-#
-bin::test()
-{
-	echo
-	echo "===================================================================="
-	echo "TESTING BIN"
-	echo "===================================================================="
-	echo
-
-	echo
+	sudo apt purge -y --autoremove dnsmasq
 
 	echo
 	echo "DONE!"

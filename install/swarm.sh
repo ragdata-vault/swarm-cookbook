@@ -34,7 +34,7 @@ swarm::install()
 
 	install::log "Installing App Installer Files to '$SWARMDIR/apps'"
 
-	source="$REPO"/src/var/apps
+	source="$REPO"/src/apps
 	while IFS= read -r file
 	do
 		install -v -C -m 0755 -D -t "$SWARMDIR"/apps "$file"
@@ -42,7 +42,7 @@ swarm::install()
 
 	install::log "Installing Script Files to '$SWARMDIR/scripts'"
 
-	source="$REPO"/src/var/scripts
+	source="$REPO"/src/scripts
 	while IFS= read -r file
 	do
 		install -v -C -m 0755 -D -t "$SWARMDIR"/scripts "$file"
@@ -50,7 +50,7 @@ swarm::install()
 
 	install::log "Installing Stack Files to '$SWARMDIR/stacks'"
 
-	source="$REPO"/src/var/stacks
+	source="$REPO"/src/stacks
 	len="${#source}"
 	while IFS= read -r file
 	do
@@ -73,7 +73,7 @@ swarm::install()
 
 	install::log "Installing /etc files to '$SWARMDIR/etc'"
 
-	source="$REPO"/src/var/etc
+	source="$REPO"/src/etc
 	len="${#source}"
 	while IFS= read -r file
 	do

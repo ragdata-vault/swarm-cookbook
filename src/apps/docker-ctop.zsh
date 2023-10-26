@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
-# shellcheck disable=SC2154,SC2181
+
 # ==================================================================
-# install/bin
+# src/apps/docker-ctop
 # ==================================================================
-# Swarm Cookbook - Installer Source File
+# Swarm Cookbook - App Installer
 #
-# File:         install/bin
+# File:         src/apps/docker-ctop
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -20,30 +20,24 @@
 #
 # INSTALLED FUNCTION
 #
-bin::installed() { return 1; }
+docker-ctop::installed() { command -v docker-ctop; }
 #
 # INSTALL FUNCTION
 #
-bin::install()
+docker-ctop::install()
 {
-	local source
-
 	echo
 	echo "===================================================================="
-	echo "INSTALLING :: BIN FILES"
+	echo "INSTALLING DOCKER-CTOP"
 	echo "===================================================================="
 	echo
 
-	source="$REPO"/src/bin
-	while IFS= read -r file
-	do
-		sudo install -v -C -m 0755 -D -t /usr/local/bin "$file"
-		if [[ $? -ne 0 ]]; then
-			install::log "Possible problem installing '$file' to /usr/local/bin - exit code $?"
-		else
-			install::log "Installed '$file' to /usr/local/bin OK!"
-		fi
-	done < <(find "$source" -type f)
+	curl -fsSL https://azlux.fr/repo.gpg.key | gpg --dearmor -o /usr/share/keyrings/azlux-archive-keyring.gpg
+	echo \
+        "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/azlux-archive-keyring.gpg] http://packages.azlux.fr/debian \
+        $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/azlux.list >/dev/null
+	sudo apt update
+	sudo apt install -y docker-ctop
 
 	echo
 	echo "DONE!"
@@ -52,11 +46,11 @@ bin::install()
 #
 # CONFIG FUNCTION
 #
-bin::config()
+docker-ctop::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING BIN"
+	echo "CONFIGURING DOCKER-CTOP"
 	echo "===================================================================="
 	echo
 
@@ -69,17 +63,15 @@ bin::config()
 #
 # REMOVE FUNCTION
 #
-bin::remove()
+docker-ctop::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING BIN"
+	echo "UNINSTALLING DOCKER-CTOP"
 	echo "===================================================================="
 	echo
 
-	cd /usr/local/bin || return 1
-	rm -f app* stack* swarm* cluster*
-	cd - || return 1
+	sudo apt purge -y --autoremove docker-ctop
 
 	echo
 	echo "DONE!"
@@ -88,11 +80,11 @@ bin::remove()
 #
 # TEST FUNCTION
 #
-bin::test()
+docker-ctop::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING BIN"
+	echo "TESTING DOCKER-CTOP"
 	echo "===================================================================="
 	echo
 

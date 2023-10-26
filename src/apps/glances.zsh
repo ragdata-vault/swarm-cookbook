@@ -1,13 +1,13 @@
 #!/usr/bin/env zsh
-# shellcheck disable=SC2154,SC2181
-# ==================================================================
-# install/bin
-# ==================================================================
-# Swarm Cookbook - Installer Source File
 #
-# File:         install/bin
+# ==================================================================
+# src/apps/glances
+# ==================================================================
+# Swarm Cookbook - App Installer
+#
+# File:         src/apps/glances
 # Author:       Ragdata
-# Date:         09/10/2023
+# Date:         25/09/2023
 # License:      MIT License
 # Copyright:    Copyright © 2023 Darren Poulton (Ragdata)
 # ==================================================================
@@ -18,32 +18,19 @@
 # FUNCTIONS
 # ==================================================================
 #
-# INSTALLED FUNCTION
-#
-bin::installed() { return 1; }
-#
 # INSTALL FUNCTION
 #
-bin::install()
+glances::install()
 {
-	local source
-
 	echo
 	echo "===================================================================="
-	echo "INSTALLING :: BIN FILES"
+	echo "INSTALLING GLANCES"
 	echo "===================================================================="
 	echo
 
-	source="$REPO"/src/bin
-	while IFS= read -r file
-	do
-		sudo install -v -C -m 0755 -D -t /usr/local/bin "$file"
-		if [[ $? -ne 0 ]]; then
-			install::log "Possible problem installing '$file' to /usr/local/bin - exit code $?"
-		else
-			install::log "Installed '$file' to /usr/local/bin OK!"
-		fi
-	done < <(find "$source" -type f)
+	sudo apt install -y python3-defusedxml python3-ujson python3-future
+
+	pip install glances
 
 	echo
 	echo "DONE!"
@@ -52,11 +39,11 @@ bin::install()
 #
 # CONFIG FUNCTION
 #
-bin::config()
+glances::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING BIN"
+	echo "CONFIGURING GLANCES"
 	echo "===================================================================="
 	echo
 
@@ -69,34 +56,15 @@ bin::config()
 #
 # REMOVE FUNCTION
 #
-bin::remove()
+glances::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING BIN"
+	echo "UNINSTALLING GLANCES"
 	echo "===================================================================="
 	echo
 
-	cd /usr/local/bin || return 1
-	rm -f app* stack* swarm* cluster*
-	cd - || return 1
-
-	echo
-	echo "DONE!"
-	echo
-}
-#
-# TEST FUNCTION
-#
-bin::test()
-{
-	echo
-	echo "===================================================================="
-	echo "TESTING BIN"
-	echo "===================================================================="
-	echo
-
-	echo
+	pip uninstall glances
 
 	echo
 	echo "DONE!"

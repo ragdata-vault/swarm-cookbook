@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
-# shellcheck disable=SC2154,SC2181
+
 # ==================================================================
-# install/bin
+# src/apps/redis
 # ==================================================================
-# Swarm Cookbook - Installer Source File
+# Swarm Cookbook - App Installer
 #
-# File:         install/bin
+# File:         src/apps/redis
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -20,30 +20,19 @@
 #
 # INSTALLED FUNCTION
 #
-bin::installed() { return 1; }
+redis::installed() { command -v redis-server; }
 #
 # INSTALL FUNCTION
 #
-bin::install()
+redis::install()
 {
-	local source
-
 	echo
 	echo "===================================================================="
-	echo "INSTALLING :: BIN FILES"
+	echo "INSTALLING REDIS"
 	echo "===================================================================="
 	echo
 
-	source="$REPO"/src/bin
-	while IFS= read -r file
-	do
-		sudo install -v -C -m 0755 -D -t /usr/local/bin "$file"
-		if [[ $? -ne 0 ]]; then
-			install::log "Possible problem installing '$file' to /usr/local/bin - exit code $?"
-		else
-			install::log "Installed '$file' to /usr/local/bin OK!"
-		fi
-	done < <(find "$source" -type f)
+	sudo apt install -y redis-server redis-tools
 
 	echo
 	echo "DONE!"
@@ -52,15 +41,39 @@ bin::install()
 #
 # CONFIG FUNCTION
 #
-bin::config()
+redis::config()
 {
+	local REDIS_PWD ENV_FILE
+	local USER="${SUDO_USER:-$(whoami)}"
+
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING BIN"
+	echo "CONFIGURING REDIS"
 	echo "===================================================================="
 	echo
 
-	echo
+	if grep -q "^# requirepass.*$" /etc/redis/redis.conf; then
+		REDIS_PWD="$(install::getPassword | base64)"
+		sed -i "/^supervised.*/c\supervised systemd" /etc/redis/redis.conf
+		sed -i "/^# requirepass.*/c\requirepass ${REDIS_PWD}" /etc/redis/redis.conf
+	elif grep -E -q "^requirepass.*$" /etc/redis/redis.conf; then
+		REDIS_PWD="$(install::redis::passGET)"
+		if [[ -f "/home/$USERNAME/.zshenv" ]]; then
+			ENV_FILE="/home/$USERNAME/.zshenv"
+		elif [[ -f "/home/$USERNAME/.swarm/.env" ]]; then
+			ENV_FILE="/home/$USERNAME/.swarm/.env"
+		fi
+		if ! grep -q "REDISCLI_AUTH" "$ENV_FILE"; then
+			{
+				echo "# Redis-Server Authentication String"
+				echo "export REDISCLI_AUTH=${REDIS_PWD}"
+			} >> "$ENV_FILE"
+		fi
+	fi
+
+	systemctl daemon-reload
+	systemctl enable redis-server.service
+	systemctl start redis-server
 
 	echo
 	echo "DONE!"
@@ -69,34 +82,15 @@ bin::config()
 #
 # REMOVE FUNCTION
 #
-bin::remove()
+redis::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING BIN"
+	echo "UNINSTALLING REDIS"
 	echo "===================================================================="
 	echo
 
-	cd /usr/local/bin || return 1
-	rm -f app* stack* swarm* cluster*
-	cd - || return 1
-
-	echo
-	echo "DONE!"
-	echo
-}
-#
-# TEST FUNCTION
-#
-bin::test()
-{
-	echo
-	echo "===================================================================="
-	echo "TESTING BIN"
-	echo "===================================================================="
-	echo
-
-	echo
+	sudo apt purge -y --autoremove redis-server redis-tools
 
 	echo
 	echo "DONE!"

@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
-# shellcheck disable=SC2154,SC2181
+
 # ==================================================================
-# install/bin
+# src/apps/python
 # ==================================================================
-# Swarm Cookbook - Installer Source File
+# Swarm Cookbook - App Installer
 #
-# File:         install/bin
+# File:         src/apps/python
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -18,32 +18,18 @@
 # FUNCTIONS
 # ==================================================================
 #
-# INSTALLED FUNCTION
-#
-bin::installed() { return 1; }
-#
 # INSTALL FUNCTION
 #
-bin::install()
+python::install()
 {
-	local source
-
 	echo
 	echo "===================================================================="
-	echo "INSTALLING :: BIN FILES"
+	echo "INSTALLING PYTHON"
 	echo "===================================================================="
 	echo
 
-	source="$REPO"/src/bin
-	while IFS= read -r file
-	do
-		sudo install -v -C -m 0755 -D -t /usr/local/bin "$file"
-		if [[ $? -ne 0 ]]; then
-			install::log "Possible problem installing '$file' to /usr/local/bin - exit code $?"
-		else
-			install::log "Installed '$file' to /usr/local/bin OK!"
-		fi
-	done < <(find "$source" -type f)
+	sudo apt install -y python3-full python3-dev python3-pip python3.11-full python3-certbot-nginx
+	sudo apt install -y python3-software-properties python3-dateutil python3-debconf python3-debian python3-venv python3-django
 
 	echo
 	echo "DONE!"
@@ -52,15 +38,22 @@ bin::install()
 #
 # CONFIG FUNCTION
 #
-bin::config()
+python::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING BIN"
+	echo "CONFIGURING PYTHON"
 	echo "===================================================================="
 	echo
 
-	echo
+	if [[ ! -f /usr/bin/python2 ]]; then ln -s /usr/bin/python2.7 /usr/bin/python2; fi
+	if [[ ! -f /usr/bin/python3 ]]; then ln -s /usr/bin/python3.11 /usr/bin/python3; fi
+
+	sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.11 99
+
+	if [[ -f /usr/bin/python3.8 ]]; then update-alternatives --install /usr/bin/python python /usr/bin/python3.8 80; fi
+
+	sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 20
 
 	echo
 	echo "DONE!"
@@ -69,17 +62,15 @@ bin::config()
 #
 # REMOVE FUNCTION
 #
-bin::remove()
+python::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING BIN"
+	echo "UNINSTALLING PYTHON"
 	echo "===================================================================="
 	echo
 
-	cd /usr/local/bin || return 1
-	rm -f app* stack* swarm* cluster*
-	cd - || return 1
+	sudo apt purge -y --autoremove python3-full python3-pip python3.11-full
 
 	echo
 	echo "DONE!"
@@ -88,11 +79,11 @@ bin::remove()
 #
 # TEST FUNCTION
 #
-bin::test()
+python::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING BIN"
+	echo "TESTING PYTHON"
 	echo "===================================================================="
 	echo
 

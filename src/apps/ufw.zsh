@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
-# shellcheck disable=SC2154,SC2181
+
 # ==================================================================
-# install/bin
+# src/apps/ufw
 # ==================================================================
-# Swarm Cookbook - Installer Source File
+# Swarm Cookbook - App Installer
 #
-# File:         install/bin
+# File:         src/apps/ufw
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -18,32 +18,17 @@
 # FUNCTIONS
 # ==================================================================
 #
-# INSTALLED FUNCTION
-#
-bin::installed() { return 1; }
-#
 # INSTALL FUNCTION
 #
-bin::install()
+ufw::install()
 {
-	local source
-
 	echo
 	echo "===================================================================="
-	echo "INSTALLING :: BIN FILES"
+	echo "INSTALLING UFW"
 	echo "===================================================================="
 	echo
 
-	source="$REPO"/src/bin
-	while IFS= read -r file
-	do
-		sudo install -v -C -m 0755 -D -t /usr/local/bin "$file"
-		if [[ $? -ne 0 ]]; then
-			install::log "Possible problem installing '$file' to /usr/local/bin - exit code $?"
-		else
-			install::log "Installed '$file' to /usr/local/bin OK!"
-		fi
-	done < <(find "$source" -type f)
+	sudo apt install -y ufw
 
 	echo
 	echo "DONE!"
@@ -52,15 +37,30 @@ bin::install()
 #
 # CONFIG FUNCTION
 #
-bin::config()
+ufw::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING BIN"
+	echo "CONFIGURING UFW"
 	echo "===================================================================="
 	echo
 
-	echo
+	ufw allow 2376/tcp
+	ufw allow 7946/udp
+	ufw allow 7946/tcp
+	ufw allow 80/tcp
+	ufw allow 8080/tcp
+	ufw allow 9090/tcp
+	ufw allow 443/tcp
+	ufw allow 2377/tcp
+
+	ufw allow 53/udp
+	ufw allow 4789/udp
+
+	ufw allow samba
+
+	ufw reload
+	ufw enable
 
 	echo
 	echo "DONE!"
@@ -69,34 +69,15 @@ bin::config()
 #
 # REMOVE FUNCTION
 #
-bin::remove()
+ufw::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING BIN"
+	echo "UNINSTALLING UFW"
 	echo "===================================================================="
 	echo
 
-	cd /usr/local/bin || return 1
-	rm -f app* stack* swarm* cluster*
-	cd - || return 1
-
-	echo
-	echo "DONE!"
-	echo
-}
-#
-# TEST FUNCTION
-#
-bin::test()
-{
-	echo
-	echo "===================================================================="
-	echo "TESTING BIN"
-	echo "===================================================================="
-	echo
-
-	echo
+	sudo apt purge -y --autoremove ufw
 
 	echo
 	echo "DONE!"

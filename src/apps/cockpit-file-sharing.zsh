@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
-# shellcheck disable=SC2154,SC2181
+# shellcheck disable=SC2164
 # ==================================================================
-# install/bin
+# src/apps/cockpit-file-sharing
 # ==================================================================
-# Swarm Cookbook - Installer Source File
+# Swarm Cookbook - App Installer
 #
-# File:         install/bin
+# File:         src/apps/cockpit-file-sharing
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -18,32 +18,28 @@
 # FUNCTIONS
 # ==================================================================
 #
-# INSTALLED FUNCTION
-#
-bin::installed() { return 1; }
-#
 # INSTALL FUNCTION
 #
-bin::install()
+cockpit-file-sharing::install()
 {
-	local source
-
 	echo
 	echo "===================================================================="
-	echo "INSTALLING :: BIN FILES"
+	echo "INSTALLING COCKPIT-FILE-SHARING"
 	echo "===================================================================="
 	echo
 
-	source="$REPO"/src/bin
-	while IFS= read -r file
-	do
-		sudo install -v -C -m 0755 -D -t /usr/local/bin "$file"
-		if [[ $? -ne 0 ]]; then
-			install::log "Possible problem installing '$file' to /usr/local/bin - exit code $?"
-		else
-			install::log "Installed '$file' to /usr/local/bin OK!"
-		fi
-	done < <(find "$source" -type f)
+	[[ ! -d "$USERDIR"/downloads ]] && mkdir -p "$USERDIR"/downloads
+
+	wget -O "$USERDIR"/downloads/cockpit-file-sharing_3.2.9_generic.zip https://github.com/45Drives/cockpit-file-sharing/releases/download/v3.2.9/cockpit-file-sharing_3.2.9_generic.zip
+
+	unzip "$USERDIR"/downloads/cockpit-file-sharing_3.2.9_generic.zip
+
+	cd "$USERDIR"/downloads/cockpit-file-sharing_3.2.9_generic || return 1
+
+	# no need to 'make' this one first - it comes pre-built
+	make install
+
+	systemctl restart cockpit.socket
 
 	echo
 	echo "DONE!"
@@ -52,11 +48,11 @@ bin::install()
 #
 # CONFIG FUNCTION
 #
-bin::config()
+cockpit-file-sharing::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING BIN"
+	echo "CONFIGURING COCKPIT-FILE-SHARING"
 	echo "===================================================================="
 	echo
 
@@ -69,34 +65,17 @@ bin::config()
 #
 # REMOVE FUNCTION
 #
-bin::remove()
+cockpit-file-sharing::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING BIN"
+	echo "UNINSTALLING COCKPIT-FILE-SHARING"
 	echo "===================================================================="
 	echo
 
-	cd /usr/local/bin || return 1
-	rm -f app* stack* swarm* cluster*
-	cd - || return 1
+	rm -f /usr/local/bin/cockpit-file-sharing		# (???)
 
-	echo
-	echo "DONE!"
-	echo
-}
-#
-# TEST FUNCTION
-#
-bin::test()
-{
-	echo
-	echo "===================================================================="
-	echo "TESTING BIN"
-	echo "===================================================================="
-	echo
-
-	echo
+	systemctl restart cockpit.socket
 
 	echo
 	echo "DONE!"
