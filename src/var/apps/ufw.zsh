@@ -77,7 +77,7 @@ ufw::remove()
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y ufw
+	sudo apt purge -y --autoremove ufw
 
 	echo
 	echo "DONE!"

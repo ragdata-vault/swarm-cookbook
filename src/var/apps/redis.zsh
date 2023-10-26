@@ -90,7 +90,7 @@ redis::remove()
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y redis-server redis-tools
+	sudo apt purge -y --autoremove redis-server redis-tools
 
 	echo
 	echo "DONE!"

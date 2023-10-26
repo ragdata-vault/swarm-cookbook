@@ -71,7 +71,7 @@ rkhunter::remove()
 	echo "===================================================================="
 	echo
 
-	apt purge -y rkhunter
+	apt purge -y --autoremove rkhunter
 
 	echo
 	echo "DONE!"

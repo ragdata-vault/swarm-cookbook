@@ -62,7 +62,7 @@ shellcheck::remove()
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y shellcheck
+	sudo apt purge -y --autoremove shellcheck
 
 	echo
 	echo "DONE!"

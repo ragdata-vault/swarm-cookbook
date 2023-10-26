@@ -63,8 +63,8 @@ perl::remove()
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y perl perl-openssl-defaults perl-doc libterm-readline-gnu-perl libdbi-perl libdbd-mysql-perl
-	sudo apt purge -y libsql-statement-perl libclone-perl libmldbm-perl libnet-daemon-perl
+	sudo apt purge -y --autoremove perl perl-openssl-defaults perl-doc libterm-readline-gnu-perl libdbi-perl libdbd-mysql-perl
+	sudo apt purge -y --autoremove libsql-statement-perl libclone-perl libmldbm-perl libnet-daemon-perl
 
 	echo
 	echo "DONE!"

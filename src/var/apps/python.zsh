@@ -70,7 +70,7 @@ python::remove()
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y python3-full python3-pip python3.11-full
+	sudo apt purge -y --autoremove python3-full python3-pip python3.11-full
 
 	echo
 	echo "DONE!"

@@ -13,7 +13,8 @@
 # ==================================================================
 # DEPENDENCIES
 # ==================================================================
-export ZSHSHARE="${XDG_DATA_DIRS%%:*}"
+export ZSHSHARE="${XDG_DATA_DIRS%%:*}/zsh"
+export CFGSHARE="${XDG_DATA_DIRS%%:*}/cfg"
 # ==================================================================
 # FUNCTIONS
 # ==================================================================
@@ -89,6 +90,16 @@ dotfiles::install()
 	done < <(find "$source" -type f)
 
 	chown -R root:zshusers "$ZSHSHARE"
+
+	install::log "Installing Shared Configuration Files to '$CFGSHARE'"
+	source="$REPO"/src/.dotfiles/cfg
+	len="${#source}"
+	while IFS= read -r file
+	do
+		fileDir="${file%/*}"
+		stub="${fileDir:$len}"
+		sudo install -v -b -C -m 0644 -D -t "$CFGSHARE${stub}" "$file"
+	done < <(find "$source" -type f)
 
 	local users=("root:/root")
 

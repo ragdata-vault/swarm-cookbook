@@ -71,7 +71,7 @@ dive::remove()
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y dive
+	sudo apt purge -y --autoremove dive
 
 	echo
 	echo "DONE!"

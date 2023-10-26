@@ -80,7 +80,7 @@ cockpit-certificates::remove()
 
 	systemctl restart cockpit.socket
 
-	sudo apt purge -y cockpit-certificates
+	sudo apt purge -y --autoremove cockpit-certificates
 
 	echo
 	echo "DONE!"

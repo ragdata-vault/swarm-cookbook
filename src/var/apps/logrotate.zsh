@@ -64,7 +64,7 @@ logrotate::remove()
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y logrotate
+	sudo apt purge -y --autoremove logrotate
 
 	echo
 	echo "DONE!"

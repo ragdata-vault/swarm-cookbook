@@ -51,6 +51,7 @@ install::install()
 	install::loadSource zsh-plugins.sh -i
 	install::loadSource bin.sh -i
 	install::loadSource swarm.sh -i
+	install::loadSource cron-updates.sh -i
 
 	echo
 	echo "FULL INSTALLATION - DONE!"
@@ -372,7 +373,7 @@ do
 			install::loadSource node.sh -i -c
 			;;
 		zsh)
-			sudo bash -c "$REPO"/install/zsh.sh
+			sudo bash "$REPO"/install/zsh.sh "${@:2}"
 			;;
 		plugins)
 			install::loadSource zsh-plugins.sh -i

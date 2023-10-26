@@ -53,15 +53,18 @@ zsh::install()
 
 		sudo chsh -s "$(which zsh)" "$USERNAME"
 
-		if [[ -L "$USERDIR"/.zshrc ]]; then
-			echo "sudo bash -c ./$REPO/install/zsh.sh cont" >> "$USERDIR"/.zshrc
+		if [[ -f "$USERDIR"/.zshrc ]]; then
+			echo "sudo bash $REPO/install/zsh.sh cont" >> "$USERDIR"/.zshrc
 		else
-
+			echo "sudo bash $REPO/install/zsh.sh cont" > "$USERDIR"/.zshrc
 		fi
 
 		sudo reboot
 	elif [[ "${1,,}" == "cont" ]]; then
-
+		# remove line in .zshrc written before reboot
+		tail -n 1 "$USERDIR/.zshrc" | wc -c xargs -I {} truncate "$USERDIR/.zshrc" -s -{}
+		# install zsh plugins
+		sudo ./"$REPO"/install.sh plugins
 	fi
 
 
@@ -142,5 +145,5 @@ zsh::report()
 # ==================================================================
 clear
 
-zsh::install
+zsh::install "$@"
 zsh::report

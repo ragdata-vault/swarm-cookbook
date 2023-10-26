@@ -62,7 +62,7 @@ gpg::remove()
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y gpg
+	sudo apt purge -y --autoremove gpg
 
 	echo
 	echo "DONE!"

@@ -71,7 +71,7 @@ docker-ctop::remove()
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y docker-ctop
+	sudo apt purge -y --autoremove docker-ctop
 
 	echo
 	echo "DONE!"

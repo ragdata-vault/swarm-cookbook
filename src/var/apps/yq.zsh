@@ -62,7 +62,7 @@ yq::remove()
 	echo "===================================================================="
 	echo
 
-	apt purge -y yq
+	apt purge -y --autoremove yq
 
 	echo
 	echo "DONE!"

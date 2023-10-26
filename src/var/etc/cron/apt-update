@@ -1,3 +1,3 @@
 #!/bin/bash
-sudo apt update && sudo apt -y -d upgrade
+sudo apt update && sudo apt upgrade -y -d
 exit 0

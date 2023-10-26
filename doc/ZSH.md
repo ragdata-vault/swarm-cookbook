@@ -83,7 +83,7 @@ sudo chsh -s "$(which bash)" "$USERNAME"
 Restart terminal session, then:
 
 ```shell
-sudo apt purge -y zsh && sudo apt autoremove -y
+sudo apt purge -y --autoremove zsh && sudo apt autoremove -y
 mv "$USERDIR/.bash_archive/*" "$USERDIR"/.
 . "$USERDIR"/.bashrc
 ```

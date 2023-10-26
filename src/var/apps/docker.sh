@@ -70,7 +70,7 @@ docker::install()
 				;;
 		esac
 
-		sudo apt purge -y docker.io docker-doc docker-compose podman-docker containerd runc
+		sudo apt purge -y --autoremove docker.io docker-doc docker-compose podman-docker containerd runc
 
 		sudo apt update
 
@@ -149,7 +149,7 @@ docker::remove()
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+	sudo apt purge -y --autoremove docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 	sudo rm -f /etc/systemd/system/docker-volume-local-persist.service
 
 	sudo systemctl disable docker-volume-local-persist

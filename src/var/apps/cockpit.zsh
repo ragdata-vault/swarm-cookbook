@@ -66,7 +66,7 @@ cockpit::remove()
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y cockpit
+	sudo apt purge -y --autoremove cockpit
 
 	echo
 	echo "DONE!"

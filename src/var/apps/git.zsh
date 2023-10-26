@@ -138,7 +138,7 @@ git::remove() {
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y git
+	sudo apt purge -y --autoremove git
 
 	echo
 	echo "DONE!"

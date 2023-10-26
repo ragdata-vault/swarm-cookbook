@@ -79,7 +79,7 @@ logwatch::remove()
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y logwatch
+	sudo apt purge -y --autoremove logwatch
 
 	echo
 	echo "DONE!"

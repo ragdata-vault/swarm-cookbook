@@ -62,7 +62,7 @@ go::remove()
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y golang
+	sudo apt purge -y --autoremove golang
 
 	echo
 	echo "DONE!"

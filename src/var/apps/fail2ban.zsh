@@ -73,7 +73,7 @@ fail2ban::remove()
 	echo "===================================================================="
 	echo
 
-	apt purge -y fail2ban
+	apt purge -y --autoremove fail2ban
 
 	echo
 	echo "DONE!"

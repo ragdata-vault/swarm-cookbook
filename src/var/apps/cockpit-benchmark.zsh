@@ -64,7 +64,7 @@ cockpit-benchmark::remove()
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y cockpit-benchmark
+	sudo apt purge -y --autoremove cockpit-benchmark
 
 	systemctl restart cockpit.socket
 

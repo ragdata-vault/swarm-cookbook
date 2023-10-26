@@ -74,7 +74,7 @@ cockpit-identities::remove()
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y cockpit-identities
+	sudo apt purge -y --autoremove cockpit-identities
 
 	systemctl restart cockpit.socket
 

@@ -66,7 +66,7 @@ jq::remove()
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y jq
+	sudo apt purge -y --autoremove jq
 
 	echo
 	echo "DONE!"

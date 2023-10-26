@@ -72,8 +72,8 @@ php-8::remove()
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y php8.1 php-sass
-	sudo apt purge -y php8.1-{amqp,cli,common,curl,fpm,gd,gnupg,imagick,imap,intl,mailparse,mbstring,memcached,mongodb,oauth,opcache,pgsql,psr,readline,redis,smbclient,ssh2,sqlite3,uploadprogress,xdebug,xml,yaml,zip}
+	sudo apt purge -y --autoremove php8.1 php-sass
+	sudo apt purge -y --autoremove php8.1-{amqp,cli,common,curl,fpm,gd,gnupg,imagick,imap,intl,mailparse,mbstring,memcached,mongodb,oauth,opcache,pgsql,psr,readline,redis,smbclient,ssh2,sqlite3,uploadprogress,xdebug,xml,yaml,zip}
 
 	echo
 	echo "DONE!"

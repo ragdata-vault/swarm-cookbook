@@ -64,7 +64,7 @@ cockpit-navigator::remove()
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y cockpit-navigator
+	sudo apt purge -y --autoremove cockpit-navigator
 
 	systemctl restart cockpit.socket
 

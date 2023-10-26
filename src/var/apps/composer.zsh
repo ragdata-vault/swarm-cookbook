@@ -62,7 +62,7 @@ composer::remove()
 	echo "===================================================================="
 	echo
 
-	apt purge -y composer
+	apt purge -y --autoremove composer
 
 	echo
 	echo "DONE!"

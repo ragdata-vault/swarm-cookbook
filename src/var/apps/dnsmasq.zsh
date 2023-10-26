@@ -88,7 +88,7 @@ dnsmasq::remove()
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y dnsmasq
+	sudo apt purge -y --autoremove dnsmasq
 
 	echo
 	echo "DONE!"

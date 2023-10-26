@@ -84,7 +84,7 @@ dialog::config()
 		echo
 		echo "    Q. Quit"
 		echo
-		read -r -n 1 RESP
+		read -rs -k 1 RESP
 	done
 
 	case "$RESP" in
@@ -113,7 +113,7 @@ dialog::remove()
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y dialog
+	sudo apt purge -y --autoremove dialog
 
 	echo
 	echo "DONE!"

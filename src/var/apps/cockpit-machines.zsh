@@ -66,7 +66,7 @@ cockpit-machines::remove()
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y cockpit-machines libvirt-dbus
+	sudo apt purge -y --autoremove cockpit-machines libvirt-dbus
 
 	systemctl restart cockpit.socket
 

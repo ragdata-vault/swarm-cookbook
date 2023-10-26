@@ -1,11 +1,11 @@
 #!/usr/bin/env zsh
 
 # ==================================================================
-# src/var/apps/cron-updates
+# install/cron-updates
 # ==================================================================
-# Swarm Cookbook - App Installer
+# Swarm Cookbook - Installer Source File
 #
-# File:         src/var/apps/cron-updates
+# File:         install/cron-updates
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -18,19 +18,21 @@
 # FUNCTIONS
 # ==================================================================
 #
+# INSTALLED FUNCTION
+#
+cron-updates::installed() { return 1; }
+#
 # INSTALL FUNCTION
 #
 cron-updates::install()
 {
-	local USERNAME="${SUDO_USER:-$(whoami)}"
-
 	echo
 	echo "===================================================================="
-	echo "INSTALLING CRON-UPDATES"
+	echo "INSTALLING :: CRON UPDATE FILES"
 	echo "===================================================================="
 	echo
 
-	install -v -m 0755 -C -D -t /etc/cron.daily "$SWARMDIR"/inc/cron/apt-update
+	sudo install -v -m 0755 -C -D -t /etc/cron.daily "$REPO"/var/etc/cron/apt-update
 
 	echo
 	echo "DONE!"
@@ -43,7 +45,7 @@ cron-updates::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING CRON-UPDATES"
+	echo "CONFIGURING :: CRON UPDATE FILES"
 	echo "===================================================================="
 	echo
 
@@ -60,11 +62,28 @@ cron-updates::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING CRON-UPDATES"
+	echo "UNINSTALLING :: CRON UPDATE FILES"
 	echo "===================================================================="
 	echo
 
-	rm -f /etc/cron.daily/apt-update
+	sudo rm -f /etc/cron.daily/apt-update
+
+	echo
+	echo "DONE!"
+	echo
+}
+#
+# TEST FUNCTION
+#
+cron-updates::test()
+{
+	echo
+	echo "===================================================================="
+	echo "TESTING :: CRON UPDATE FILES"
+	echo "===================================================================="
+	echo
+
+	echo
 
 	echo
 	echo "DONE!"

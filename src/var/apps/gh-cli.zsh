@@ -67,7 +67,7 @@ gh-cli::remove()
 	echo "===================================================================="
 	echo
 
-	sudo apt purge -y gh
+	sudo apt purge -y --autoremove gh
 
 	echo
 	echo "DONE!"
