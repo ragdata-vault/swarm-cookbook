@@ -35,7 +35,7 @@ dotfiles::install()
 	echo "===================================================================="
 	echo
 
-	sudo groupadd zshusers
+	if [ ! "$(getent group zshusers)" ]; then sudo groupadd zshusers; fi
 
 	if [[ ! -f "$ZSHSHARE/zshenv" ]]; then
 		log::file "Installing ZSH Dotfiles to '$ZSHSHARE'"
@@ -55,6 +55,7 @@ dotfiles::install()
 		sudo install -v -b -C -m 0660 -D -t "$ZSHSHARE" "$source/zsh_functions"
 	fi
 
+	source="$REPO"/src/.dotfiles/.zsh
 	log::file "Installing .zsh_ssh & .zsh_ware directly to '$ZSHDIR'"
 	if [[ ! -f "$ZSHDIR/.zsh_ssh" ]]; then install -v -b -C -m 0660 -T "$source/zsh_ssh" "$ZSHDIR/.zsh_ssh"; fi
 	if [[ ! -f "$ZSHDIR/.zsh_ware" ]]; then install -v -b -C -m 0660 -T "$source/zsh_ware.dist" "$ZSHDIR/.zsh_ware"; fi
@@ -68,9 +69,9 @@ dotfiles::install()
 
 	log::file "Installing ZSH Completion Files to '$ZSHSHARE/completion'"
 	source="$REPO"/src/.dotfiles/.zsh/completion
-	mkdir -p "$ZSHSHARE/completion"
-	sudo install -v -b -C -m 0660 -T "$source/git-completion.bash" "$ZSHSHARE/git-completion.bash"
-	sudo install -v -b -C -m 0660 -T "$source/_git" "$ZSHSHARE/_git"
+	sudo mkdir -p "$ZSHSHARE/completion"
+	sudo install -v -b -C -m 0660 -T "$source/git-completion.bash" "$ZSHSHARE/completion/git-completion.bash"
+	sudo install -v -b -C -m 0660 -T "$source/_git" "$ZSHSHARE/completion/_git"
 
 	log::file "Installing ZSH Autoload Functions to '$ZSHSHARE/functions'"
 	source="$REPO"/src/.dotfiles/.zsh/functions
@@ -89,7 +90,12 @@ dotfiles::install()
 		sudo install -v -b -C -m 0660 -D -t "$ZSHSHARE/includes" "$file"
 	done < <(find "$source" -type f)
 
-	chown -R root:zshusers "$ZSHSHARE"
+	log::file "Set file and folder permissions on '$ZSHSHARE'"
+	sudo chown -R root:zshusers "$ZSHSHARE"
+	while IFS= read -r dir
+	do
+		sudo chmod 0660 "$dir"
+	done < <(find "$ZSHSHARE" -type d)
 
 	log::file "Installing Shared Configuration Files to '$CFGSHARE'"
 	source="$REPO"/src/.dotfiles/cfg
@@ -113,52 +119,53 @@ dotfiles::install()
 		username="${userinfo%:*}"
 		userdir="${userinfo##*:}"
 		userzsh="$userdir/.zsh"
+		if [[ ! -d "$userzsh" ]]; then sudo mkdir -p "$userzsh"; fi
 		# add to zshusers group
 		sudo usermod -aG zshusers "$username"
 
 		log::file "Linking user '$username' to ZSH Dotfiles in '$ZSHSHARE'"
-		[[ ! -L "$userdir/.zshenv" ]] && ln -sf "$ZSHSHARE/zshenv" "$userdir/.zshenv"
-		[[ ! -L "$userdir/.zprofile" ]] && ln -sf "$ZSHSHARE/zprofile" "$userdir/.zprofile"
-		[[ ! -f "$userdir/.zshrc" ]] && install -v -C -m 0644 -D -t "$ZSHSHARE/zshrc_usr" "$userdir/.zshrc"
-		[[ ! -L "$userdir/.zlogin" ]] && ln -sf "$ZSHSHARE/zlogin" "$userdir/.zlogin"
-		[[ ! -L "$userdir/.zlogout" ]] && ln -sf "$ZSHSHARE/zlogout" "$userdir/.zlogout"
+		[[ ! -L "$userdir/.zshenv" ]] && sudo ln -sf "$ZSHSHARE/zshenv" "$userdir/.zshenv"
+		[[ ! -L "$userdir/.zprofile" ]] && sudo ln -sf "$ZSHSHARE/zprofile" "$userdir/.zprofile"
+		[[ ! -f "$userdir/.zshrc" ]] && sudo install -v -C -m 0644 -T "$ZSHSHARE/zshrc_usr" "$userdir/.zshrc"
+		[[ ! -L "$userdir/.zlogin" ]] && sudo ln -sf "$ZSHSHARE/zlogin" "$userdir/.zlogin"
+		[[ ! -L "$userdir/.zlogout" ]] && sudo ln -sf "$ZSHSHARE/zlogout" "$userdir/.zlogout"
 
 		log::file "Linking user '$username' to ZSH Loader / Utility Files in '$ZSHSHARE'"
-		[[ ! -L "$userdir/.zsh_aliases" ]] && ln -sf "$ZSHSHARE/zsh_aliases" "$userzsh/.zsh_aliases"
-		[[ ! -L "$userdir/.zsh_completion" ]] && ln -sf "$ZSHSHARE/zsh_completion" "$userzsh/.zsh_completion"
-		[[ ! -L "$userdir/.zsh_functions" ]] && ln -sf "$ZSHSHARE/zsh_functions" "$userzsh/.zsh_functions"
+		[[ ! -L "$userdir/.zsh_aliases" ]] && sudo ln -sf "$ZSHSHARE/zsh_aliases" "$userzsh/.zsh_aliases"
+		[[ ! -L "$userdir/.zsh_completion" ]] && sudo ln -sf "$ZSHSHARE/zsh_completion" "$userzsh/.zsh_completion"
+		[[ ! -L "$userdir/.zsh_functions" ]] && sudo ln -sf "$ZSHSHARE/zsh_functions" "$userzsh/.zsh_functions"
 
-		chown "$username":"$username" "$userdir/.z*"
+		sudo chown "$username":"$username" "$userdir/.z*"
 
 		log::file "Linking user '$username' to ZSH Aliases in '$ZSHSHARE/aliases'"
-		mkdir -p "$userzsh/aliases"
+		sudo mkdir -p "$userzsh/aliases"
 		while IFS= read -r file
 		do
 			filename="${file%%*/}"
-			[[ ! -L "$userzsh/aliases/$filename" ]] && ln -sf "$file" "$userzsh/aliases/$filename"
+			[[ ! -L "$userzsh/aliases/$filename" ]] && sudo ln -sf "$file" "$userzsh/aliases/$filename"
 		done < <(find "$ZSHSHARE/aliases" -type f)
 
-		chown "$username":"$username" "$userzsh/aliases/*"
+		sudo chown "$username":"$username" "$userzsh/aliases/*"
 
 		log::file "Linking user '$username' to ZSH Completion Files in '$ZSHSHARE/completion'"
-		mkdir -p "$userzsh/completion"
+		sudo mkdir -p "$userzsh/completion"
 		while IFS= read -r file
 		do
-			[[ ! -L "$userzsh/completion/$filename" ]] && ln -sf "$file" "$userzsh/completion/$filename"
+			[[ ! -L "$userzsh/completion/$filename" ]] && sudo ln -sf "$file" "$userzsh/completion/$filename"
 		done < <(find "$ZSHSHARE/completion" -type f)
 
-		chown "$username":"$username" "$userzsh/completion/*"
+		sudo chown "$username":"$username" "$userzsh/completion/*"
 
 		log::file "Linking user '$username' to ZSH Functions in '$ZSHSHARE/functions'"
-		mkdir -p "$userzsh/completion"
+		sudo mkdir -p "$userzsh/completion"
 		source="$ZSHSHARE/functions"
 		len="${#source}"
 		while IFS= read -r file
 		do
 			filedir="${file%/*}"
 			stub="${filedir:$len}"
-			[[ ! -d "$userzsh/functions${stub}" ]] && mkdir -p "$userzsh/functions${stub}"
-			[[ ! -L "$userzsh/functions${stub}/$filename" ]] && ln -sf "$file" "$userzsh/functions${stub}/$filename"
+			[[ ! -d "$userzsh/functions${stub}" ]] && sudo mkdir -p "$userzsh/functions${stub}"
+			[[ ! -L "$userzsh/functions${stub}/$filename" ]] && sudo ln -sf "$file" "$userzsh/functions${stub}/$filename"
 		done < <(find "$ZSHSHARE/functions" -type f)
 
 		chown -R "$username":"$username" "$userzsh/functions/*"
@@ -167,7 +174,7 @@ dotfiles::install()
 		mkdir -p "$userzsh/includes"
 		while IFS= read -r file
 		do
-			[[ ! -L "$userzsh/includes/$filename" ]] && ln -sf "$file" "$userzsh/includes/$filename"
+			[[ ! -L "$userzsh/includes/$filename" ]] && sudo ln -sf "$file" "$userzsh/includes/$filename"
 		done < <(find "$ZSHSHARE/includes" -type f)
 
 		chown "$username":"$username" "$userzsh/includes/*"

@@ -29,7 +29,7 @@ declare -gx USERNAME="${SUDO_USER:-$(whoami)}"
 # ==================================================================
 # DEPENDENCIES
 # ==================================================================
-if ! typeset -f loadLib > /dev/null; then
+if ! grep -q 'function' <<< "$(type loadLib)"; then
 	loadLib()
 	{
 		local file="${1:-}"
@@ -46,7 +46,7 @@ if ! typeset -f loadLib > /dev/null; then
 		fi
 	}
 fi
-if ! typeset -f historyStats > /dev/null; then loadLib common.zsh; fi
+if ! grep -q 'function' <<< "$(type historyStats)"; then loadLib common.zsh; fi
 if [[ ! -f "$REPO"/.env ]]; then cp "$REPO"/.env.dist "$REPO"/.env; fi
 chown "$USERNAME":"$USERNAME" "$REPO"/.env
 source "$REPO"/.env
