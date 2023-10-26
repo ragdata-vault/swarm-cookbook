@@ -40,37 +40,37 @@ dotfiles::install()
 	if [[ ! -f "$ZSHSHARE/zshenv" ]]; then
 		install::log "Installing ZSH Dotfiles to '$ZSHSHARE'"
 		source="$REPO"/src/.dotfiles
-		sudo install -v -b -C -m 0644 -D -t "$ZSHSHARE" "$source/zshenv"
-		sudo install -v -b -C -m 0644 -D -t "$ZSHSHARE" "$source/zprofile"
-		sudo install -v -b -C -m 0644 -D -t "$ZSHSHARE" "$source/zshrc"
-		sudo install -v -b -C -m 0644 -D -t "$ZSHSHARE" "$source/zlogin"
-		sudo install -v -b -C -m 0644 -D -t "$ZSHSHARE" "$source/zlogout"
+		sudo install -v -b -C -m 0660 -D -t "$ZSHSHARE" "$source/zshenv"
+		sudo install -v -b -C -m 0660 -D -t "$ZSHSHARE" "$source/zprofile"
+		sudo install -v -b -C -m 0660 -D -t "$ZSHSHARE" "$source/zshrc"
+		sudo install -v -b -C -m 0660 -D -t "$ZSHSHARE" "$source/zlogin"
+		sudo install -v -b -C -m 0660 -D -t "$ZSHSHARE" "$source/zlogout"
 	fi
 
 	if [[ ! -f "$ZSHSHARE/zsh_functions" ]]; then
 		install::log "Installing ZSH Loaders / Utility Files to '$ZSHSHARE'"
 		source="$REPO"/src/.dotfiles/.zsh
-		sudo install -v -b -C -m 0644 -D -t "$ZSHSHARE" "$source/zsh_aliases"
-		sudo install -v -b -C -m 0644 -D -t "$ZSHSHARE" "$source/zsh_completion"
-		sudo install -v -b -C -m 0644 -D -t "$ZSHSHARE" "$source/zsh_functions"
+		sudo install -v -b -C -m 0660 -D -t "$ZSHSHARE" "$source/zsh_aliases"
+		sudo install -v -b -C -m 0660 -D -t "$ZSHSHARE" "$source/zsh_completion"
+		sudo install -v -b -C -m 0660 -D -t "$ZSHSHARE" "$source/zsh_functions"
 	fi
 
 	install::log "Installing .zsh_ssh & .zsh_ware directly to '$ZSHDIR'"
-	if [[ ! -f "$ZSHDIR/.zsh_ssh" ]]; then install -v -b -C -m 0644 -T "$source/.zsh_ssh" "$ZSHDIR/.zsh_ssh"; fi
-	if [[ ! -f "$ZSHDIR/.zsh_ware" ]]; then install -v -b -C -m 0644 -T "$source/.zsh_ware.dist" "$ZSHDIR/.zsh_ware"; fi
+	if [[ ! -f "$ZSHDIR/.zsh_ssh" ]]; then install -v -b -C -m 0660 -T "$source/.zsh_ssh" "$ZSHDIR/.zsh_ssh"; fi
+	if [[ ! -f "$ZSHDIR/.zsh_ware" ]]; then install -v -b -C -m 0660 -T "$source/.zsh_ware.dist" "$ZSHDIR/.zsh_ware"; fi
 
 	install::log "Installing ZSH Aliases to '$ZSHSHARE/aliases'"
 	source="$REPO"/src/.dotfiles/.zsh/aliases
 	while IFS= read -r file
 	do
-		sudo install -v -b -C -m 0644 -D -t "$ZSHSHARE/aliases" "$file"
+		sudo install -v -b -C -m 0660 -D -t "$ZSHSHARE/aliases" "$file"
 	done < <(find "$source" -type f)
 
 	install::log "Installing ZSH Completion Files to '$ZSHSHARE/completion'"
 	source="$REPO"/src/.dotfiles/.zsh/completion
 	mkdir -p "$ZSHSHARE/completion"
-	sudo install -v -b -C -m 0644 -T "$source/git-completion.bash" "$ZSHSHARE/git-completion.bash"
-	sudo install -v -b -C -m 0644 -T "$source/_git" "$ZSHSHARE/_git"
+	sudo install -v -b -C -m 0660 -T "$source/git-completion.bash" "$ZSHSHARE/git-completion.bash"
+	sudo install -v -b -C -m 0660 -T "$source/_git" "$ZSHSHARE/_git"
 
 	install::log "Installing ZSH Autoload Functions to '$ZSHSHARE/functions'"
 	source="$REPO"/src/.dotfiles/.zsh/functions
@@ -79,14 +79,14 @@ dotfiles::install()
 	do
 		fileDir="${file%/*}"
 		stub="${fileDir:$len}"
-		sudo install -v -b -C -m 0644 -D -t "$ZSHSHARE/functions${stub}" "$file"
+		sudo install -v -b -C -m 0660 -D -t "$ZSHSHARE/functions${stub}" "$file"
 	done < <(find "$source" -type f)
 
 	install::log "Installing ZSH Includes to '$ZSHSHARE/includes'"
 	source="$REPO"/src/.dotfiles/.zsh/includes
 	while IFS= read -r file
 	do
-		sudo install -v -b -C -m 0644 -D -t "$ZSHSHARE/includes" "$file"
+		sudo install -v -b -C -m 0660 -D -t "$ZSHSHARE/includes" "$file"
 	done < <(find "$source" -type f)
 
 	chown -R root:zshusers "$ZSHSHARE"
@@ -98,7 +98,7 @@ dotfiles::install()
 	do
 		fileDir="${file%/*}"
 		stub="${fileDir:$len}"
-		sudo install -v -b -C -m 0644 -D -t "$CFGSHARE${stub}" "$file"
+		sudo install -v -b -C -m 0660 -D -t "$CFGSHARE${stub}" "$file"
 	done < <(find "$source" -type f)
 
 	local users=("root:/root")
