@@ -13,7 +13,7 @@
 # ==================================================================
 # DEPENDENCIES
 # ==================================================================
-if ! typeset -f loadLib > /dev/null; then
+if ! grep -q 'function' <<< "$(type loadLib)"; then
 	loadLib()
 	{
 		local file="${1:-}"
@@ -30,7 +30,7 @@ if ! typeset -f loadLib > /dev/null; then
 		fi
 	}
 fi
-if ! typeset -f ansi::color > /dev/null; then loadLib ansi_color.zsh; fi
+if ! grep -q 'function' <<< "$(type ansi::color)"; then loadLib ansi_color.zsh; fi
 # ==================================================================
 # FUNCTIONS
 # ==================================================================

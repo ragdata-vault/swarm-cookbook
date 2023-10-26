@@ -13,8 +13,8 @@
 # ==================================================================
 # DEPENDENCIES
 # ==================================================================
-if ! typeset -f ansi::cursor::restore > /dev/null; then loadLib ansi_cursor.zsh; fi
-if ! typeset -f ansi::column > /dev/null; then loadLib ansi_format.zsh; fi
+if ! grep -q 'function' <<< "$(type ansi::cursor::restore)"; then loadLib ansi_cursor.zsh; fi
+if ! grep -q 'function' <<< "$(type ansi::column)"; then loadLib ansi_format.zsh; fi
 # ==================================================================
 # VARIABLES
 # ==================================================================

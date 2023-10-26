@@ -13,7 +13,7 @@
 # ==================================================================
 # DEPENDENCIES
 # ==================================================================
-if ! typeset -f loadLib > /dev/null; then
+if ! grep -q 'function' <<< "$(type loadLib)"; then
 	loadLib()
 	{
 		local file="${1:-}"
@@ -30,10 +30,10 @@ if ! typeset -f loadLib > /dev/null; then
 		fi
 	}
 fi
-if ! typeset -f ansi::color > /dev/null; then loadLib ansi_color.zsh; fi
-if ! typeset -f ansi::cursor::restore > /dev/null; then loadLib ansi_cursor.zsh; fi
-if ! typeset -f ansi::blink > /dev/null; then loadLib ansi_effect.zsh; fi
-if ! typeset -f ansi::column > /dev/null; then loadLib ansi_format.zsh; fi
-if ! typeset -f ansi::reset::attributes > /dev/null; then loadLib ansi_misc.zsh; fi
-if ! typeset -f historyStats > /dev/null; then loadLib common.zsh; fi
-if ! typeset -f regex::isCC > /dev/null; then loadLib regex_aliases.zsh; fi
+if ! grep -q 'function' <<< "$(type ansi::color)"; then loadLib ansi_color.zsh; fi
+if ! grep -q 'function' <<< "$(type ansi::cursor::restore)"; then loadLib ansi_cursor.zsh; fi
+if ! grep -q 'function' <<< "$(type ansi::blink)"; then loadLib ansi_effect.zsh; fi
+if ! grep -q 'function' <<< "$(type ansi::column)"; then loadLib ansi_format.zsh; fi
+if ! grep -q 'function' <<< "$(type ansi::reset::attributes)"; then loadLib ansi_misc.zsh; fi
+if ! grep -q 'function' <<< "$(type historyStats)"; then loadLib common.zsh; fi
+if ! grep -q 'function' <<< "$(type regex::isCC)"; then loadLib regex_aliases.zsh; fi

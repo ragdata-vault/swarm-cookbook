@@ -20,7 +20,7 @@ if [[ -z "$REPO" ]]; then export REPO="$(dirname "$(dirname "$(realpath "${0:h}"
 # ------------------------------------------------------------------
 # loadLib
 # ------------------------------------------------------------------
-if ! typeset -f loadLib > /dev/null; then
+if ! grep -q 'function' <<< "$(type loadLib)"; then
 	loadLib()
 	{
 		local file="${1:-}"
@@ -40,8 +40,8 @@ fi
 # ==================================================================
 # DEPENDENCIES
 # ==================================================================
-if ! typeset -f ansi::color > /dev/null; then loadLib ansi_color.zsh; fi
-if ! typeset -f regex::isCC > /dev/null; then loadLib regex_aliases.zsh; fi
+if ! grep -q 'function' <<< "$(type ansi::color)"; then loadLib ansi_color.zsh; fi
+if ! grep -q 'function' <<< "$(type regex::isCC)"; then loadLib regex_aliases.zsh; fi
 # ==================================================================
 # FUNCTION ALIASES
 # ==================================================================
