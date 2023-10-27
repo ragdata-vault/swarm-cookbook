@@ -20,7 +20,7 @@
 #
 # INSTALLED FUNCTION
 #
-redis::installed() { command -v redis-server; }
+redis::installed() { command -v redis-server > /dev/null; }
 #
 # INSTALL FUNCTION
 #
@@ -54,8 +54,8 @@ redis::config()
 
 	if grep -q "^# requirepass.*$" /etc/redis/redis.conf; then
 		REDIS_PWD="$(getPassword | base64)"
-		sed -i "/^supervised.*/c\supervised systemd" /etc/redis/redis.conf
-		sed -i "/^# requirepass.*/c\requirepass ${REDIS_PWD}" /etc/redis/redis.conf
+		sudo sed -i "/^supervised.*/c\supervised systemd" /etc/redis/redis.conf
+		sudo sed -i "/^# requirepass.*/c\requirepass ${REDIS_PWD}" /etc/redis/redis.conf
 	elif grep -E -q "^requirepass.*$" /etc/redis/redis.conf; then
 		REDIS_PWD="$(redis::passGET)"
 		if [[ -f "/home/$USERNAME/.zshenv" ]]; then
@@ -71,9 +71,9 @@ redis::config()
 		fi
 	fi
 
-	systemctl daemon-reload
-	systemctl enable redis-server.service
-	systemctl start redis-server
+	sudo systemctl daemon-reload
+	sudo systemctl enable redis-server.service
+	sudo systemctl start redis-server
 
 	echo
 	echo "DONE!"

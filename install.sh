@@ -23,7 +23,6 @@ if [[ "${1:l}" == "verbose" ]] || [[ "$LOG_VERBOSE" == 1 ]]; then shift; LOG_VER
 # VARIABLES
 # ==================================================================
 if [[ -z "$REPO" ]]; then export REPO="$(realpath "${0:h}")"; fi
-if [[ "${1:l}" == "logfile" ]]; then declare -gx logFile="${2:-}"; shift 2; else declare -gx logFile="$(mktemp -t INSTALL-XXXXXX)"; fi
 declare -gx SOURCE_DIRS=("$REPO/src/apps" "$REPO/install")
 declare -gx USERNAME="${SUDO_USER:-$(whoami)}"
 # ==================================================================
@@ -50,6 +49,7 @@ if ! grep -q 'function' <<< "$(type historyStats)"; then loadLib common.zsh; fi
 if [[ ! -f "$REPO"/.env ]]; then cp "$REPO"/.env.dist "$REPO"/.env; fi
 chown "$USERNAME":"$USERNAME" "$REPO"/.env
 source "$REPO"/.env
+if [[ "${1:l}" == "logfile" ]]; then declare -gx logFile="${2:-}"; shift 2; else log::init; fi
 # ==================================================================
 # FUNCTIONS
 # ==================================================================

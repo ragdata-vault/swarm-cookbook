@@ -1,9 +1,10 @@
 # shellcheck disable=SC2034
 NODE_TYPE=Manager
+MY_USER=ragdata
 NIC_ID=eth0
 NODE_HOSTNAME=wsl
 NODE_DOMAIN=local
-MY_USER=ragdata
 ADMIN_EMAIL=admin@redeyed.au
 SYSTEM_EMAIL=system@redeyed.au
-TIMEZONE=Australia/Brisbane
+	TIMEZONE=Australia/Brisbane
+NODE_LOCALE=en_AU.UTF-8
