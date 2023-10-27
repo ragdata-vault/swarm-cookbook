@@ -18,8 +18,7 @@ source "$ZSH"/oh-my-zsh.sh
 # incur that huge drain on resources each time a script loads because
 # you're loading all required functions up-front.  This method loads
 # functions the first time they are called, and only IF they are called.
-fpath=("$fpath" "$ZSHDIR/functions")
-FPATH="$FPATH:$ZSHDIR/functions"
+fpath+=("$ZSHDIR/functions")
 autoload -Uz "$ZSHDIR/functions/**/*"
 
 # ------------------------------------------------------------------
@@ -322,6 +321,8 @@ export CMD_NOT_FOUND_MSGS_APPEND=("${custom_insults[@]}" "${custom_insults[@]}")
 
 # Load .zsh_aliases, if available
 [[ ! -f "$ZSHDIR"/.zsh_aliases ]] || source "$ZSHDIR"/.zsh_aliases
+# Load .zsh_bindings, if available
+[[ ! -f "$ZSHDIR"/.zsh_bindings ]] || source "$ZSHDIR"/.zsh_bindings
 # Load .zsh_completion, if available
 [[ ! -f "$ZSHDIR"/.zsh_completion ]] || source "$ZSHDIR"/.zsh_completion
 # Load .zsh_functions, if available

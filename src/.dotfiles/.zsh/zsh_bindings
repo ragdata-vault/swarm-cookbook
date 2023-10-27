@@ -1,0 +1,19 @@
+#!/usr/bin/env zsh
+# shellcheck disable=SC1090
+# ==================================================================
+# .zsh_bindings
+# ==================================================================
+# This file exists so that you may add any bindings you require
+# ==================================================================
+# LOAD DOTFILES
+# ==================================================================
+source="$ZSHDIR/bindings"
+while IFS= read -r file
+do
+	fileName="${file##*/}"
+	# check that file is not excluded, and is not a backup
+	if [[ "${ZSHEXCLUDE_BINDINGS[(ie)${fileName}]}" -lt "${#ZSHEXCLUDE_BINDINGS}" ]] && [[ "${fileName:((${#fileName}-1)):1}" != "~" ]]; then source "$source/$fileName"; fi
+done < <(find "$source" -type f)
+# ==================================================================
+# KEY BINDING FUNCTIONS
+# ==================================================================

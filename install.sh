@@ -13,18 +13,19 @@
 # ==================================================================
 # PREFLIGHT
 # ==================================================================
-# set debug mode = false
-if [[ -z "$DEBUG" ]]; then declare -gx DEBUG=0; fi
-if [[ -z "$LOG_VERBOSE" ]]; then declare -gx LOG_VERBOSE=0; fi
 # if script is called with 'debug' as an argument, then set debug mode
-if [[ "${1:l}" == "debug" ]] || [[ "$DEBUG" == 1 ]]; then shift; DEBUG=1; set -- "${@}"; set -axeET; else set -aeET; fi
-if [[ "${1:l}" == "verbose" ]] || [[ "$LOG_VERBOSE" == 1 ]]; then shift; LOG_VERBOSE=1; else LOG_VERBOSE=0; fi
+if [[ "${1:l}" == "debug" ]] || [[ "$DEBUG" == 1 ]]; then shift; export DEBUG=1; set -- "${@}"; set -axeET; else export DEBUG=0; set -aeET; fi
+# if script is called with 'verbose' as an argument, then unset verbose mode
+if [[ "${1:l}" == "verbose" ]] || [[ "$LOG_VERBOSE" == 0 ]]; then shift; export LOG_VERBOSE=0; else export LOG_VERBOSE=1; fi
 # ==================================================================
 # VARIABLES
 # ==================================================================
+# define REPO
 if [[ -z "$REPO" ]]; then export REPO="$(realpath "${0:h}")"; fi
-declare -gx SOURCE_DIRS=("$REPO/src/apps" "$REPO/install")
-declare -gx USERNAME="${SUDO_USER:-$(whoami)}"
+# define SOURCE_DIRS
+export SOURCE_DIRS=("$REPO/src/apps" "$REPO/install")
+# define USERNAME
+export USERNAME="${SUDO_USER:-$(whoami)}"
 # ==================================================================
 # DEPENDENCIES
 # ==================================================================
@@ -45,11 +46,18 @@ if ! grep -q 'function' <<< "$(type loadLib)"; then
 		fi
 	}
 fi
+# load common.zsh library
 if ! grep -q 'function' <<< "$(type historyStats)"; then loadLib common.zsh; fi
+# create .env, if not exists
 if [[ ! -f "$REPO"/.env ]]; then cp "$REPO"/.env.dist "$REPO"/.env; fi
-chown "$USERNAME":"$USERNAME" "$REPO"/.env
-source "$REPO"/.env
-if [[ "${1:l}" == "logfile" ]]; then declare -gx logFile="${2:-}"; shift 2; else log::init; fi
+# create .node, if not exists
+if [[ ! -f "$REPO"/.node ]]; then cp "$REPO"/.node.dist "$REPO"/.node; fi
+# set file ownership
+chown "$USERNAME":"$USERNAME" "$REPO"/.env "$REPO"/.node
+# load .env & .node
+source "$REPO"/.env; source "$REPO"/.node;
+# initialize log
+if [[ "${1:l}" == "logfile" ]]; then export logFile="${2:-}"; shift 2; else log::init; fi
 # ==================================================================
 # FUNCTIONS
 # ==================================================================

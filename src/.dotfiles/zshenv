@@ -129,6 +129,13 @@ export ZSH_CUSTOM_PLUGINS="$ZSH_CUSTOM/plugins"
 export ZSHSHARE="${XDG_DATA_DIRS%%:*}"
 export ZSHLOG="$ZSHSHARE/log"
 # ------------------------------------------------------------------
+# ZSH EXCLUDED VARIABLES
+# ------------------------------------------------------------------
+export ZSHEXCLUDE_ALIASES=()
+export ZSHEXCLUDE_BINDINGS=()
+export ZSHEXCLUDE_COMPLETION=()
+export ZSHEXCLUDE_FUNCTIONS=()
+# ------------------------------------------------------------------
 # MISC PATHS
 # ------------------------------------------------------------------
 export SSHDIR="$USERDIR"/.ssh

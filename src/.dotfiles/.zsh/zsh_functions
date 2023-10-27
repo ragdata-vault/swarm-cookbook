@@ -4,5 +4,19 @@
 # .zsh_functions
 # ==================================================================
 # This file exists so that you may add any alias files you require
-# Don't uncomment any files below unless you know what you're doing!
+# ==================================================================
+# LOAD DOTFILES
+# ==================================================================
+source="$ZSHDIR/functions"
+len="${#source}"
+while IFS= read -r file
+do
+	fileDir="${file%%/*}"
+	fileName="${file##*/}"
+	stub="${fileDir:$len}"
+	# check that file is not excluded, and is not a backup
+	if [[ "${ZSHEXCLUDE_FUNCTIONS[(ie)${stub}${fileName}]}" -lt "${#ZSHEXCLUDE_FUNCTIONS}" ]] && [[ "${fileName:((${#fileName}-1)):1}" != "~" ]]; then source "$source/functions${stub}$fileName"; fi
+done < <(find "$source" -type f)
+# ==================================================================
+# CUSTOM FUNCTIONS
 # ==================================================================
