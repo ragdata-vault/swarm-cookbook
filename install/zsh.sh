@@ -27,7 +27,7 @@ source "$REPO"/.env
 #
 # INSTALLED FUNCTION
 #
-zsh::installed() { return 1; }
+zsh::installed() { return 0; }
 #
 # INSTALL FUNCTION
 #

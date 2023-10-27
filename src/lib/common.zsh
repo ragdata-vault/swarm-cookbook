@@ -14,6 +14,8 @@
 # VARIABLES
 # ==================================================================
 if [[ -z "$REPO" ]]; then export REPO="$(dirname "$(dirname "$(realpath "${0:h}")")")"; fi
+alias logStamp="date -u +'%Y-%m-%dT%H:%M:%S.%3N%z'"
+alias logTime="date -u +'%y%m%dT%H%M%S.%3N'"
 # ==================================================================
 # LOADERS
 # ==================================================================
@@ -157,6 +159,15 @@ getPassword()
 	echo "$passwd"
 }
 # ------------------------------------------------------------------
+# getRepo
+# ------------------------------------------------------------------
+getRepo()
+{
+	local repo="${1:-}"
+
+	git clone git@github.com:"${repo}" "${2:-}"
+}
+# ------------------------------------------------------------------
 # historyStats
 # ------------------------------------------------------------------
 historyStats()
@@ -278,13 +289,13 @@ log::init()
 
 	if [[ ! -d "$ZSHLOG" ]]; then sudo mkdir -p "$ZSHLOG"; fi
 
-	if [[ -z "$file" ]]; then file=ZSH-"$(date +%y%m%d%H%MT%H%M%S.%3N)"; fi
+	if [[ -z "$file" ]]; then file=ZSH-"$(logTime)"; fi
 
 	export logFile="$ZSHLOG/$file"
 
 	sudo touch "$logFile"
 
-	log::file
+	log::file "LogFile Initialized"
 }
 # ------------------------------------------------------------------
 # log::file
@@ -293,7 +304,7 @@ log::file()
 {
 	local msg="${1:-}" timestamp
 
-	timestamp="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+	timestamp="$(logStamp)"
 
 	[[ ! -f "$logFile" ]] && { echo "LogFile '$logFile' Not Found!"; exit 1; }
 
@@ -308,7 +319,7 @@ log::redis()
 	local key="${1:-}" timestamp
 	local val="${2:-}"
 
-	timestamp="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+	timestamp="$(logStamp)"
 
 	[[ -z "$REDISCLI_AUTH" ]] && { echo "Redis Authentication Missing!"; exit 1; }
 

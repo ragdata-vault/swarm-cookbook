@@ -18,13 +18,14 @@ export ZSHDIR="$USERDIR"/.zsh
 export ZSH="$USERDIR"/.oh-my-zsh
 export ZSH_CUSTOM="$ZSH/custom"
 export ZSH_CUSTOM_PLUGINS="$ZSH_CUSTOM/plugins"
+export ZSHSHARE=/usr/local/share/zsh
 # ==================================================================
 # FUNCTIONS
 # ==================================================================
 #
 # INSTALLED FUNCTION
 #
-zsh-plugins::installed() { return 1; }
+zsh-plugins::installed() { return 0; }
 #
 # INSTALL FUNCTION
 #
