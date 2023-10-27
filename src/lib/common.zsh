@@ -163,9 +163,8 @@ getPassword()
 # ------------------------------------------------------------------
 getRepo()
 {
-	local repo="${1:-}"
-
-	git clone git@github.com:"${repo}" "${2:-}"
+	if [[ -n "$2" ]]; then git clone git@github.com:"${1:-}" "${2:-}";
+	else git clone git@github.com:"${1:-}"; fi
 }
 # ------------------------------------------------------------------
 # historyStats
