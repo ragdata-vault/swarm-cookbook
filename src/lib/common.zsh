@@ -138,6 +138,36 @@ checkShell()
 # ------------------------------------------------------------------
 colorGrid() { for i in {0..255}; do print -Pn "%K{$i}  %k%F{$i}${(l:3::0:)i}%f " ${${(M)$((i%6)):#3}:+$'\n'}; done; }
 # ------------------------------------------------------------------
+# configGET
+# ------------------------------------------------------------------
+configGET()
+{
+	local value
+	local key="${1:-}"
+	local field="${2:-}"
+
+	value="$(redis-cli HGET "$key" "$field")"
+
+	printf '%s' "$value"
+}
+# ------------------------------------------------------------------
+# configSET
+# ------------------------------------------------------------------
+configSET()
+{
+	local key="${1:-}"
+	local field="${2:-}"
+	local value="${3:-}"
+
+	if grep -q "$field" "$SWARMDIR"/.node; then
+		sed -i "/^${field}.*/c\\${field}=${value}" "$SWARMDIR"/.node
+	else
+		echo "${field}=${value}" >> "$SWARMDIR"/.node
+	fi
+
+	redis-cli HSET "$key" "$field" "$value" > /dev/null
+}
+# ------------------------------------------------------------------
 # getPassword
 # ------------------------------------------------------------------
 getPassword()

@@ -32,7 +32,7 @@ user::install()
 	echo "===================================================================="
 	echo
 
-	echo
+	if [[ ! -d "$XDG_DOWNLOAD_DIR" ]]; then mkdir -p "$XDG_DOWNLOAD_DIR"; fi
 
 	echo
 	echo "DONE!"
