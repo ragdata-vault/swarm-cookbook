@@ -6,5 +6,5 @@ NODE_HOSTNAME=wsl
 NODE_DOMAIN=local
 ADMIN_EMAIL=admin@redeyed.au
 SYSTEM_EMAIL=system@redeyed.au
-	TIMEZONE=Australia/Brisbane
+TIMEZONE=Australia/Brisbane
 NODE_LOCALE=en_AU.UTF-8

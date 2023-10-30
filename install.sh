@@ -93,12 +93,12 @@ install::install()
 	echo
 
 	loadSource config.sh -i
+	loadSource cron-updates.sh -i
 	loadSource dotfiles.sh -i
 	loadSource zsh-plugins.sh -i
 	loadSource bin.sh -i
 	loadSource lib.sh -i
 	loadSource swarm.sh -i
-	loadSource cron-updates.sh -i
 
 	echo
 	echo "FULL INSTALLATION - DONE!"
