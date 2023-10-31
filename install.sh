@@ -29,7 +29,7 @@ export USERNAME="${SUDO_USER:-$(whoami)}"
 # ==================================================================
 # DEPENDENCIES
 # ==================================================================
-if ! grep -q 'function' <<< "$(type loadLib)"; then
+if ! grep -q 'function' <<< "$(type loadLib 2> /dev/null)"; then
 	loadLib()
 	{
 		local file="${1:-}"
@@ -47,7 +47,7 @@ if ! grep -q 'function' <<< "$(type loadLib)"; then
 	}
 fi
 # load common.zsh library
-if ! grep -q 'function' <<< "$(type historyStats)"; then loadLib common.zsh; fi
+if ! grep -q 'function' <<< "$(type historyStats 2> /dev/null)"; then loadLib common.zsh; fi
 # create .env, if not exists
 if [[ ! -f "$REPO"/.env ]]; then cp "$REPO"/.env.dist "$REPO"/.env; fi
 # create .node, if not exists

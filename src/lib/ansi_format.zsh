@@ -13,7 +13,7 @@
 # ==================================================================
 # DEPENDENCIES
 # ==================================================================
-if ! grep -q 'function' <<< "$(type loadLib)"; then
+if ! grep -q 'function' <<< "$(type loadLib 2> /dev/null)"; then
 	loadLib()
 	{
 		local file="${1:-}"
@@ -30,8 +30,8 @@ if ! grep -q 'function' <<< "$(type loadLib)"; then
 		fi
 	}
 fi
-if ! grep -q 'function' <<< "$(type ansi::color)"; then loadLib ansi_color.zsh; fi
-if ! grep -q 'function' <<< "$(type ansi::blink)"; then loadLib ansi_effect.zsh; fi
+if ! grep -q 'function' <<< "$(type ansi::color 2> /dev/null)"; then loadLib ansi_color.zsh; fi
+if ! grep -q 'function' <<< "$(type ansi::blink 2> /dev/null)"; then loadLib ansi_effect.zsh; fi
 # ==================================================================
 # FUNCTIONS
 # ==================================================================

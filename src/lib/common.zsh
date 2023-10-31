@@ -22,7 +22,7 @@ alias logTime="date -u +'%y%m%dT%H%M%S.%3N'"
 # ------------------------------------------------------------------
 # loadLib
 # ------------------------------------------------------------------
-if ! grep -q 'function' <<< "$(type loadLib)"; then
+if ! grep -q 'function' <<< "$(type loadLib 2> /dev/null)"; then
 	loadLib()
 	{
 		local file="${1:-}"
@@ -42,8 +42,8 @@ fi
 # ==================================================================
 # DEPENDENCIES
 # ==================================================================
-if ! grep -q 'function' <<< "$(type ansi::color)"; then loadLib ansi_color.zsh; fi
-if ! grep -q 'function' <<< "$(type regex::isCC)"; then loadLib regex_aliases.zsh; fi
+if ! grep -q 'function' <<< "$(type ansi::color 2> /dev/null)"; then loadLib ansi_color.zsh; fi
+if ! grep -q 'function' <<< "$(type regex::isCC 2> /dev/null)"; then loadLib regex_aliases.zsh; fi
 # ==================================================================
 # FUNCTION ALIASES
 # ==================================================================
