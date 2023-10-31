@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 # shellcheck disable=SC1090,SC2031,SC2034,SC2154,SC2155,SC2181,SC2260
 # ==================================================================
 # install.sh
@@ -14,14 +14,14 @@
 # PREFLIGHT
 # ==================================================================
 # if script is called with 'debug' as an argument, then set debug mode
-if [[ "${1:l}" == "debug" ]] || [[ "$DEBUG" == 1 ]]; then shift; export DEBUG=1; set -- "${@}"; set -axeET; else export DEBUG=0; set -aeET; fi
+if [[ "${1,,}" == "debug" ]] || [[ "$DEBUG" == 1 ]]; then shift; export DEBUG=1; set -- "${@}"; set -axeET; else export DEBUG=0; set -aeET; fi
 # if script is called with 'verbose' as an argument, then unset verbose mode
-if [[ "${1:l}" == "verbose" ]] || [[ "$LOG_VERBOSE" == 0 ]]; then shift; export LOG_VERBOSE=0; else export LOG_VERBOSE=1; fi
+if [[ "${1,,}" == "verbose" ]] || [[ "$LOG_VERBOSE" == 0 ]]; then shift; export LOG_VERBOSE=0; else export LOG_VERBOSE=1; fi
 # ==================================================================
 # VARIABLES
 # ==================================================================
 # define REPO
-if [[ -z "$REPO" ]]; then export REPO="$(realpath "${0:h}")"; fi
+if [[ -z "$REPO" ]]; then export REPO="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"; fi
 # define SOURCE_DIRS
 export SOURCE_DIRS=("$REPO/src/apps" "$REPO/install")
 # define USERNAME
@@ -57,7 +57,7 @@ chown "$USERNAME":"$USERNAME" "$REPO"/.env "$REPO"/.node
 # load .env & .node
 source "$REPO"/.env; source "$REPO"/.node;
 # initialize log
-if [[ "${1:l}" == "logfile" ]]; then export logFile="${2:-}"; shift 2; else log::init; fi
+if [[ "${1,,}" == "logfile" ]]; then export logFile="${2:-}"; shift 2; else log::init; fi
 # ==================================================================
 # FUNCTIONS
 # ==================================================================
@@ -134,7 +134,7 @@ install::report()
 
 	read -rs -k 1 resp
 
-	resp="${resp:l}"
+	resp="${resp,,}"
 
 	case "$resp" in
 		v)

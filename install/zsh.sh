@@ -13,7 +13,7 @@
 # ==================================================================
 # DEPENDENCIES
 # ==================================================================
-if [[ -z "$REPO" ]]; then export REPO="$(dirname "$(realpath "${0:h}")")"; fi
+if [[ -z "$REPO" ]]; then export REPO="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"; fi
 if [[ ! -f "$REPO"/.env ]]; then cp "$REPO"/.env.dist "$REPO"/.env; fi
 # include environment file
 source "$REPO"/.env
