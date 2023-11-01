@@ -44,7 +44,11 @@ redis::install()
 redis::config()
 {
 	local REDIS_PWD ENV_FILE
-	local USER="${SUDO_USER:-$(whoami)}"
+
+	if [[ -z "$USERDIR" ]]; then
+		echo "ERROR :: 'USERDIR' Undefined!"
+		exit 1
+	fi
 
 	echo
 	echo "===================================================================="
@@ -58,10 +62,14 @@ redis::config()
 		sudo sed -i "/^# requirepass.*/c\requirepass ${REDIS_PWD}" /etc/redis/redis.conf
 	elif grep -E -q "^requirepass.*$" /etc/redis/redis.conf; then
 		REDIS_PWD="$(redis::passGET)"
-		if [[ -f "/home/$USERNAME/.zshenv" ]]; then
-			ENV_FILE="/home/$USERNAME/.zshenv"
-		elif [[ -f "/home/$USERNAME/.swarm/.env" ]]; then
-			ENV_FILE="/home/$USERNAME/.swarm/.env"
+		if [[ -f "$USERDIR/.zshenv" ]]; then
+			ENV_FILE="$USERDIR/.zshenv"
+		elif [[ -f "$USERDIR/.swarm/.env" ]]; then
+			ENV_FILE="$USERDIR/.swarm/.env"
+		elif [[ -f "$REPO"/.env ]]; then
+			ENV_FILE="$REPO"/.env
+		elif [[ -f "$REPO"/.env.dist ]]; then
+			ENV_FILE="$REPO"/.env.dist
 		fi
 		if ! grep -q "REDISCLI_AUTH" "$ENV_FILE"; then
 			{
