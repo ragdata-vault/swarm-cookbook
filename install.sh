@@ -412,7 +412,11 @@ install::report()
 	echo -e "\t (Q)uit"
 	echo
 
-	read -rs -n 1 resp
+		if [[ "${SHELL##*/}" == 'zsh' ]]; then
+			read -rs -k 1 resp
+		elif [[ "${SHELL##*/}" == 'bash' ]]; then
+			read -rs -n 1 resp
+		fi
 
 	resp="${resp,,}"
 
