@@ -72,6 +72,18 @@ While I plan to realease a version for the bash shell, this is not yet complete.
 
 #### Step 1 - Install ZSH + Extras
 
+Under a bash shell:
+
+```shell
+sudo ./install.sh zsh
+```
+
+or
+
+```shell
+sudo bash -c './install.sh zsh'
+```
+
 #### Step 2 - Clone the Repo
 
 Once you've got your new shell sorted, clone the repo ...

@@ -14,8 +14,8 @@
 # VARIABLES
 # ==================================================================
 if [[ -z "$REPO" ]]; then export REPO="$(dirname "$(dirname "$(realpath "${0:h}")")")"; fi
-alias logStamp="date -u +'%Y-%m-%dT%H:%M:%S.%3N%z'"
-alias logTime="date -u +'%y%m%dT%H%M%S.%3N'"
+if ! grep -q 'aliased' <<< "$(type logStamp 2> /dev/null)"; then alias logStamp="date -u +'%Y-%m-%dT%H:%M:%S.%3N%z'"; fi
+if ! grep -q 'aliased' <<< "$(type logStamp 2> /dev/null)"; then alias alias logTime="date -u +'%y%m%dT%H%M%S.%3N'"; fi
 # ==================================================================
 # LOADERS
 # ==================================================================
