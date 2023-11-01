@@ -60,7 +60,7 @@ zsh::install()
 
 		if [[ ! -f "$USERDIR"/.zshrc ]]; then touch "$USERDIR"/.zshrc; fi
 
-		echo "sudo ./$REPO/install.sh zsh cont" >> "$USERDIR"/.zshrc
+		echo "bash; sudo .$REPO/install.sh zsh cont;" >> "$USERDIR"/.zshrc
 
 		sudo reboot
 	elif [[ "${1,,}" == "cont" ]]; then
