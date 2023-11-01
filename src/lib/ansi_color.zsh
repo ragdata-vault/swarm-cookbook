@@ -109,7 +109,6 @@ export WHITE="$(ansi::hvy::white)"
 export YELLOW="$(ansi::hvy::yellow)"
 # RESETS
 export RESET="$(ansi::color::reset)"
-export RESETALL="$(ansi::reset)"
 #
 # BG ALIASES -------------------------------------------------------
 #
