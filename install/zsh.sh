@@ -19,6 +19,8 @@ if [[ -z "$REPO" ]]; then export REPO="$(dirname "$(realpath "${BASH_SOURCE[0]}"
 if [[ ! -f "$REPO"/.env ]]; then cp "$REPO"/.env.dist "$REPO"/.env; fi
 # include environment file
 source "$REPO"/.env
+# initialize logFile
+if [[ -z "$logFile" ]] || [[ ! -f "$LOGDIR/$logFile" ]]; then init::log ZSH-"$(logTime)"; fi
 # ==================================================================
 # HELPER FUNCTIONS
 # ==================================================================
@@ -35,6 +37,11 @@ zsh::installed() { return 0; }
 #
 zsh::install()
 {
+	if [[ -z "$USERNAME" ]]; then
+		echo "ERROR :: 'USERNAME' Undefined!"
+		exit 1
+	fi
+
 	echo
 	echo "===================================================================="
 	echo "INSTALLING :: ZSH"
