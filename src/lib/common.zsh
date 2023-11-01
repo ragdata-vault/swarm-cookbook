@@ -14,8 +14,8 @@
 # VARIABLES
 # ==================================================================
 if [[ -z "$REPO" ]]; then export REPO="$(dirname "$(dirname "$(realpath "${0:h}")")")"; fi
-if ! grep -q 'aliased' <<< "$(type logStamp 2> /dev/null)"; then alias logStamp="date -u +'%Y-%m-%dT%H:%M:%S.%3N%z'"; fi
-if ! grep -q 'aliased' <<< "$(type logStamp 2> /dev/null)"; then alias logTime="date -u +'%y%m%dT%H%M%S.%3N'"; fi
+alias logStamp="date -u +'%Y-%m-%dT%H:%M:%S.%3N%z'"
+alias logTime="date -u +'%y%m%dT%H%M%S.%3N'"
 # ==================================================================
 # LOADERS
 # ==================================================================
@@ -355,6 +355,24 @@ log::redis()
 	if [[ "$LOG_VERBOSE" -eq 1 ]]; then echo "$msg"; fi
 
 	redis-cli "$logFile" "$key" "$val" > /dev/null
+}
+# ------------------------------------------------------------------
+# logStamp
+# ------------------------------------------------------------------
+logStamp()
+{
+	local dtg="$(date -u +'%Y-%m-%dT%H:%M:%S.%3N%z')"
+
+	printf '%s' "$dtg"
+}
+# ------------------------------------------------------------------
+# logTime
+# ------------------------------------------------------------------
+logTime()
+{
+	local dtg="$(date -u +'%y%m%dT%H%M%S.%3N')"
+
+	printf '%s' "$dtg"
 }
 # ------------------------------------------------------------------
 # redis::passGET

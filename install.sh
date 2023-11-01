@@ -27,8 +27,8 @@ export SOURCE_DIRS=("$REPO/src/apps" "$REPO/install")
 # define USERNAME
 export USERNAME="${SUDO_USER:-$(whoami)}"
 # aliased timestamps
-if ! grep -q 'aliased' <<< "$(type logStamp 2> /dev/null)"; then alias logStamp="date -u +'%Y-%m-%dT%H:%M:%S.%3N%z'"; fi
-if ! grep -q 'aliased' <<< "$(type logStamp 2> /dev/null)"; then alias logTime="date -u +'%y%m%dT%H%M%S.%3N'"; fi
+#alias logStamp="date -u +'%Y-%m-%dT%H:%M:%S.%3N%z'"
+#alias logTime="date -u +'%y%m%dT%H%M%S.%3N'"
 # ==================================================================
 # HELPER FUNCTIONS
 # ==================================================================
@@ -302,6 +302,24 @@ if [[ "${SHELL##*/}" == 'bash' ]]; then
 		redis-cli "$logFile" "$key" "$val" > /dev/null
 	}
 	# ------------------------------------------------------------------
+	# logStamp
+	# ------------------------------------------------------------------
+	logStamp()
+	{
+		local dtg="$(date -u +'%Y-%m-%dT%H:%M:%S.%3N%z')";
+
+		printf '%s' "$dtg"
+	}
+	# ------------------------------------------------------------------
+	# logTime
+	# ------------------------------------------------------------------
+	logTime()
+	{
+		local dtg="$(date -u +'%y%m%dT%H%M%S.%3N')"
+
+		printf '%s' "$dtg"
+	}
+	# ------------------------------------------------------------------
 	# redis::passGET
 	# ------------------------------------------------------------------
 	redis::passGET() { sudo sed -n -e '/^requirepass.*/p' /etc/redis/redis.conf | awk '{print $2}'; }
@@ -319,7 +337,7 @@ chown "$USERNAME":"$USERNAME" "$REPO"/.env
 # load .env
 source "$REPO"/.env;
 # initialize log
-if [[ "${1,,}" == "logfile" ]]; then export logFile="${2:-}"; shift 2; else log::init INSTALL-; fi
+if [[ "${1,,}" == "logfile" ]]; then export logFile="${2:-}"; shift 2; else log::init INSTALL-"$(logTime)"; fi
 # ==================================================================
 # INSTALL FUNCTIONS
 # ==================================================================
