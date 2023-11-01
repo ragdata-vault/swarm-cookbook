@@ -46,10 +46,11 @@ zsh::install()
 
 		mkdir -p "$USERDIR"/.bash_archive
 
-		mv "$USERDIR/.bash*" "$USERDIR/.bash_archive/."
+		while IFS= read -r file; do filename="${file##*/}"; mv "$file" "$USERDIR"/.bash_archive/"$filename"; done < <(find "$USERDIR" maxdepth 1 -name ".bash*" -type f)
+
 		mv "$USERDIR/.profile" "$USERDIR/.bash_archive/."
 
-		chown -R "$USERNAME":"$USERNAME" "$USERDIR"/.bash_archive
+		chown "$USERNAME":"$USERNAME" "$USERDIR"/.bash_archive
 
 		sudo apt install -y zsh
 
