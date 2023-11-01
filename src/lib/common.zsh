@@ -316,11 +316,11 @@ log::init()
 {
 	local file="${1:-}"
 
-	if [[ ! -d "$ZSHLOG" ]]; then sudo mkdir -p "$ZSHLOG"; fi
+	if [[ ! -d "$LOGDIR" ]]; then sudo mkdir -p "$LOGDIR"; fi
 
 	if [[ -z "$file" ]]; then file=ZSH-"$(logTime)"; fi
 
-	export logFile="$ZSHLOG/$file"
+	export logFile="$LOGDIR/$file"
 
 	sudo touch "$logFile"
 
@@ -403,7 +403,7 @@ fkill()
 # ------------------------------------------------------------------
 # jqy
 # ------------------------------------------------------------------
-if command -v jq > /dev/null && command -v yq; then
+if command -v jq > /dev/null && command -v yq > /dev/null; then
 	# JQ FOR YAML
 	# [YQ](https://github.com/mikefarah/yq) uses unfamiliar syntax
 	# So, just convert the YAML to JSON, run it through JQ, then convert back to YAML

@@ -127,7 +127,6 @@ export ZSH="$USERDIR"/.oh-my-zsh
 export ZSH_CUSTOM="$ZSH/custom"
 export ZSH_CUSTOM_PLUGINS="$ZSH_CUSTOM/plugins"
 export ZSHSHARE="${XDG_DATA_DIRS%%:*}"
-export ZSHLOG="$ZSHSHARE/log"
 # ------------------------------------------------------------------
 # ZSH EXCLUDED VARIABLES
 # ------------------------------------------------------------------
@@ -138,6 +137,7 @@ export ZSHEXCLUDE_FUNCTIONS=()
 # ------------------------------------------------------------------
 # MISC PATHS
 # ------------------------------------------------------------------
+export LOGDIR="$ZSHSHARE/log"
 export SSHDIR="$USERDIR"/.ssh
 export GNUPGHOME="$USERDIR"/.gnupg
 export INFOPATH="/usr/local/share/info:$INFOPATH"
