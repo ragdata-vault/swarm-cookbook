@@ -42,7 +42,7 @@ dialog::theme::config()
 #
 # INSTALLED FUNCTION
 #
-dialog::installed() { command -v dialog; }
+dialog::installed() { command -v dialog > /dev/null; }
 #
 # INSTALL FUNCTION
 #
@@ -84,7 +84,12 @@ dialog::config()
 		echo
 		echo "    Q. Quit"
 		echo
-		read -rs -k 1 RESP
+
+		if [[ "${SHELL##*/}" == 'zsh' ]]; then
+			read -rs -k 1 RESP
+		elif [[ "${SHELL##*/}" == 'bash' ]]; then
+			read -rs -n 1 RESP
+		fi
 	done
 
 	case "$RESP" in
