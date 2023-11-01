@@ -1,9 +1,9 @@
 # ==================================================================
-# src/apps/template
+# src/apps/toolset-dev
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/template
+# File:         src/apps/toolset-dev
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -16,42 +16,20 @@
 # FUNCTIONS
 # ==================================================================
 #
-# HELP FUNCTION
-#
-template::help()
-{
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo "${WHITE}TEMPLATE HELP${RESET}"
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-
-
-
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-}
-#
-# REQUIRES FUNCTION
-#
-template::requires() { echo; }
-#
-# INSTALLED FUNCTION
-#
-template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
-#
 # INSTALL FUNCTION
 #
-template::install()
+toolset-dev::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING TEMPLATE"
+	echo "INSTALLING TOOLSET-DEV"
 	echo "===================================================================="
 	echo
 
-	echo
+	export DEBIAN_FRONTEND=noninteractive
+
+	sudo apt install -y mkcert libffi-dev libgdbm-dev libncurses5-dev automake libtool gcc g++ make colordiff
+	sudo apt install -y zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev libxml2-dev libxslt1-dev libcurl4-openssl-dev libc-bin
 
 	echo
 	echo "DONE!"
@@ -60,11 +38,11 @@ template::install()
 #
 # CONFIG FUNCTION
 #
-template::config()
+toolset-dev::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING TEMPLATE"
+	echo "CONFIGURING TOOLSET-DEV"
 	echo "===================================================================="
 	echo
 
@@ -77,11 +55,11 @@ template::config()
 #
 # REMOVE FUNCTION
 #
-template::remove()
+toolset-dev::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING TEMPLATE"
+	echo "UNINSTALLING TOOLSET-DEV"
 	echo "===================================================================="
 	echo
 
@@ -94,11 +72,11 @@ template::remove()
 #
 # TEST FUNCTION
 #
-template::test()
+toolset-dev::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING TEMPLATE"
+	echo "TESTING TOOLSET-DEV"
 	echo "===================================================================="
 	echo
 

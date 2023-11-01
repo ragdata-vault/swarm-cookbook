@@ -1,9 +1,9 @@
 # ==================================================================
-# src/apps/template
+# src/apps/fail2ban
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/template
+# File:         src/apps/fail2ban
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -16,42 +16,17 @@
 # FUNCTIONS
 # ==================================================================
 #
-# HELP FUNCTION
-#
-template::help()
-{
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo "${WHITE}TEMPLATE HELP${RESET}"
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-
-
-
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-}
-#
-# REQUIRES FUNCTION
-#
-template::requires() { echo; }
-#
-# INSTALLED FUNCTION
-#
-template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
-#
 # INSTALL FUNCTION
 #
-template::install()
+fail2ban::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING TEMPLATE"
+	echo "INSTALLING FAIL2BAN"
 	echo "===================================================================="
 	echo
 
-	echo
+	sudo apt install -y fail2ban
 
 	echo
 	echo "DONE!"
@@ -60,15 +35,24 @@ template::install()
 #
 # CONFIG FUNCTION
 #
-template::config()
+fail2ban::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING TEMPLATE"
+	echo "CONFIGURING FAIL2BAN"
 	echo "===================================================================="
 	echo
 
-	echo
+	cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local
+
+	ignore="${TRUSTED[*]}"
+
+    sed -ri "/^\[DEFAULT\]$/,/^# JAILS$/ s/^bantime[[:blank:]]*= .*/bantime = 18000/" /etc/fail2ban/jail.local
+    sed -ri "/^\[DEFAULT\]$/,/^# JAILS$/ s/^backend[[:blank:]]*=.*/backend = polling/" /etc/fail2ban/jail.local
+    sed -ri "/^\[DEFAULT\]$/,/^# JAILS$/ s/^ignoreip[[:blank:]]*=.*/ignoreip = ${ignore//\//\\/}" /etc/fail2ban/jail.local
+
+    cp /etc/fail2ban/jail.d/defaults-debian.conf /etc/fail2ban/jail.d/defaults-debian.conf~
+    cp "$SWARMDIR"/inc/fail2ban/defaults-debian.conf /etc/fail2ban/jail.d/defaults-debian.conf
 
 	echo
 	echo "DONE!"
@@ -77,15 +61,15 @@ template::config()
 #
 # REMOVE FUNCTION
 #
-template::remove()
+fail2ban::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING TEMPLATE"
+	echo "UNINSTALLING FAIL2BAN"
 	echo "===================================================================="
 	echo
 
-	echo
+	apt purge -y --autoremove fail2ban
 
 	echo
 	echo "DONE!"
@@ -94,11 +78,11 @@ template::remove()
 #
 # TEST FUNCTION
 #
-template::test()
+fail2ban::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING TEMPLATE"
+	echo "TESTING FAIL2BAN"
 	echo "===================================================================="
 	echo
 

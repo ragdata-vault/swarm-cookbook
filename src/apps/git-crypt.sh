@@ -1,9 +1,9 @@
 # ==================================================================
-# src/apps/template
+# src/apps/git-crypt
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/template
+# File:         src/apps/git-crypt
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -16,42 +16,25 @@
 # FUNCTIONS
 # ==================================================================
 #
-# HELP FUNCTION
-#
-template::help()
-{
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo "${WHITE}TEMPLATE HELP${RESET}"
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-
-
-
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-}
-#
-# REQUIRES FUNCTION
-#
-template::requires() { echo; }
-#
-# INSTALLED FUNCTION
-#
-template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
-#
 # INSTALL FUNCTION
 #
-template::install()
+git-crypt::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING TEMPLATE"
+	echo "INSTALLING GIT-CRYPT"
 	echo "===================================================================="
 	echo
 
-	echo
+	wget -O /home/"$SUDO_USER"/downloads/git-crypt.0.7.0.tar.gz https://www.agwa.name/projects/git-crypt/downloads/git-crypt-0.7.0.tar.gz
+
+	tar zxvf /home/"$SUDO_USER"/downloads/git-crypt.0.7.0.tar.gz
+
+	cd /home/"$SUDO_USER"/downloads/git-crypt.0.7.0 || return 1
+
+	make
+
+	make install PREFIX=/usr/local/bin
 
 	echo
 	echo "DONE!"
@@ -60,11 +43,11 @@ template::install()
 #
 # CONFIG FUNCTION
 #
-template::config()
+git-crypt::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING TEMPLATE"
+	echo "CONFIGURING GIT-CRYPT"
 	echo "===================================================================="
 	echo
 
@@ -77,11 +60,11 @@ template::config()
 #
 # REMOVE FUNCTION
 #
-template::remove()
+git-crypt::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING TEMPLATE"
+	echo "UNINSTALLING GIT-CRYPT"
 	echo "===================================================================="
 	echo
 
@@ -94,11 +77,11 @@ template::remove()
 #
 # TEST FUNCTION
 #
-template::test()
+git-crypt::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING TEMPLATE"
+	echo "TESTING GIT-CRYPT"
 	echo "===================================================================="
 	echo
 

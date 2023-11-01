@@ -1,9 +1,9 @@
 # ==================================================================
-# src/apps/template
+# src/apps/python
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/template
+# File:         src/apps/python
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -16,42 +16,18 @@
 # FUNCTIONS
 # ==================================================================
 #
-# HELP FUNCTION
-#
-template::help()
-{
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo "${WHITE}TEMPLATE HELP${RESET}"
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-
-
-
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-}
-#
-# REQUIRES FUNCTION
-#
-template::requires() { echo; }
-#
-# INSTALLED FUNCTION
-#
-template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
-#
 # INSTALL FUNCTION
 #
-template::install()
+python::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING TEMPLATE"
+	echo "INSTALLING PYTHON"
 	echo "===================================================================="
 	echo
 
-	echo
+	sudo apt install -y python3-full python3-dev python3-pip python3.11-full python3-certbot-nginx
+	sudo apt install -y python3-software-properties python3-dateutil python3-debconf python3-debian python3-venv python3-django
 
 	echo
 	echo "DONE!"
@@ -60,15 +36,22 @@ template::install()
 #
 # CONFIG FUNCTION
 #
-template::config()
+python::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING TEMPLATE"
+	echo "CONFIGURING PYTHON"
 	echo "===================================================================="
 	echo
 
-	echo
+	if [[ ! -f /usr/bin/python2 ]]; then ln -s /usr/bin/python2.7 /usr/bin/python2; fi
+	if [[ ! -f /usr/bin/python3 ]]; then ln -s /usr/bin/python3.11 /usr/bin/python3; fi
+
+	sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.11 99
+
+	if [[ -f /usr/bin/python3.8 ]]; then update-alternatives --install /usr/bin/python python /usr/bin/python3.8 80; fi
+
+	sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 20
 
 	echo
 	echo "DONE!"
@@ -77,15 +60,15 @@ template::config()
 #
 # REMOVE FUNCTION
 #
-template::remove()
+python::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING TEMPLATE"
+	echo "UNINSTALLING PYTHON"
 	echo "===================================================================="
 	echo
 
-	echo
+	sudo apt purge -y --autoremove python3-full python3-pip python3.11-full
 
 	echo
 	echo "DONE!"
@@ -94,11 +77,11 @@ template::remove()
 #
 # TEST FUNCTION
 #
-template::test()
+python::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING TEMPLATE"
+	echo "TESTING PYTHON"
 	echo "===================================================================="
 	echo
 

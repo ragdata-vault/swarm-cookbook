@@ -1,9 +1,10 @@
+# shellcheck disable=SC2164
 # ==================================================================
-# src/apps/template
+# src/apps/cockpit-file-sharing
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/template
+# File:         src/apps/cockpit-file-sharing
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -16,42 +17,28 @@
 # FUNCTIONS
 # ==================================================================
 #
-# HELP FUNCTION
-#
-template::help()
-{
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo "${WHITE}TEMPLATE HELP${RESET}"
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-
-
-
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-}
-#
-# REQUIRES FUNCTION
-#
-template::requires() { echo; }
-#
-# INSTALLED FUNCTION
-#
-template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
-#
 # INSTALL FUNCTION
 #
-template::install()
+cockpit-file-sharing::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING TEMPLATE"
+	echo "INSTALLING COCKPIT-FILE-SHARING"
 	echo "===================================================================="
 	echo
 
-	echo
+	[[ ! -d "$USERDIR"/downloads ]] && mkdir -p "$USERDIR"/downloads
+
+	wget -O "$USERDIR"/downloads/cockpit-file-sharing_3.2.9_generic.zip https://github.com/45Drives/cockpit-file-sharing/releases/download/v3.2.9/cockpit-file-sharing_3.2.9_generic.zip
+
+	unzip "$USERDIR"/downloads/cockpit-file-sharing_3.2.9_generic.zip
+
+	cd "$USERDIR"/downloads/cockpit-file-sharing_3.2.9_generic || return 1
+
+	# no need to 'make' this one first - it comes pre-built
+	make install
+
+	systemctl restart cockpit.socket
 
 	echo
 	echo "DONE!"
@@ -60,11 +47,11 @@ template::install()
 #
 # CONFIG FUNCTION
 #
-template::config()
+cockpit-file-sharing::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING TEMPLATE"
+	echo "CONFIGURING COCKPIT-FILE-SHARING"
 	echo "===================================================================="
 	echo
 
@@ -77,32 +64,17 @@ template::config()
 #
 # REMOVE FUNCTION
 #
-template::remove()
+cockpit-file-sharing::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING TEMPLATE"
+	echo "UNINSTALLING COCKPIT-FILE-SHARING"
 	echo "===================================================================="
 	echo
 
-	echo
+	rm -f /usr/local/bin/cockpit-file-sharing		# (???)
 
-	echo
-	echo "DONE!"
-	echo
-}
-#
-# TEST FUNCTION
-#
-template::test()
-{
-	echo
-	echo "===================================================================="
-	echo "TESTING TEMPLATE"
-	echo "===================================================================="
-	echo
-
-	echo
+	systemctl restart cockpit.socket
 
 	echo
 	echo "DONE!"

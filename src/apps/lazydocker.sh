@@ -1,11 +1,11 @@
 # ==================================================================
-# src/apps/template
+# src/apps/lazydocker
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/template
+# File:         src/apps/lazydocker
 # Author:       Ragdata
-# Date:         09/10/2023
+# Date:         25/09/2023
 # License:      MIT License
 # Copyright:    Copyright © 2023 Darren Poulton (Ragdata)
 # ==================================================================
@@ -16,42 +16,27 @@
 # FUNCTIONS
 # ==================================================================
 #
-# HELP FUNCTION
-#
-template::help()
-{
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo "${WHITE}TEMPLATE HELP${RESET}"
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-
-
-
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-}
-#
-# REQUIRES FUNCTION
-#
-template::requires() { echo; }
-#
-# INSTALLED FUNCTION
-#
-template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
-#
 # INSTALL FUNCTION
 #
-template::install()
+lazydocker::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING TEMPLATE"
+	echo "INSTALLING LAZYDOCKER"
 	echo "===================================================================="
 	echo
 
-	echo
+	export DIR=/usr/local/bin
+
+	[[ ! -d "$HOME"/downloads ]] && mkdir -p "$HOME"/downloads
+
+	cd "$HOME"/downloads || return 1
+
+	wget https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.zsh
+
+	chmod 0755 install_update_linux.zsh
+
+	sudo ./install_update_linux.zsh
 
 	echo
 	echo "DONE!"
@@ -60,11 +45,11 @@ template::install()
 #
 # CONFIG FUNCTION
 #
-template::config()
+lazydocker::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING TEMPLATE"
+	echo "CONFIGURING LAZYDOCKER"
 	echo "===================================================================="
 	echo
 
@@ -77,32 +62,15 @@ template::config()
 #
 # REMOVE FUNCTION
 #
-template::remove()
+lazydocker::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING TEMPLATE"
+	echo "UNINSTALLING LAZYDOCKER"
 	echo "===================================================================="
 	echo
 
-	echo
-
-	echo
-	echo "DONE!"
-	echo
-}
-#
-# TEST FUNCTION
-#
-template::test()
-{
-	echo
-	echo "===================================================================="
-	echo "TESTING TEMPLATE"
-	echo "===================================================================="
-	echo
-
-	echo
+	rm -f /usr/local/bin/lazydocker
 
 	echo
 	echo "DONE!"

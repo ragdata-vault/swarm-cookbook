@@ -1,9 +1,9 @@
 # ==================================================================
-# src/apps/template
+# src/apps/logrotate
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/template
+# File:         src/apps/logrotate
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -16,42 +16,17 @@
 # FUNCTIONS
 # ==================================================================
 #
-# HELP FUNCTION
-#
-template::help()
-{
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo "${WHITE}TEMPLATE HELP${RESET}"
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-
-
-
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-}
-#
-# REQUIRES FUNCTION
-#
-template::requires() { echo; }
-#
-# INSTALLED FUNCTION
-#
-template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
-#
 # INSTALL FUNCTION
 #
-template::install()
+logrotate::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING TEMPLATE"
+	echo "INSTALLING LOGROTATE"
 	echo "===================================================================="
 	echo
 
-	echo
+	sudo apt install -y logrotate
 
 	echo
 	echo "DONE!"
@@ -60,15 +35,15 @@ template::install()
 #
 # CONFIG FUNCTION
 #
-template::config()
+logrotate::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING TEMPLATE"
+	echo "CONFIGURING LOGROTATE"
 	echo "===================================================================="
 	echo
 
-	echo
+	cp "$SWARMDIR"/inc/log/logrotate-traefik.conf /etc/logrotate.d/traefik
 
 	echo
 	echo "DONE!"
@@ -77,15 +52,15 @@ template::config()
 #
 # REMOVE FUNCTION
 #
-template::remove()
+logrotate::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING TEMPLATE"
+	echo "UNINSTALLING LOGROTATE"
 	echo "===================================================================="
 	echo
 
-	echo
+	sudo apt purge -y --autoremove logrotate
 
 	echo
 	echo "DONE!"
@@ -94,15 +69,15 @@ template::remove()
 #
 # TEST FUNCTION
 #
-template::test()
+logrotate::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING TEMPLATE"
+	echo "TESTING LOGROTATE"
 	echo "===================================================================="
 	echo
 
-	echo
+	logrotate /etc/logrotate.conf --debug
 
 	echo
 	echo "DONE!"

@@ -1,11 +1,12 @@
+#shellcheck disable=SC1090
 # ==================================================================
-# src/apps/template
+# src/apps/dnsmasq
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/template
+# File:         src/apps/dnsmasq
 # Author:       Ragdata
-# Date:         09/10/2023
+# Date:         25/09/2023
 # License:      MIT License
 # Copyright:    Copyright © 2023 Darren Poulton (Ragdata)
 # ==================================================================
@@ -16,42 +17,41 @@
 # FUNCTIONS
 # ==================================================================
 #
-# HELP FUNCTION
-#
-template::help()
-{
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo "${WHITE}TEMPLATE HELP${RESET}"
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-
-
-
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-}
-#
-# REQUIRES FUNCTION
-#
-template::requires() { echo; }
-#
-# INSTALLED FUNCTION
-#
-template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
-#
 # INSTALL FUNCTION
 #
-template::install()
+dnsmasq::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING TEMPLATE"
+	echo "INSTALLING DNSMASQ"
 	echo "===================================================================="
 	echo
 
-	echo
+	local NODE_ID NODE_DOMAIN
+
+	NODE_ID="$(docker info -f '{{.Swarm.NodeID}}')"
+
+	source "$SWARMDIR"/.env
+
+	NODE_DOMAIN="$(hashGET NODE:"${NODE_ID}" NODE_DOMAIN)"
+
+	systemctl disable systemd-resolved
+	systemctl stop systemd-resolved
+
+	ls -lh /etc/resolv.conf
+	rm /etc/resolv.conf
+
+	echo "nameserver 127.0.0.1" > /etc/resolv.conf
+	echo "nameserver 1.1.1.1" >> /etc/resolv.conf
+
+	sudo apt install -y dnsmasq
+
+	echo "address=/.${NODE_DOMAIN}/127.0.0.1" >> /etc/dnsmasq.conf
+
+	mkdir -v /etc/resolver && echo "nameserver 127.0.0.1" > /etc/resolver/"${NODE_DOMAIN}"
+
+	systemctl enable dnsmasq
+	systemctl restart dnsmasq
 
 	echo
 	echo "DONE!"
@@ -60,11 +60,11 @@ template::install()
 #
 # CONFIG FUNCTION
 #
-template::config()
+dnsmasq::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING TEMPLATE"
+	echo "CONFIGURING DNSMASQ"
 	echo "===================================================================="
 	echo
 
@@ -77,32 +77,15 @@ template::config()
 #
 # REMOVE FUNCTION
 #
-template::remove()
+dnsmasq::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING TEMPLATE"
+	echo "UNINSTALLING DNSMASQ"
 	echo "===================================================================="
 	echo
 
-	echo
-
-	echo
-	echo "DONE!"
-	echo
-}
-#
-# TEST FUNCTION
-#
-template::test()
-{
-	echo
-	echo "===================================================================="
-	echo "TESTING TEMPLATE"
-	echo "===================================================================="
-	echo
-
-	echo
+	sudo apt purge -y --autoremove dnsmasq
 
 	echo
 	echo "DONE!"

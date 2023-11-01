@@ -1,9 +1,9 @@
 # ==================================================================
-# src/apps/template
+# src/apps/gpg
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/template
+# File:         src/apps/gpg
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -16,42 +16,17 @@
 # FUNCTIONS
 # ==================================================================
 #
-# HELP FUNCTION
-#
-template::help()
-{
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo "${WHITE}TEMPLATE HELP${RESET}"
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-
-
-
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-}
-#
-# REQUIRES FUNCTION
-#
-template::requires() { echo; }
-#
-# INSTALLED FUNCTION
-#
-template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
-#
 # INSTALL FUNCTION
 #
-template::install()
+gpg::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING TEMPLATE"
+	echo "INSTALLING GPG"
 	echo "===================================================================="
 	echo
 
-	echo
+	sudo apt install -y gpg
 
 	echo
 	echo "DONE!"
@@ -60,15 +35,15 @@ template::install()
 #
 # CONFIG FUNCTION
 #
-template::config()
+gpg::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING TEMPLATE"
+	echo "CONFIGURING GPG"
 	echo "===================================================================="
 	echo
 
-	echo
+	gpg --default-new-key-algo rsa4096 --gen-key
 
 	echo
 	echo "DONE!"
@@ -77,32 +52,15 @@ template::config()
 #
 # REMOVE FUNCTION
 #
-template::remove()
+gpg::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING TEMPLATE"
+	echo "UNINSTALLING GPG"
 	echo "===================================================================="
 	echo
 
-	echo
-
-	echo
-	echo "DONE!"
-	echo
-}
-#
-# TEST FUNCTION
-#
-template::test()
-{
-	echo
-	echo "===================================================================="
-	echo "TESTING TEMPLATE"
-	echo "===================================================================="
-	echo
-
-	echo
+	sudo apt purge -y --autoremove gpg
 
 	echo
 	echo "DONE!"

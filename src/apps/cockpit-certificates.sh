@@ -1,9 +1,9 @@
 # ==================================================================
-# src/apps/template
+# src/apps/cockpit-certificates
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/template
+# File:         src/apps/cockpit-certificates
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -16,42 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
-# HELP FUNCTION
-#
-template::help()
-{
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo "${WHITE}TEMPLATE HELP${RESET}"
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-
-
-
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-}
-#
-# REQUIRES FUNCTION
-#
-template::requires() { echo; }
-#
-# INSTALLED FUNCTION
-#
-template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
-#
 # INSTALL FUNCTION
 #
-template::install()
+cockpit-certificates::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING TEMPLATE"
+	echo "INSTALLING COCKPIT-CERTIFICATES"
 	echo "===================================================================="
 	echo
 
-	echo
+	[[ ! -d "$USERDIR"/downloads ]] && mkdir -p "$USERDIR"/downloads
+
+	sudo apt install -y certmonger
+
+	git clone git@github.com:skobyda/cockpit-certificates "$USERDIR"/downloads/cockpit-certificates
+
+	cd "$USERDIR"/downloads/cockpit-certificates || return 1
+
+	make
+
+	export NODE_ENV=production
+
+	make install
+
+	systemctl restart cockpit.socket
 
 	echo
 	echo "DONE!"
@@ -60,11 +49,11 @@ template::install()
 #
 # CONFIG FUNCTION
 #
-template::config()
+cockpit-certificates::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING TEMPLATE"
+	echo "CONFIGURING COCKPIT-CERTIFICATES"
 	echo "===================================================================="
 	echo
 
@@ -77,32 +66,17 @@ template::config()
 #
 # REMOVE FUNCTION
 #
-template::remove()
+cockpit-certificates::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING TEMPLATE"
+	echo "UNINSTALLING COCKPIT-CERTIFICATES"
 	echo "===================================================================="
 	echo
 
-	echo
+	systemctl restart cockpit.socket
 
-	echo
-	echo "DONE!"
-	echo
-}
-#
-# TEST FUNCTION
-#
-template::test()
-{
-	echo
-	echo "===================================================================="
-	echo "TESTING TEMPLATE"
-	echo "===================================================================="
-	echo
-
-	echo
+	sudo apt purge -y --autoremove cockpit-certificates
 
 	echo
 	echo "DONE!"

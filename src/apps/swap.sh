@@ -1,9 +1,9 @@
 # ==================================================================
-# src/apps/template
+# src/apps/swap
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/template
+# File:         src/apps/swap
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -16,38 +16,17 @@
 # FUNCTIONS
 # ==================================================================
 #
-# HELP FUNCTION
-#
-template::help()
-{
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo "${WHITE}TEMPLATE HELP${RESET}"
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-
-
-
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-}
-#
-# REQUIRES FUNCTION
-#
-template::requires() { echo; }
-#
 # INSTALLED FUNCTION
 #
-template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
+swap::installed() { command -v swap; }
 #
 # INSTALL FUNCTION
 #
-template::install()
+swap::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING TEMPLATE"
+	echo "INSTALLING SWAP"
 	echo "===================================================================="
 	echo
 
@@ -60,28 +39,50 @@ template::install()
 #
 # CONFIG FUNCTION
 #
-template::config()
+swap::config()
 {
+	autoload -Uz regexResponse
+
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING TEMPLATE"
+	echo "CONFIGURING SWAP"
 	echo "===================================================================="
 	echo
 
-	echo
+    SWAP_TOTAL=$(awk '/^SwapTotal:/ {print $2}' /proc/meminfo)
+    SWAP_MiB=$(( SWAP_TOTAL / 1024))
+    SWAP_MB=$(awk -vr=$SWAP_MiB 'BEGIN{printf "%.0f", r * 1.049}')
+    SWAP_GiB=$(( SWAP_MB / 1024 ))
+    PRINT_SWAP_MiB=$(printf "%'d" $SWAP_MiB)
+    PRINT_SWAP_MB=$(printf "%'d" "$SWAP_MB")
+    PRINT_SWAP_GiB=$(printf "%'d" $SWAP_GiB)
+
+	# shellcheck disable=SC2028
+	echo "TOTAL SWAP: ${SWAP_TOTAL} (${PRINT_SWAP_MiB} MiB)\n"
+
+	echo -e -n "Do you want to configure swap space for this server? (${WHITE}Y${RESET}/n) "
+
+	read -rsq SWAPYN
+
+	if [[ "${SWAPYN:l}" == "n" ]]; then echo "User elected not to configure swap space"; fi
+
+	if [[ ! $SWAPYN =~ $NEGAT ]]; then
+		if [[ $SWAP_TOTAL -lt 4194000 ]]
+	fi
 
 	echo
 	echo "DONE!"
 	echo
 }
+}
 #
 # REMOVE FUNCTION
 #
-template::remove()
+swap::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING TEMPLATE"
+	echo "UNINSTALLING SWAP"
 	echo "===================================================================="
 	echo
 
@@ -94,11 +95,11 @@ template::remove()
 #
 # TEST FUNCTION
 #
-template::test()
+swap::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING TEMPLATE"
+	echo "TESTING SWAP"
 	echo "===================================================================="
 	echo
 

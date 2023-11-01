@@ -1,9 +1,9 @@
 # ==================================================================
-# src/apps/template
+# src/apps/dive
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/template
+# File:         src/apps/dive
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -16,42 +16,26 @@
 # FUNCTIONS
 # ==================================================================
 #
-# HELP FUNCTION
-#
-template::help()
-{
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo "${WHITE}TEMPLATE HELP${RESET}"
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-
-
-
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-}
-#
-# REQUIRES FUNCTION
-#
-template::requires() { echo; }
-#
-# INSTALLED FUNCTION
-#
-template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
-#
 # INSTALL FUNCTION
 #
-template::install()
+dive::install()
 {
+	local DIVE_VERSION
+
 	echo
 	echo "===================================================================="
-	echo "INSTALLING TEMPLATE"
+	echo "INSTALLING DIVE"
 	echo "===================================================================="
 	echo
 
-	echo
+	[[ ! -d "$USERDIR"/downloads ]] && mkdir -p "$USERDIR"/downloads
+
+	# get latest version tag
+	DIVE_VERSION=$(curl -s "https://api.github.com/repos/wagoodman/dive/releases/latest" | grep -Po '"tag_name": "v\K[0-9.]+')
+	# download latest Debian package
+	wget -O "$USERDIR"/downloads/dive.deb https://github.com/wagoodman/dive/releases/latest/download/dive_${DIVE_VERSION}_linux_amd64.deb
+
+	sudo apt install -y "$USERDIR"/downloads/dive.deb
 
 	echo
 	echo "DONE!"
@@ -60,11 +44,11 @@ template::install()
 #
 # CONFIG FUNCTION
 #
-template::config()
+dive::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING TEMPLATE"
+	echo "CONFIGURING DIVE"
 	echo "===================================================================="
 	echo
 
@@ -77,32 +61,15 @@ template::config()
 #
 # REMOVE FUNCTION
 #
-template::remove()
+dive::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING TEMPLATE"
+	echo "UNINSTALLING DIVE"
 	echo "===================================================================="
 	echo
 
-	echo
-
-	echo
-	echo "DONE!"
-	echo
-}
-#
-# TEST FUNCTION
-#
-template::test()
-{
-	echo
-	echo "===================================================================="
-	echo "TESTING TEMPLATE"
-	echo "===================================================================="
-	echo
-
-	echo
+	sudo apt purge -y --autoremove dive
 
 	echo
 	echo "DONE!"

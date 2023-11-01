@@ -1,9 +1,9 @@
 # ==================================================================
-# src/apps/template
+# src/apps/devcontainers-cli.zsh
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/template
+# File:         src/apps/devcontainers-cli.zsh
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -16,42 +16,18 @@
 # FUNCTIONS
 # ==================================================================
 #
-# HELP FUNCTION
-#
-template::help()
-{
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo "${WHITE}TEMPLATE HELP${RESET}"
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-
-
-
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-}
-#
-# REQUIRES FUNCTION
-#
-template::requires() { echo; }
-#
-# INSTALLED FUNCTION
-#
-template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
-#
 # INSTALL FUNCTION
 #
-template::install()
+devcontainers-cli.zsh::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING TEMPLATE"
+	echo "INSTALLING DEVCONTAINERS-CLI"
 	echo "===================================================================="
 	echo
 
-	echo
+	nvm use --lts
+	npm install -g @devcontainers/cli
 
 	echo
 	echo "DONE!"
@@ -60,11 +36,11 @@ template::install()
 #
 # CONFIG FUNCTION
 #
-template::config()
+devcontainers-cli.zsh::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING TEMPLATE"
+	echo "CONFIGURING DEVCONTAINERS-CLI"
 	echo "===================================================================="
 	echo
 
@@ -77,32 +53,16 @@ template::config()
 #
 # REMOVE FUNCTION
 #
-template::remove()
+devcontainers-cli.zsh::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING TEMPLATE"
+	echo "UNINSTALLING DEVCONTAINERS-CLI"
 	echo "===================================================================="
 	echo
 
-	echo
-
-	echo
-	echo "DONE!"
-	echo
-}
-#
-# TEST FUNCTION
-#
-template::test()
-{
-	echo
-	echo "===================================================================="
-	echo "TESTING TEMPLATE"
-	echo "===================================================================="
-	echo
-
-	echo
+	nvm use --lts
+	npm uninstall -g @devcontainers/cli
 
 	echo
 	echo "DONE!"

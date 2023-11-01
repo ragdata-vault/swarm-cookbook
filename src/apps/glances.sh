@@ -1,11 +1,11 @@
 # ==================================================================
-# src/apps/template
+# src/apps/glances
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/template
+# File:         src/apps/glances
 # Author:       Ragdata
-# Date:         09/10/2023
+# Date:         25/09/2023
 # License:      MIT License
 # Copyright:    Copyright © 2023 Darren Poulton (Ragdata)
 # ==================================================================
@@ -16,42 +16,19 @@
 # FUNCTIONS
 # ==================================================================
 #
-# HELP FUNCTION
-#
-template::help()
-{
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo "${WHITE}TEMPLATE HELP${RESET}"
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-
-
-
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-}
-#
-# REQUIRES FUNCTION
-#
-template::requires() { echo; }
-#
-# INSTALLED FUNCTION
-#
-template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
-#
 # INSTALL FUNCTION
 #
-template::install()
+glances::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING TEMPLATE"
+	echo "INSTALLING GLANCES"
 	echo "===================================================================="
 	echo
 
-	echo
+	sudo apt install -y python3-defusedxml python3-ujson python3-future
+
+	pip install glances
 
 	echo
 	echo "DONE!"
@@ -60,11 +37,11 @@ template::install()
 #
 # CONFIG FUNCTION
 #
-template::config()
+glances::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING TEMPLATE"
+	echo "CONFIGURING GLANCES"
 	echo "===================================================================="
 	echo
 
@@ -77,32 +54,15 @@ template::config()
 #
 # REMOVE FUNCTION
 #
-template::remove()
+glances::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING TEMPLATE"
+	echo "UNINSTALLING GLANCES"
 	echo "===================================================================="
 	echo
 
-	echo
-
-	echo
-	echo "DONE!"
-	echo
-}
-#
-# TEST FUNCTION
-#
-template::test()
-{
-	echo
-	echo "===================================================================="
-	echo "TESTING TEMPLATE"
-	echo "===================================================================="
-	echo
-
-	echo
+	pip uninstall glances
 
 	echo
 	echo "DONE!"

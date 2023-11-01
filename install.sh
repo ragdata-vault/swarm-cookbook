@@ -213,7 +213,7 @@ if [[ "${SHELL##*/}" == 'bash' ]]; then
 			fullPath="$app"
 		else
 			if [[ $DEBUG -eq 1 ]]; then log::file "Finding '$app'"; fi
-			if [[ ! "$app" = *.* ]]; then thisFile="$app".zsh; else thisFile="$app"; fi
+			if [[ ! "$app" = *.* ]]; then thisFile="$app".sh; else thisFile="$app"; fi
 			for dir in "${SOURCE_DIRS[@]}"
 			do
 				if [[ $DEBUG -eq 1 ]]; then log::file "Searching '$dir'"; fi
@@ -354,6 +354,7 @@ install::init()
 
 	checkPkg "jq" "JQ"
 	checkPkg "redis" "Redis"
+	loadSource redis -c
 	checkPkg "dialog" "Dialog"
 
 	echo

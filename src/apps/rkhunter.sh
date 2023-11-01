@@ -1,9 +1,9 @@
 # ==================================================================
-# src/apps/template
+# src/apps/rkhunter
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/template
+# File:         src/apps/rkhunter
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -16,42 +16,17 @@
 # FUNCTIONS
 # ==================================================================
 #
-# HELP FUNCTION
-#
-template::help()
-{
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo "${WHITE}TEMPLATE HELP${RESET}"
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-
-
-
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-}
-#
-# REQUIRES FUNCTION
-#
-template::requires() { echo; }
-#
-# INSTALLED FUNCTION
-#
-template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
-#
 # INSTALL FUNCTION
 #
-template::install()
+rkhunter::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING TEMPLATE"
+	echo "INSTALLING RKHUNTER"
 	echo "===================================================================="
 	echo
 
-	echo
+	sudo apt install -y rkhunter
 
 	echo
 	echo "DONE!"
@@ -60,15 +35,24 @@ template::install()
 #
 # CONFIG FUNCTION
 #
-template::config()
+rkhunter::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING TEMPLATE"
+	echo "CONFIGURING RKHUNTER"
 	echo "===================================================================="
 	echo
 
-	echo
+    sed -i '/UPDATE_MIRRORS.*/c\UPDATE_MIRRORS=1' /etc/rkhunter.conf
+    sed -i '/MIRRORS_MODE.*/c\MIRRORS_MODE=0' /etc/rkhunter.conf
+    sed -i '/WEB_CMD.*/c\WEB_CMD=""' /etc/rkhunter.conf
+
+    sed -i '/CRON_DAILY_RUN.*/c\CRON_DAILY_RUN="true"' /etc/default/rkhunter
+    sed -i '/CRON_DB_UPDATE.*/c\CRON_DB_UPDATE="true"' /etc/default/rkhunter
+    sed -i '/APT_AUTOGEN.*/c\APT_AUTOGEN="true"' /etc/default/rkhunter
+
+    rkhunter --update
+    rkhunter --propupd
 
 	echo
 	echo "DONE!"
@@ -77,15 +61,15 @@ template::config()
 #
 # REMOVE FUNCTION
 #
-template::remove()
+rkhunter::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING TEMPLATE"
+	echo "UNINSTALLING RKHUNTER"
 	echo "===================================================================="
 	echo
 
-	echo
+	apt purge -y --autoremove rkhunter
 
 	echo
 	echo "DONE!"
@@ -94,11 +78,11 @@ template::remove()
 #
 # TEST FUNCTION
 #
-template::test()
+rkhunter::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING TEMPLATE"
+	echo "TESTING RKHUNTER"
 	echo "===================================================================="
 	echo
 

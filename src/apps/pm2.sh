@@ -1,9 +1,9 @@
 # ==================================================================
-# src/apps/template
+# src/apps/pm2
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/template
+# File:         src/apps/pm2
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -18,11 +18,11 @@
 #
 # HELP FUNCTION
 #
-template::help()
+pm2::help()
 {
 	echo
 	echo "${GOLD}====================================================================${RESET}"
-	echo "${WHITE}TEMPLATE HELP${RESET}"
+	echo "${WHITE}PM2 HELP${RESET}"
 	echo "${GOLD}====================================================================${RESET}"
 	echo
 
@@ -35,23 +35,25 @@ template::help()
 #
 # REQUIRES FUNCTION
 #
-template::requires() { echo; }
+pm2::requires() { echo; }
 #
 # INSTALLED FUNCTION
 #
-template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
+pm2::installed() { command -v pm2; }
 #
 # INSTALL FUNCTION
 #
-template::install()
+pm2::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING TEMPLATE"
+	echo "INSTALLING PM2"
 	echo "===================================================================="
 	echo
 
-	echo
+	if ! command -v npm; then echo "Requires npm to be installed first!"; exit 1; fi
+
+	sudo npm i -g pm2
 
 	echo
 	echo "DONE!"
@@ -60,11 +62,11 @@ template::install()
 #
 # CONFIG FUNCTION
 #
-template::config()
+pm2::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING TEMPLATE"
+	echo "CONFIGURING PM2"
 	echo "===================================================================="
 	echo
 
@@ -77,15 +79,16 @@ template::config()
 #
 # REMOVE FUNCTION
 #
-template::remove()
+pm2::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING TEMPLATE"
+	echo "UNINSTALLING PM2"
 	echo "===================================================================="
 	echo
 
-	echo
+	pm2 kill
+	npm remove pm2 -g
 
 	echo
 	echo "DONE!"
@@ -94,11 +97,11 @@ template::remove()
 #
 # TEST FUNCTION
 #
-template::test()
+pm2::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING TEMPLATE"
+	echo "TESTING PM2"
 	echo "===================================================================="
 	echo
 

@@ -1,9 +1,9 @@
 # ==================================================================
-# src/apps/template
+# src/apps/dry
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/template
+# File:         src/apps/dry
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -16,42 +16,25 @@
 # FUNCTIONS
 # ==================================================================
 #
-# HELP FUNCTION
-#
-template::help()
-{
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo "${WHITE}TEMPLATE HELP${RESET}"
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-
-
-
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-}
-#
-# REQUIRES FUNCTION
-#
-template::requires() { echo; }
-#
-# INSTALLED FUNCTION
-#
-template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
-#
 # INSTALL FUNCTION
 #
-template::install()
+dry::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING TEMPLATE"
+	echo "INSTALLING DRY"
 	echo "===================================================================="
 	echo
 
-	echo
+	[[ ! -d "$USERDIR"/downloads ]] && mkdir -p "$USERDIR"/downloads
+
+	wget -O "$USERDIR"/downloads/dryup.zsh https://moncho.github.io/dry/dryup.zsh
+
+	chmod 0755 "$USERDIR"/downloads/dryup.zsh
+
+	sh "$USERDIR"/downloads/dryup.zsh
+
+	chmod 0755 /usr/local/bin/dry
 
 	echo
 	echo "DONE!"
@@ -60,11 +43,11 @@ template::install()
 #
 # CONFIG FUNCTION
 #
-template::config()
+dry::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING TEMPLATE"
+	echo "CONFIGURING DRY"
 	echo "===================================================================="
 	echo
 
@@ -77,32 +60,15 @@ template::config()
 #
 # REMOVE FUNCTION
 #
-template::remove()
+dry::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING TEMPLATE"
+	echo "UNINSTALLING DRY"
 	echo "===================================================================="
 	echo
 
-	echo
-
-	echo
-	echo "DONE!"
-	echo
-}
-#
-# TEST FUNCTION
-#
-template::test()
-{
-	echo
-	echo "===================================================================="
-	echo "TESTING TEMPLATE"
-	echo "===================================================================="
-	echo
-
-	echo
+	rm -f /usr/local/bin/dry
 
 	echo
 	echo "DONE!"

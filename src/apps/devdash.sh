@@ -1,9 +1,9 @@
 # ==================================================================
-# src/apps/template
+# src/apps/devdash
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/template
+# File:         src/apps/devdash
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -16,42 +16,29 @@
 # FUNCTIONS
 # ==================================================================
 #
-# HELP FUNCTION
-#
-template::help()
-{
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo "${WHITE}TEMPLATE HELP${RESET}"
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-
-
-
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-}
-#
-# REQUIRES FUNCTION
-#
-template::requires() { echo; }
-#
 # INSTALLED FUNCTION
 #
-template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
+devdash::installed() { command -v devdash; }
 #
 # INSTALL FUNCTION
 #
-template::install()
+devdash::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING TEMPLATE"
+	echo "INSTALLING DEVDASH"
 	echo "===================================================================="
 	echo
 
-	echo
+	cd "$XDG_DOWNLOAD_DIR" || return 1
+
+	curl -LO https://raw.githubusercontent.com/Phantas0s/devdash/master/install/linux.sh
+
+	mv linux.sh install-devdash.sh
+
+	sh ./install-devdash.sh
+
+	cd - || return 1
 
 	echo
 	echo "DONE!"
@@ -60,15 +47,16 @@ template::install()
 #
 # CONFIG FUNCTION
 #
-template::config()
+devdash::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING TEMPLATE"
+	echo "CONFIGURING DEVDASH"
 	echo "===================================================================="
 	echo
 
-	echo
+	# default location for config file is:
+	# $XDG_CONFIG_HOME/devdash/default.yml
 
 	echo
 	echo "DONE!"
@@ -77,15 +65,15 @@ template::config()
 #
 # REMOVE FUNCTION
 #
-template::remove()
+devdash::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING TEMPLATE"
+	echo "UNINSTALLING DEVDASH"
 	echo "===================================================================="
 	echo
 
-	echo
+	rm -f "$XDG_DOWNLOAD_DIR/install-devdash.sh"
 
 	echo
 	echo "DONE!"
@@ -94,11 +82,11 @@ template::remove()
 #
 # TEST FUNCTION
 #
-template::test()
+devdash::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING TEMPLATE"
+	echo "TESTING DEVDASH"
 	echo "===================================================================="
 	echo
 

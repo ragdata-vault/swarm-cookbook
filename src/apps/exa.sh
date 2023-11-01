@@ -1,9 +1,9 @@
 # ==================================================================
-# src/apps/template
+# src/apps/exa
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/template
+# File:         src/apps/exa
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -16,42 +16,25 @@
 # FUNCTIONS
 # ==================================================================
 #
-# HELP FUNCTION
-#
-template::help()
-{
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo "${WHITE}TEMPLATE HELP${RESET}"
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-
-
-
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-}
-#
 # REQUIRES FUNCTION
 #
-template::requires() { echo; }
+exa::requires() { echo; }
 #
 # INSTALLED FUNCTION
 #
-template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
+exa::installed() { command -v exa; }
 #
 # INSTALL FUNCTION
 #
-template::install()
+exa::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING TEMPLATE"
+	echo "INSTALLING EXA"
 	echo "===================================================================="
 	echo
 
-	echo
+	sudo apt install -y exa
 
 	echo
 	echo "DONE!"
@@ -60,11 +43,11 @@ template::install()
 #
 # CONFIG FUNCTION
 #
-template::config()
+exa::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING TEMPLATE"
+	echo "CONFIGURING EXA"
 	echo "===================================================================="
 	echo
 
@@ -77,15 +60,15 @@ template::config()
 #
 # REMOVE FUNCTION
 #
-template::remove()
+exa::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING TEMPLATE"
+	echo "UNINSTALLING EXA"
 	echo "===================================================================="
 	echo
 
-	echo
+	sudo purge -y --autoremove exa
 
 	echo
 	echo "DONE!"
@@ -94,11 +77,11 @@ template::remove()
 #
 # TEST FUNCTION
 #
-template::test()
+exa::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING TEMPLATE"
+	echo "TESTING EXA"
 	echo "===================================================================="
 	echo
 

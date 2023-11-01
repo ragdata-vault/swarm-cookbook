@@ -1,9 +1,9 @@
 # ==================================================================
-# src/apps/template
+# src/apps/docker-ctop
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/template
+# File:         src/apps/docker-ctop
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -16,42 +16,26 @@
 # FUNCTIONS
 # ==================================================================
 #
-# HELP FUNCTION
-#
-template::help()
-{
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo "${WHITE}TEMPLATE HELP${RESET}"
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-
-
-
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-}
-#
-# REQUIRES FUNCTION
-#
-template::requires() { echo; }
-#
 # INSTALLED FUNCTION
 #
-template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
+docker-ctop::installed() { command -v docker-ctop; }
 #
 # INSTALL FUNCTION
 #
-template::install()
+docker-ctop::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING TEMPLATE"
+	echo "INSTALLING DOCKER-CTOP"
 	echo "===================================================================="
 	echo
 
-	echo
+	curl -fsSL https://azlux.fr/repo.gpg.key | gpg --dearmor -o /usr/share/keyrings/azlux-archive-keyring.gpg
+	echo \
+        "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/azlux-archive-keyring.gpg] http://packages.azlux.fr/debian \
+        $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/azlux.list >/dev/null
+	sudo apt update
+	sudo apt install -y docker-ctop
 
 	echo
 	echo "DONE!"
@@ -60,11 +44,11 @@ template::install()
 #
 # CONFIG FUNCTION
 #
-template::config()
+docker-ctop::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING TEMPLATE"
+	echo "CONFIGURING DOCKER-CTOP"
 	echo "===================================================================="
 	echo
 
@@ -77,15 +61,15 @@ template::config()
 #
 # REMOVE FUNCTION
 #
-template::remove()
+docker-ctop::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING TEMPLATE"
+	echo "UNINSTALLING DOCKER-CTOP"
 	echo "===================================================================="
 	echo
 
-	echo
+	sudo apt purge -y --autoremove docker-ctop
 
 	echo
 	echo "DONE!"
@@ -94,11 +78,11 @@ template::remove()
 #
 # TEST FUNCTION
 #
-template::test()
+docker-ctop::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING TEMPLATE"
+	echo "TESTING DOCKER-CTOP"
 	echo "===================================================================="
 	echo
 

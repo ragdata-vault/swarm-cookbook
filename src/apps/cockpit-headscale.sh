@@ -1,9 +1,9 @@
 # ==================================================================
-# src/apps/template
+# src/apps/cockpit-headscale
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/template
+# File:         src/apps/cockpit-headscale
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -16,42 +16,23 @@
 # FUNCTIONS
 # ==================================================================
 #
-# HELP FUNCTION
-#
-template::help()
-{
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo "${WHITE}TEMPLATE HELP${RESET}"
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-
-
-
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-}
-#
-# REQUIRES FUNCTION
-#
-template::requires() { echo; }
-#
-# INSTALLED FUNCTION
-#
-template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
-#
 # INSTALL FUNCTION
 #
-template::install()
+cockpit-headscale::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING TEMPLATE"
+	echo "INSTALLING COCKPIT-HEADSCALE"
 	echo "===================================================================="
 	echo
 
-	echo
+	[[ ! -d "$USERDIR"/downloads ]] && mkdir -p "$USERDIR"/downloads
+
+	wget -O "$USERDIR"/downloads/cockpit-headscale-v0.0.1-1.fc38.noarch.rpm https://github.com/spotsnel/cockpit-headscale/releases/download/v0.0.1/cockpit-headscale-v0.0.1-1.fc38.noarch.rpm
+
+	rpm -ivh "$USERDIR"/downloads/cockpit-headscale-v0.0.1-1.fc38.noarch.rpm
+
+	systemctl restart cockpit.socket
 
 	echo
 	echo "DONE!"
@@ -60,11 +41,11 @@ template::install()
 #
 # CONFIG FUNCTION
 #
-template::config()
+cockpit-headscale::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING TEMPLATE"
+	echo "CONFIGURING COCKPIT-HEADSCALE"
 	echo "===================================================================="
 	echo
 
@@ -77,32 +58,17 @@ template::config()
 #
 # REMOVE FUNCTION
 #
-template::remove()
+cockpit-headscale::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING TEMPLATE"
+	echo "UNINSTALLING COCKPIT-HEADSCALE"
 	echo "===================================================================="
 	echo
 
-	echo
+	rpm -e cockpit-headscale
 
-	echo
-	echo "DONE!"
-	echo
-}
-#
-# TEST FUNCTION
-#
-template::test()
-{
-	echo
-	echo "===================================================================="
-	echo "TESTING TEMPLATE"
-	echo "===================================================================="
-	echo
-
-	echo
+	systemctl restart cockpit.socket
 
 	echo
 	echo "DONE!"

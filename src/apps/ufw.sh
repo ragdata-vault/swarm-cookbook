@@ -1,9 +1,9 @@
 # ==================================================================
-# src/apps/template
+# src/apps/ufw
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/template
+# File:         src/apps/ufw
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -16,42 +16,17 @@
 # FUNCTIONS
 # ==================================================================
 #
-# HELP FUNCTION
-#
-template::help()
-{
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo "${WHITE}TEMPLATE HELP${RESET}"
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-
-
-
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-}
-#
-# REQUIRES FUNCTION
-#
-template::requires() { echo; }
-#
-# INSTALLED FUNCTION
-#
-template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
-#
 # INSTALL FUNCTION
 #
-template::install()
+ufw::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING TEMPLATE"
+	echo "INSTALLING UFW"
 	echo "===================================================================="
 	echo
 
-	echo
+	sudo apt install -y ufw
 
 	echo
 	echo "DONE!"
@@ -60,15 +35,32 @@ template::install()
 #
 # CONFIG FUNCTION
 #
-template::config()
+ufw::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING TEMPLATE"
+	echo "CONFIGURING UFW"
 	echo "===================================================================="
 	echo
 
-	echo
+	ufw allow 2376/tcp			# docker
+	ufw allow 7946/udp
+	ufw allow 7946/tcp
+	ufw allow 80/tcp			# http
+	ufw allow 8080/tcp			# http
+	ufw allow 9090/tcp			# cockpit
+	ufw allow 443/tcp			# https
+	ufw allow 2377/tcp			# docker
+	ufw allow 3000/tcp			# pm2
+	ufw allow 3001/tcp			# pm2
+
+	ufw allow 53/udp			# dns
+	ufw allow 4789/udp
+
+	ufw allow samba
+
+	ufw reload
+	ufw enable
 
 	echo
 	echo "DONE!"
@@ -77,32 +69,15 @@ template::config()
 #
 # REMOVE FUNCTION
 #
-template::remove()
+ufw::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING TEMPLATE"
+	echo "UNINSTALLING UFW"
 	echo "===================================================================="
 	echo
 
-	echo
-
-	echo
-	echo "DONE!"
-	echo
-}
-#
-# TEST FUNCTION
-#
-template::test()
-{
-	echo
-	echo "===================================================================="
-	echo "TESTING TEMPLATE"
-	echo "===================================================================="
-	echo
-
-	echo
+	sudo apt purge -y --autoremove ufw
 
 	echo
 	echo "DONE!"

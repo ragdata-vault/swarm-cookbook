@@ -1,9 +1,9 @@
 # ==================================================================
-# src/apps/template
+# src/apps/shellcheck
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/template
+# File:         src/apps/shellcheck
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -16,42 +16,17 @@
 # FUNCTIONS
 # ==================================================================
 #
-# HELP FUNCTION
-#
-template::help()
-{
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo "${WHITE}TEMPLATE HELP${RESET}"
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-
-
-
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-}
-#
-# REQUIRES FUNCTION
-#
-template::requires() { echo; }
-#
-# INSTALLED FUNCTION
-#
-template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
-#
 # INSTALL FUNCTION
 #
-template::install()
+shellcheck::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING TEMPLATE"
+	echo "INSTALLING SHELLCHECK"
 	echo "===================================================================="
 	echo
 
-	echo
+	sudo apt install -y shellcheck
 
 	echo
 	echo "DONE!"
@@ -60,11 +35,11 @@ template::install()
 #
 # CONFIG FUNCTION
 #
-template::config()
+shellcheck::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING TEMPLATE"
+	echo "CONFIGURING SHELLCHECK"
 	echo "===================================================================="
 	echo
 
@@ -77,15 +52,15 @@ template::config()
 #
 # REMOVE FUNCTION
 #
-template::remove()
+shellcheck::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING TEMPLATE"
+	echo "UNINSTALLING SHELLCHECK"
 	echo "===================================================================="
 	echo
 
-	echo
+	sudo apt purge -y --autoremove shellcheck
 
 	echo
 	echo "DONE!"
@@ -94,11 +69,11 @@ template::remove()
 #
 # TEST FUNCTION
 #
-template::test()
+shellcheck::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING TEMPLATE"
+	echo "TESTING SHELLCHECK"
 	echo "===================================================================="
 	echo
 

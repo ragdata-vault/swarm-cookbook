@@ -1,9 +1,9 @@
 # ==================================================================
-# src/apps/template
+# src/apps/sysstat
 # ==================================================================
 # Swarm Cookbook - App Installer
 #
-# File:         src/apps/template
+# File:         src/apps/sysstat
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
@@ -16,42 +16,17 @@
 # FUNCTIONS
 # ==================================================================
 #
-# HELP FUNCTION
-#
-template::help()
-{
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo "${WHITE}TEMPLATE HELP${RESET}"
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-
-
-
-	echo
-	echo "${GOLD}====================================================================${RESET}"
-	echo
-}
-#
-# REQUIRES FUNCTION
-#
-template::requires() { echo; }
-#
-# INSTALLED FUNCTION
-#
-template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
-#
 # INSTALL FUNCTION
 #
-template::install()
+sysstat::install()
 {
 	echo
 	echo "===================================================================="
-	echo "INSTALLING TEMPLATE"
+	echo "INSTALLING SYSSTAT"
 	echo "===================================================================="
 	echo
 
-	echo
+	sudo apt install -y sysstat
 
 	echo
 	echo "DONE!"
@@ -60,15 +35,18 @@ template::install()
 #
 # CONFIG FUNCTION
 #
-template::config()
+sysstat::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING TEMPLATE"
+	echo "CONFIGURING SYSSTAT"
 	echo "===================================================================="
 	echo
 
-	echo
+    sed -i '/^ENABLED.*/c\ENABLED="true"' /etc/default/sysstat
+
+    systemctl enable sysstat
+    systemctl start sysstat
 
 	echo
 	echo "DONE!"
@@ -77,15 +55,15 @@ template::config()
 #
 # REMOVE FUNCTION
 #
-template::remove()
+sysstat::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING TEMPLATE"
+	echo "UNINSTALLING SYSSTAT"
 	echo "===================================================================="
 	echo
 
-	echo
+	sudo apt install -y sysstat
 
 	echo
 	echo "DONE!"
@@ -94,11 +72,11 @@ template::remove()
 #
 # TEST FUNCTION
 #
-template::test()
+sysstat::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING TEMPLATE"
+	echo "TESTING SYSSTAT"
 	echo "===================================================================="
 	echo
 
