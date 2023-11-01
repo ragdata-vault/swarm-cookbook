@@ -413,11 +413,11 @@ install::report()
 	echo -e "\t (Q)uit"
 	echo
 
-		if [[ "${SHELL##*/}" == 'zsh' ]]; then
-			read -rs -k 1 resp
-		elif [[ "${SHELL##*/}" == 'bash' ]]; then
-			read -rs -n 1 resp
-		fi
+	if [[ "${SHELL##*/}" == 'zsh' ]]; then
+		read -rs -k 1 resp
+	elif [[ "${SHELL##*/}" == 'bash' ]]; then
+		read -rs -n 1 resp
+	fi
 
 	resp="${resp,,}"
 
@@ -498,6 +498,9 @@ do
 		zsh)
 			loadSource zsh -i "${@:2}"
 			;;
+		zsh-p10k)
+			loadSource zsh-p10k -i
+			;;
 		plugins)
 			loadSource zsh-plugins -i
 			;;
@@ -505,4 +508,8 @@ do
 	shift
 done
 
-install::report
+if [[ -n "$ZSH_RESTART" ]]; then
+	exec zsh
+else
+	install::report
+fi

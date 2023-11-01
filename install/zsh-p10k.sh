@@ -1,81 +1,38 @@
-#!/usr/bin/env bash
-# shellcheck disable=SC2155
 # ==================================================================
-# install/zsh
+# install/zsh-p10k
 # ==================================================================
 # Swarm Cookbook - Installer Source File
 #
-# File:         install/zsh
+# File:         install/zsh-p10k
 # Author:       Ragdata
 # Date:         09/10/2023
 # License:      MIT License
 # Copyright:    Copyright © 2023 Darren Poulton (Ragdata)
 # ==================================================================
-# DEPENDENCIES
+# VARIABLES
 # ==================================================================
-
-# ==================================================================
-# HELPER FUNCTIONS
-# ==================================================================
-
+export ZSH_RESTART=1
 # ==================================================================
 # FUNCTIONS
 # ==================================================================
 #
 # INSTALLED FUNCTION
 #
-zsh::installed() { return 0; }
+zsh-p10k::installed() { return 1; }
 #
 # INSTALL FUNCTION
 #
-zsh::install()
+zsh-p10k::install()
 {
-	if [[ -z "$USERNAME" ]]; then
-		echo "ERROR :: 'USERNAME' Undefined!"
-		exit 1
-	fi
-
 	echo
 	echo "===================================================================="
-	echo "INSTALLING :: ZSH"
+	echo "INSTALLING :: POWERLEVEL10K FILES"
 	echo "===================================================================="
 	echo
 
-	if [[ -z "$1" ]]; then
-		sudo apt update && sudo apt upgrade -y
+	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$USERDIR/.oh-my-zsh/custom}"/themes/powerlevel10k
 
-		mkdir -p "$USERDIR"/.bash_archive
-
-		mv "$USERDIR/.bash*" "$USERDIR/.bash_archive/."
-		mv "$USERDIR/.profile" "$USERDIR/.bash_archive/."
-
-		chown -R "$USERNAME":"$USERNAME" "$USERDIR"/.bash_archive
-
-		sudo apt install -y zsh
-
-		chsh -s "$(which zsh)" "$USERNAME"
-
-		zsh
-
-		if [[ ! -f "$USERDIR"/.zshrc ]]; then touch "$USERDIR"/.zshrc; fi
-
-		echo "sudo ./$REPO/install.sh zsh cont" >> "$USERDIR"/.zshrc
-
-		sudo reboot
-	elif [[ "${1,,}" == "cont" ]]; then
-		# remove line in .zshrc written before reboot
-		cp "$USERDIR"/.zshrc "$USERDIR"/.zshrc.copy
-		rm -f "$USERDIR"/.zshrc
-		head -n -1 "$USERDIR"/.zshrc.copy > "$USERDIR"/.zshrc
-
-		if [[ ! -d "$XDG_DOWNLOAD_DIR" ]]; then mkdir -p "$XDG_DOWNLOAD_DIR"; fi
-
-		chown "$USERNAME":"$USERNAME" "$XDG_DOWNLOAD_DIR"
-
-		# install oh-my-zsh
-		sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O "$XDG_DOWNLOAD_DIR"/install-oh-my-zsh.sh)"
-	fi
-
+	sed -i '/^ZSH_THEME.*/c\ZSH_THEME="powerlevel10k/powerlevel10k"' "$USERDIR"/.zshrc
 
 	echo
 	echo "DONE!"
@@ -84,11 +41,11 @@ zsh::install()
 #
 # CONFIG FUNCTION
 #
-zsh::config()
+zsh-p10k::config()
 {
 	echo
 	echo "===================================================================="
-	echo "CONFIGURING :: ZSH"
+	echo "CONFIGURING :: POWERLEVEL10K FILES"
 	echo "===================================================================="
 	echo
 
@@ -101,11 +58,11 @@ zsh::config()
 #
 # REMOVE FUNCTION
 #
-zsh::remove()
+zsh-p10k::remove()
 {
 	echo
 	echo "===================================================================="
-	echo "UNINSTALLING :: ZSH"
+	echo "UNINSTALLING :: POWERLEVEL10K FILES"
 	echo "===================================================================="
 	echo
 
@@ -118,11 +75,11 @@ zsh::remove()
 #
 # TEST FUNCTION
 #
-zsh::test()
+zsh-p10k::test()
 {
 	echo
 	echo "===================================================================="
-	echo "TESTING :: ZSH"
+	echo "TESTING :: POWERLEVEL10K FILES"
 	echo "===================================================================="
 	echo
 
