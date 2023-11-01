@@ -13,7 +13,9 @@
 # ==================================================================
 # DEPENDENCIES
 # ==================================================================
+# define REPO
 if [[ -z "$REPO" ]]; then export REPO="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"; fi
+# copy default environment variables
 if [[ ! -f "$REPO"/.env ]]; then cp "$REPO"/.env.dist "$REPO"/.env; fi
 # include environment file
 source "$REPO"/.env
@@ -51,7 +53,7 @@ zsh::install()
 
 		sudo apt install -y zsh
 
-		sudo chsh -s "$(which zsh)" "$USERNAME"
+		chsh -s "$(which zsh)" "$USERNAME"
 
 		if [[ -f "$USERDIR"/.zshrc ]]; then
 			echo "sudo bash $REPO/install/zsh.sh cont" >> "$USERDIR"/.zshrc
