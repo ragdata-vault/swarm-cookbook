@@ -13,14 +13,7 @@
 # ==================================================================
 # DEPENDENCIES
 # ==================================================================
-# define REPO
-if [[ -z "$REPO" ]]; then export REPO="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"; fi
-# copy default environment variables
-if [[ ! -f "$REPO"/.env ]]; then cp "$REPO"/.env.dist "$REPO"/.env; fi
-# include environment file
-source "$REPO"/.env
-# initialize logFile
-if [[ -z "$logFile" ]] || [[ ! -f "$LOGDIR/$logFile" ]]; then init::log ZSH-"$(logTime)"; fi
+
 # ==================================================================
 # HELPER FUNCTIONS
 # ==================================================================
@@ -53,8 +46,6 @@ zsh::install()
 
 		mkdir -p "$USERDIR"/.bash_archive
 
-		while IFS= read -r file; do filename="${file##*/}"; mv "$file" "$USERDIR"/.bash_archive/"$filename"; done < <(find "$USERDIR" -maxdepth 1 -name ".bash*" -type f)
-
 		mv "$USERDIR/.bash*" "$USERDIR/.bash_archive/."
 		mv "$USERDIR/.profile" "$USERDIR/.bash_archive/."
 
@@ -62,18 +53,19 @@ zsh::install()
 
 		chsh -s "$(which zsh)" "$USERNAME"
 
-		if [[ -f "$USERDIR"/.zshrc ]]; then
-			echo "sudo bash $REPO/install/zsh.sh cont" >> "$USERDIR"/.zshrc
-		else
-			echo "sudo bash $REPO/install/zsh.sh cont" > "$USERDIR"/.zshrc
-		fi
+		if [[ ! -f "$USERDIR"/.zshrc ]]; then touch "$USERDIR"/.zshrc; fi
+
+		# echo "sudo ./$REPO/install.sh zsh cont" >> "$USERDIR"/.zshrc
+
+		chown -R "$USERNAME":"$USERNAME" "$USERDIR"/.bash_archive
+		chown "$USERNAME":"$USERNAME" "$USERDIR"/.zshrc
 
 		sudo reboot
 	elif [[ "${1,,}" == "cont" ]]; then
 		# remove line in .zshrc written before reboot
-		tail -n 1 "$USERDIR/.zshrc" | wc -c xargs -I {} truncate "$USERDIR/.zshrc" -s -{}
-		# install zsh plugins
-		sudo ./"$REPO"/install.sh plugins
+		cp "$USERDIR"/.zshrc "$USERDIR"/.zshrc.copy
+		rm -f "$USERDIR"/.zshrc
+		head -n -1 "$USERDIR"/.zshrc.copy > "$USERDIR"/.zshrc
 	fi
 
 
@@ -132,25 +124,3 @@ zsh::test()
 	echo "DONE!"
 	echo
 }
-#
-# REPORT FUNCTION
-#
-zsh::report()
-{
-	echo
-	echo "===================================================================="
-	echo "REPORTING :: ZSH"
-	echo "===================================================================="
-	echo
-
-	echo
-
-	echo
-	echo "DONE!"
-	echo
-}
-# ==================================================================
-# MAIN
-# ==================================================================
-zsh::install "$@"
-zsh::report

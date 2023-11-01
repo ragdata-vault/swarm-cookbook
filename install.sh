@@ -228,29 +228,29 @@ if [[ "${SHELL##*/}" == 'bash' ]]; then
 		# INSTALLED
 		if [[ "${FILEOPTS[installed]}" -eq 1 ]]; then
 			log::file "Checking if '$fileName' installed"
-			eval "$fileName::installed"
+			eval "$fileName::installed $*"
 			return $?
 		fi
 		# INSTALL & REMOVE
 		if [[ "${FILEOPTS[install]}" -eq 1 ]]; then
 			log::file "Installing '$fileName'"
-			eval "$fileName::install $logFile"
+			eval "$fileName::install $*"
 			return $?
 		elif [[ "${FILEOPTS[remove]}" -eq 1 ]]; then
 			log::file "Uninstalling '$fileName'"
-			eval "$fileName::remove $logFile"
+			eval "$fileName::remove $*"
 			return $?
 		fi
 		# CONFIGURE
 		if [[ "${FILEOPTS[config]}" -eq 1 ]]; then
 			log::file "Configuring '$fileName'"
-			eval "$fileName::config $logFile"
+			eval "$fileName::config $*"
 			return $?
 		fi
 		# TEST
 		if [[ "${FILEOPTS[test]}" -eq 1 ]]; then
 			log::file "Testing '$fileName'"
-			eval "$fileName::test $logFile"
+			eval "$fileName::test $*"
 			return $?
 		fi
 	}
@@ -460,46 +460,46 @@ do
 			install::install
 			;;
 		bin)
-			loadSource bin.sh -i
+			loadSource bin -i
 			;;
 		rmBin|binRemove)
-			loadSource bin.sh -r
+			loadSource bin -r
 			;;
 		config)
-			loadSource config.sh -i
+			loadSource config -i
 			;;
 		rmConfig|configRemove)
-			loadSource config.sh -r
+			loadSource config -r
 			;;
 		dotfiles)
-			loadSource dotfiles.sh -i
+			loadSource dotfiles -i
 			;;
 		rmDotfiles|dotfilesRemove)
-			loadSource dotfiles.sh -r
+			loadSource dotfiles -r
 			;;
 		init)
 			install::init
 			;;
 		lib)
-			loadSource lib.sh -i
+			loadSource lib -i
 			;;
 		rmLib|libRemove)
-			loadSource lib.sh -r
+			loadSource lib -r
 			;;
 		swarm)
-			loadSource swarm.sh -i
+			loadSource swarm -i
 			;;
 		rmSwarm|swarmRemove)
-			loadSource swarm.sh -r
+			loadSource swarm -r
 			;;
 		node)
-			loadSource node.sh -i -c
+			loadSource node -i -c
 			;;
 		zsh)
-			sudo bash "$REPO"/install/zsh.sh "${@:2}"
+			loadSource zsh -i "${@:2}"
 			;;
 		plugins)
-			loadSource zsh-plugins.sh -i
+			loadSource zsh-plugins -i
 			;;
 	esac
 	shift
