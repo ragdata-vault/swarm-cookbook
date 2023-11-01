@@ -48,14 +48,14 @@ if ! grep -q 'function' <<< "$(type loadLib 2> /dev/null)"; then
 fi
 # load common.zsh library
 if ! grep -q 'function' <<< "$(type historyStats 2> /dev/null)"; then loadLib common.zsh; fi
-# create .env, if not exists
-if [[ ! -f "$REPO"/.env ]]; then cp "$REPO"/.env.dist "$REPO"/.env; fi
-# create .node, if not exists
-if [[ ! -f "$REPO"/.node ]]; then cp "$REPO"/.node.dist "$REPO"/.node; fi
-# set file ownership
-chown "$USERNAME":"$USERNAME" "$REPO"/.env "$REPO"/.node
-# load .env & .node
-source "$REPO"/.env; source "$REPO"/.node;
+## create .env, if not exists
+#if [[ ! -f "$REPO"/.env ]]; then cp "$REPO"/.env.dist "$REPO"/.env; fi
+## create .node, if not exists
+#if [[ ! -f "$REPO"/.node ]]; then cp "$REPO"/.node.dist "$REPO"/.node; fi
+## set file ownership
+#chown "$USERNAME":"$USERNAME" "$REPO"/.env "$REPO"/.node
+## load .env & .node
+#source "$REPO"/.env; source "$REPO"/.node;
 # initialize log
 if [[ "${1,,}" == "logfile" ]]; then export logFile="${2:-}"; shift 2; else log::init; fi
 # ==================================================================
