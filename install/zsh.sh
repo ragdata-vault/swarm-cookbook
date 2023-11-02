@@ -54,11 +54,11 @@ zsh::install()
 
 		sudo apt install -y zsh
 
-		chsh -s "$(which zsh)" "$USERNAME"
+		sudo chsh -s "$(which zsh)" "$USERNAME"
 
 		zsh
 
-		if [[ ! -f "$USERDIR"/.zshrc ]]; then touch "$USERDIR"/.zshrc; fi
+		if [[ ! -f "$USERDIR"/.zshrc ]]; then touch "$USERDIR"/.zshrc; chown "$USERNAME":"$USERNAME" "$USERDIR"/.zshrc; fi
 
 		echo "bash; sudo .$REPO/install.sh zsh cont;" >> "$USERDIR"/.zshrc
 
