@@ -56,13 +56,20 @@ zsh::install()
 
 		sudo chsh -s "$(which zsh)" "$USERNAME"
 
-		zsh
+		echo
+		echo "===================================================================="
+		echo "ZSH INSTALLED!"
+		echo "===================================================================="
+		echo
+		echo "To configure, type 'zsh'"
+		echo
+		echo "Then, to install Oh-My-ZSH, type: 'sudo ./install.sh zsh cont'"
+		echo
+		echo "Finally, if you'd like to install the PowerLevel10K theme, type:"
+		echo
+		echo "'sudo ./install.sh zsh-p10k'"
+		echo
 
-		if [[ ! -f "$USERDIR"/.zshrc ]]; then touch "$USERDIR"/.zshrc; chown "$USERNAME":"$USERNAME" "$USERDIR"/.zshrc; fi
-
-		echo "bash; sudo .$REPO/install.sh zsh cont;" >> "$USERDIR"/.zshrc
-
-		sudo reboot
 	elif [[ "${1,,}" == "cont" ]]; then
 		# remove line in .zshrc written before reboot
 		cp "$USERDIR"/.zshrc "$USERDIR"/.zshrc.copy
