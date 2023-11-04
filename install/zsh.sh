@@ -84,7 +84,6 @@ zsh::install()
 		sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O "$XDG_DOWNLOAD_DIR"/install-oh-my-zsh.sh)"
 	fi
 
-
 	echo
 	echo "DONE!"
 	echo
