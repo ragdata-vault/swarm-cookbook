@@ -498,6 +498,9 @@ do
 		zsh)
 			loadSource zsh -i "${@:2}"
 			;;
+		rmzsh|zshRemove)
+			loadSource zsh -r
+			;;
 		zsh-p10k)
 			loadSource zsh-p10k -i
 			;;
