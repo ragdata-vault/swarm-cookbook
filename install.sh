@@ -346,6 +346,8 @@ if [[ "${1,,}" == "logfile" ]]; then export logFile="${2:-}"; shift 2; else log:
 # ------------------------------------------------------------------
 install::init()
 {
+	if [[ -f "$USERDIR/.local/.node-init" ]]; then return 0; fi
+
 	echo
 	echo "=================================================================="
 	echo "SYSTEM INITIALIZATION"
@@ -356,6 +358,9 @@ install::init()
 	checkPkg "redis" "Redis"
 	loadSource redis -c
 	checkPkg "dialog" "Dialog"
+
+	if [[ ! -d "$USERDIR/.local" ]]; then mkdir -p "$USERDIR/.local"; fi
+	touch "$USERDIR/.local/.node-init"
 
 	echo
 	echo "SYSTEM INITIALIZATION - DONE!"

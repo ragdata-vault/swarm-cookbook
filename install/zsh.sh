@@ -46,7 +46,7 @@ zsh::install()
 
 		mkdir -p "$USERDIR"/.bash_archive
 
-		while IFS= read -r file; do filename="${file##*/}"; mv "$file" "$USERDIR"/.bash_archive/"$filename"; done < <(find "$USERDIR" maxdepth 1 -name ".bash*" -type f)
+		while IFS= read -r file; do filename="${file##*/}"; mv "$file" "$USERDIR"/.bash_archive/"$filename"; done < <(find "$USERDIR" -maxdepth 1 -name ".bash*" -type f)
 
 		mv "$USERDIR/.profile" "$USERDIR/.bash_archive/."
 
@@ -68,7 +68,6 @@ zsh::install()
 		echo "Finally, if you'd like to install the PowerLevel10K theme (if you also installed Oh-My-ZSH), type:"
 		echo
 		echo "'sudo ./install.sh zsh-p10k'"
-		echo
 
 	elif [[ "${1,,}" == "cont" ]]; then
 		# remove line in .zshrc written before reboot
@@ -118,13 +117,18 @@ zsh::remove()
 
 	sudo chsh -s "$(which bash)" "$USERNAME"
 
-	while IFS= read -r file; do filename="${file##*/}"; mv "$file" "$USERDIR"/.bash_archive/"$filename"; done < <(find "$USERDIR/.bash_archive" maxdepth 1 -name ".bash*" -type f)
+	while IFS= read -r file; do filename="${file##*/}"; mv "$file" "$USERDIR"/.bash_archive/"$filename"; done < <(find "$USERDIR/.bash_archive" -maxdepth 1 -name ".bash*" -type f)
 
-	mv "$USERDIR/.bash_archive/.profile" "$USERDIR/."
+	if [[ -f "$USERDIR/.bash_archive/.profile" ]]; then mv "$USERDIR/.bash_archive/.profile" "$USERDIR/."; fi
 
-	sudo purge -y --autoremove zsh
+	sudo apt purge -y --autoremove zsh
 
-	bash
+	echo
+	echo "===================================================================="
+	echo "ZSH REMOVED!"
+	echo "===================================================================="
+	echo
+	echo "To switch bach to bash (if you haven't already), type 'bash'"
 
 	echo
 	echo "DONE!"
