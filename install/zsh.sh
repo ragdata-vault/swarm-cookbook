@@ -80,7 +80,17 @@ zsh::install()
 		chown "$USERNAME":"$USERNAME" "$XDG_DOWNLOAD_DIR"
 
 		# install oh-my-zsh
-		sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O "$XDG_DOWNLOAD_DIR"/install-oh-my-zsh.sh)"
+		wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O "$XDG_DOWNLOAD_DIR/install-oh-my-zsh.sh"
+		chmod +x "$XDG_DOWNLOAD_DIR/install-oh-my-zsh.sh"
+		chown "$USERNAME":"$USERNAME" "$XDG_DOWNLOAD_DIR/install-oh-my-zsh.sh"
+
+		echo
+		echo "===================================================================="
+		echo "OH-MY-ZSH DOWNLOADED!"
+		echo "===================================================================="
+		echo
+		echo "To install, type 'cd $XDG_DOWNLOAD_DIR; ./install-oh-my-zsh.sh'"
+
 	fi
 
 	echo

@@ -323,6 +323,25 @@ if [[ "${SHELL##*/}" == 'bash' ]]; then
 	# redis::passGET
 	# ------------------------------------------------------------------
 	redis::passGET() { sudo sed -n -e '/^requirepass.*/p' /etc/redis/redis.conf | awk '{print $2}'; }
+else
+	# ------------------------------------------------------------------
+	# loadLib
+	# ------------------------------------------------------------------
+	loadLib()
+	{
+		local file="${1:-}"
+
+		if [[ "${1:0:1}" == "/" ]] && [[ -f "$file" ]]; then
+			source "$file"
+		elif [[ -f /usr/local/lib/"$file" ]]; then
+			source /usr/local/lib/"$file"
+		elif [[ -f "$REPO"/src/lib/"$file" ]]; then
+			source "$REPO"/src/lib/"$file"
+		else
+			echo "Library File '$file' Not Found!"
+			exit 1
+		fi
+	}
 fi
 # ==================================================================
 # DEPENDENCIES
@@ -503,7 +522,10 @@ do
 		zsh)
 			loadSource zsh -i "${@:2}"
 			;;
-		rmzsh|zshRemove)
+		configZSH|zshConfig)
+			loadSource zsh -c
+			;;
+		rmZSH|zshRemove)
 			loadSource zsh -r
 			;;
 		zsh-p10k)
