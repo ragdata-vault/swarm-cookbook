@@ -65,7 +65,7 @@ zsh::install()
 		echo
 		echo "Then, to install Oh-My-ZSH, type: 'sudo ./install.sh zsh cont'"
 		echo
-		echo "Finally, if you'd like to install the PowerLevel10K theme, type:"
+		echo "Finally, if you'd like to install the PowerLevel10K theme (if you also installed Oh-My-ZSH), type:"
 		echo
 		echo "'sudo ./install.sh zsh-p10k'"
 		echo
@@ -117,7 +117,15 @@ zsh::remove()
 	echo "===================================================================="
 	echo
 
-	echo
+	sudo chsh -s "$(which bash)" "$USERNAME"
+
+	while IFS= read -r file; do filename="${file##*/}"; mv "$file" "$USERDIR"/.bash_archive/"$filename"; done < <(find "$USERDIR/.bash_archive" maxdepth 1 -name ".bash*" -type f)
+
+	mv "$USERDIR/.bash_archive/.profile" "$USERDIR/."
+
+	sudo purge -y --autoremove zsh
+
+	bash
 
 	echo
 	echo "DONE!"
@@ -134,9 +142,13 @@ zsh::test()
 	echo "===================================================================="
 	echo
 
-	echo
+	local rv
+
+	if [[ -n "$ZSH_VERSION" ]]; then echo "ZSH WORKING OK!"; rv=0; else echo "ZSH NOT RESPONDING!"; rv=1; fi
 
 	echo
 	echo "DONE!"
 	echo
+
+	return "$rv"
 }
