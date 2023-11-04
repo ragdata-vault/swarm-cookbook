@@ -76,7 +76,7 @@ lib::remove()
 	echo
 
 	cd /usr/local/lib || return 1
-	rm -f ./*.zsh
+	rm -f ./*.sh
 	cd - || return 1
 
 	echo
