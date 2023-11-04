@@ -282,29 +282,29 @@ loadSource()
 	# INSTALLED
 	if [[ "${FILEOPTS[installed]}" -eq 1 ]]; then
 		log::file "Checking if '$fileName' installed"
-		eval "$fileName::installed"
+		eval "$fileName::installed $*"
 		return $?
 	fi
 	# INSTALL & REMOVE
 	if [[ "${FILEOPTS[install]}" -eq 1 ]]; then
 		log::file "Installing '$fileName'"
-		eval "$fileName::install $logFile"
+		eval "$fileName::install $*"
 		return $?
 	elif [[ "${FILEOPTS[remove]}" -eq 1 ]]; then
 		log::file "Uninstalling '$fileName'"
-		eval "$fileName::remove $logFile"
+		eval "$fileName::remove $*"
 		return $?
 	fi
 	# CONFIGURE
 	if [[ "${FILEOPTS[config]}" -eq 1 ]]; then
 		log::file "Configuring '$fileName'"
-		eval "$fileName::config $logFile"
+		eval "$fileName::config $*"
 		return $?
 	fi
 	# TEST
 	if [[ "${FILEOPTS[test]}" -eq 1 ]]; then
 		log::file "Testing '$fileName'"
-		eval "$fileName::test $logFile"
+		eval "$fileName::test $*"
 		return $?
 	fi
 }

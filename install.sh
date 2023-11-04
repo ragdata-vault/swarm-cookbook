@@ -26,9 +26,6 @@ if [[ -z "$REPO" ]]; then export REPO="$(dirname "$(realpath "${BASH_SOURCE[0]}"
 export SOURCE_DIRS=("$REPO/src/apps" "$REPO/install")
 # define USERNAME
 export USERNAME="${SUDO_USER:-$(whoami)}"
-# aliased timestamps
-#alias logStamp="date -u +'%Y-%m-%dT%H:%M:%S.%3N%z'"
-#alias logTime="date -u +'%y%m%dT%H%M%S.%3N'"
 # ==================================================================
 # HELPER FUNCTIONS
 # ==================================================================
@@ -52,34 +49,6 @@ if [[ "${SHELL##*/}" == 'bash' ]]; then
 		else
 			loadSource "$pkg" -i
 			if [ "$?" -ne 0 ]; then log::file "Failed installing '$name' - exiting ..."; exit 1; fi
-		fi
-	}
-	# ------------------------------------------------------------------
-	# checkRoot
-	# ------------------------------------------------------------------
-	checkRoot()
-	{
-		if [ $EUID -ne 0 ]; then
-			echo "This script MUST be run as root!"
-			exit 1
-		fi
-	}
-	# ------------------------------------------------------------------
-	# checkShell
-	# ------------------------------------------------------------------
-	checkShell()
-	{
-		local SHELL_VERSION
-
-		if [[ "${SHELL##*/}" == "zsh" ]]; then
-			SHELL_VERSION="${ZSH_VERSION}"
-		else
-			SHELL_VERSION="${BASH_VERSION}"
-		fi
-
-		if [[ ${SHELL_VERSION:0:1} -lt 4 ]]; then
-			echo "This script requires a minimum Bash / ZSH version of 4!"
-			exit 1
 		fi
 	}
 	# ------------------------------------------------------------------
@@ -387,40 +356,6 @@ install::init()
 	echo
 }
 # ------------------------------------------------------------------
-# install::install
-# ------------------------------------------------------------------
-install::install()
-{
-	echo
-	echo "=================================================================="
-	echo "FULL INSTALLATION"
-	echo "=================================================================="
-	echo
-
-	loadSource config.sh -i
-	loadSource cron-updates.sh -i
-	loadSource dotfiles.sh -i
-	loadSource zsh-plugins.sh -i
-	loadSource bin.sh -i
-	loadSource lib.sh -i
-	loadSource swarm.sh -i
-
-	echo
-	echo "FULL INSTALLATION - DONE!"
-	echo "=================================================================="
-	echo
-}
-# ------------------------------------------------------------------
-# install::uninstall
-# ------------------------------------------------------------------
-install::uninstall()
-{
-	cd /usr/local/bin || return 1
-	rm -f app* stack* swarm*
-	rm -Rf "${ZSHDIR?}"
-	rm -Rf "${SWARMDIR?}"
-}
-# ------------------------------------------------------------------
 # install::report
 # ------------------------------------------------------------------
 install::report()
@@ -437,11 +372,7 @@ install::report()
 	echo -e "\t (Q)uit"
 	echo
 
-	if [[ "${SHELL##*/}" == 'zsh' ]]; then
-		read -rs -k 1 resp
-	elif [[ "${SHELL##*/}" == 'bash' ]]; then
-		read -rs -n 1 resp
-	fi
+	read -rs -n 1 resp
 
 	resp="${resp,,}"
 
@@ -470,7 +401,7 @@ install::report()
 # MAIN
 # ==================================================================
 clear
-checkShell
+#checkShell
 #checkRoot
 
 install::init
@@ -480,45 +411,6 @@ if [[ "$#" == 0 ]]; then set -- "all"; fi
 while [[ "$#" -gt 0 ]]
 do
 	case "$1" in
-		all)
-			install::install
-			;;
-		bin)
-			loadSource bin -i
-			;;
-		rmBin|binRemove)
-			loadSource bin -r
-			;;
-		config)
-			loadSource config -i
-			;;
-		rmConfig|configRemove)
-			loadSource config -r
-			;;
-		dotfiles)
-			loadSource dotfiles -i
-			;;
-		rmDotfiles|dotfilesRemove)
-			loadSource dotfiles -r
-			;;
-		init)
-			install::init
-			;;
-		lib)
-			loadSource lib -i
-			;;
-		rmLib|libRemove)
-			loadSource lib -r
-			;;
-		swarm)
-			loadSource swarm -i
-			;;
-		rmSwarm|swarmRemove)
-			loadSource swarm -r
-			;;
-		node)
-			loadSource node -i -c
-			;;
 		zsh)
 			loadSource zsh -i "${@:2}"
 			;;
@@ -530,9 +422,6 @@ do
 			;;
 		zsh-p10k)
 			loadSource zsh-p10k -i
-			;;
-		plugins)
-			loadSource zsh-plugins -i
 			;;
 	esac
 	shift

@@ -54,7 +54,7 @@ zsh::install()
 
 		sudo apt install -y zsh
 
-		sudo chsh -s "$(which zsh)" "$USERNAME"
+		#sudo chsh -s "$(which zsh)" "$USERNAME"
 
 		echo
 		echo "===================================================================="
@@ -68,12 +68,12 @@ zsh::install()
 		echo "Finally, if you'd like to install the PowerLevel10K theme (if you also installed Oh-My-ZSH), type:"
 		echo
 		echo "'sudo ./install.sh zsh-p10k'"
+		echo
+		echo "When you've finished installing everything and are ready to use zsh as your default shell, type:"
+		echo
+		echo "chsh -s $(which zsh) <username>"
 
-	elif [[ "${1,,}" == "cont" ]]; then
-		# remove line in .zshrc written before reboot
-		cp "$USERDIR"/.zshrc "$USERDIR"/.zshrc.copy
-		rm -f "$USERDIR"/.zshrc
-		head -n -1 "$USERDIR"/.zshrc.copy > "$USERDIR"/.zshrc
+	elif [[ "${1}" == "cont" ]]; then
 
 		if [[ ! -d "$XDG_DOWNLOAD_DIR" ]]; then mkdir -p "$XDG_DOWNLOAD_DIR"; fi
 
@@ -125,7 +125,7 @@ zsh::remove()
 	echo "===================================================================="
 	echo
 
-	sudo chsh -s "$(which bash)" "$USERNAME"
+	#sudo chsh -s "$(which bash)" "$USERNAME"
 
 	while IFS= read -r file; do filename="${file##*/}"; mv "$file" "$USERDIR"/.bash_archive/"$filename"; done < <(find "$USERDIR/.bash_archive" -maxdepth 1 -name ".bash*" -type f)
 
