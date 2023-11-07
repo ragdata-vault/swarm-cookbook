@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+glances::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}GLANCES HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+glances::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+glances::installed() { command -v glances > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 glances::install()

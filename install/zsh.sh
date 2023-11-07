@@ -60,11 +60,11 @@ zsh::install()
 		echo
 		echo "To configure, type 'zsh'"
 		echo
-		echo "Then, to install Oh-My-ZSH, type: 'sudo ./install.sh zsh cont'"
+		echo "Then, to install Oh-My-ZSH, type: './install.sh zsh cont'"
 		echo
 		echo "Finally, if you'd like to install the PowerLevel10K theme (if you also installed Oh-My-ZSH), type:"
 		echo
-		echo "'sudo ./install.sh zsh-p10k'"
+		echo "'./install.sh zsh-p10k'"
 		echo
 		echo "When you've finished installing everything and are ready to use zsh as your default shell, type:"
 		echo

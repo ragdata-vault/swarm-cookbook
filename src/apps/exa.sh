@@ -16,13 +16,30 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+exa::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}EXA HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
 # REQUIRES FUNCTION
 #
 exa::requires() { echo; }
 #
 # INSTALLED FUNCTION
 #
-exa::installed() { command -v exa; }
+exa::installed() { command -v exa > /dev/null; }
 #
 # INSTALL FUNCTION
 #

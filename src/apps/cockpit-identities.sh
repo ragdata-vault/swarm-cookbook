@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+cockpit-identities::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}COCKPIT-IDENTITIES HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+cockpit-identities::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+cockpit-identities::installed() { command -v cockpit-identities > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 cockpit-identities::install()
@@ -26,11 +51,11 @@ cockpit-identities::install()
 	echo "===================================================================="
 	echo
 
-	[[ ! -d "$HOME"/downloads ]] && mkdir -p "$HOME"/downloads
+	[[ ! -d "$XDG_DOWNLOAD_DIR" ]] && mkdir -p "$XDG_DOWNLOAD_DIR"
 
-	wget -O "$HOME"/downloads/cockpit_identities-setup.zsh https://repo.45drives.com/setup
+	wget -O "$XDG_DOWNLOAD_DIR"/cockpit_identities-setup.zsh https://repo.45drives.com/setup
 
-	bash "$HOME"/downloads/cockpit_identities-setup.zsh
+	bash "$XDG_DOWNLOAD_DIR"/cockpit_identities-setup.zsh
 
 	sudo apt update
 

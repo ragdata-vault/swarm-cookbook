@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+git-crypt::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}GIT-CRYPT HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+git-crypt::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+git-crypt::installed() { command -v git-crypt > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 git-crypt::install()

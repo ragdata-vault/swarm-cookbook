@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+cockpit-machines::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}COCKPIT-MACHINES HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+cockpit-machines::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+cockpit-machines::installed() { command -v cockpit-machines > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 cockpit-machines::install()

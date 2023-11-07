@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+lazydocker::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}LAZYDOCKER HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+lazydocker::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+lazydocker::installed() { command -v lazydocker > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 lazydocker::install()
@@ -28,9 +53,9 @@ lazydocker::install()
 
 	export DIR=/usr/local/bin
 
-	[[ ! -d "$HOME"/downloads ]] && mkdir -p "$HOME"/downloads
+	[[ ! -d "$XDG_DOWNLOAD_DIR" ]] && mkdir -p "$XDG_DOWNLOAD_DIR"
 
-	cd "$HOME"/downloads || return 1
+	cd "$XDG_DOWNLOAD_DIR" || return 1
 
 	wget https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.zsh
 

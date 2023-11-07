@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+rkhunter::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}RKHUNTER HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+rkhunter::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+rkhunter::installed() { command -v rkhunter > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 rkhunter::install()

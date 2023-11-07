@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+cockpit-tailscale::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}COCKPIT-TAILSCALE HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+cockpit-tailscale::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+cockpit-tailscale::installed() { command -v cockpit-tailscale > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 cockpit-tailscale::install()
@@ -26,11 +51,11 @@ cockpit-tailscale::install()
 	echo "===================================================================="
 	echo
 
-	[[ ! -d "$HOME"/downloads ]] && mkdir -p "$HOME"/downloads
+	[[ ! -d "$XDG_DOWNLOAD_DIR" ]] && mkdir -p "$XDG_DOWNLOAD_DIR"
 
-	wget -O "$HOME"/downloads/cockpit-tailscale-v0.0.6.6.gb7dbce5-1.el9.noarch.rpm https://github.com/spotsnel/cockpit-tailscale/releases/download/v0.0.6/cockpit-tailscale-v0.0.6.6.gb7dbce5-1.el9.noarch.rpm
+	wget -O "$XDG_DOWNLOAD_DIR"/cockpit-tailscale-v0.0.6.6.gb7dbce5-1.el9.noarch.rpm https://github.com/spotsnel/cockpit-tailscale/releases/download/v0.0.6/cockpit-tailscale-v0.0.6.6.gb7dbce5-1.el9.noarch.rpm
 
-	rpm -ivh "$HOME"/downloads/cockpit-tailscale-v0.0.6.6.gb7dbce5-1.el9.noarch.rpm
+	rpm -ivh "$XDG_DOWNLOAD_DIR"/cockpit-tailscale-v0.0.6.6.gb7dbce5-1.el9.noarch.rpm
 
 	systemctl restart cockpit.socket
 

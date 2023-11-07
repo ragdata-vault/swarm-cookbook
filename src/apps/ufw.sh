@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+ufw::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}UFW HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+ufw::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+ufw::installed() { command -v ufw > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 ufw::install()

@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+ruby::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}RUBY HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+ruby::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+ruby::installed() { command -v ruby > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 ruby::install()

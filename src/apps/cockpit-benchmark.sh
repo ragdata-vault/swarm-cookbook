@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+cockpit-benchmark::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}COCKPIT-BENCHMARK HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+cockpit-benchmark::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+cockpit-benchmark::installed() { command -v cockpit-benchmark > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 cockpit-benchmark::install()

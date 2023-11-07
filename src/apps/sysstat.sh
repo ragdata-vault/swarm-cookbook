@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+sysstat::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}SYSSTAT HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+sysstat::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+sysstat::installed() { command -v sysstat > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 sysstat::install()

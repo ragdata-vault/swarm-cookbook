@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+cockpit-certificates::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}COCKPIT-CERTIFICATES HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+cockpit-certificates::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+cockpit-certificates::installed() { command -v cockpit-certificates > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 cockpit-certificates::install()
@@ -26,13 +51,13 @@ cockpit-certificates::install()
 	echo "===================================================================="
 	echo
 
-	[[ ! -d "$HOME"/downloads ]] && mkdir -p "$HOME"/downloads
+	[[ ! -d "$XDG_DOWNLOAD_DIR" ]] && mkdir -p "$XDG_DOWNLOAD_DIR"
 
 	sudo apt install -y certmonger
 
-	git clone git@github.com:skobyda/cockpit-certificates "$HOME"/downloads/cockpit-certificates
+	git clone git@github.com:skobyda/cockpit-certificates "$XDG_DOWNLOAD_DIR"/cockpit-certificates
 
-	cd "$HOME"/downloads/cockpit-certificates || return 1
+	cd "$XDG_DOWNLOAD_DIR"/cockpit-certificates || return 1
 
 	make
 

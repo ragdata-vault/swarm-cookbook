@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+cockpit-navigator::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}COCKPIT-NAVIGATOR HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+cockpit-navigator::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+cockpit-navigator::installed() { command -v cockpit-navigator > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 cockpit-navigator::install()

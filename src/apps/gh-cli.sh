@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+gh-cli::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}GH-CLI HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+gh-cli::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+gh-cli::installed() { command -v gh-cli > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 gh-cli::install()

@@ -16,9 +16,30 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+docker-ctop::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}DOCKER-CTOP HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+docker-ctop::requires() { echo; }
+#
 # INSTALLED FUNCTION
 #
-docker-ctop::installed() { command -v docker-ctop; }
+docker-ctop::installed() { command -v docker-ctop > /dev/null; }
 #
 # INSTALL FUNCTION
 #

@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+nodejs::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}NODEJS HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+nodejs::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+nodejs::installed() { command -v nodejs > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 nodejs::install()

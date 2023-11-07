@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+mkcert::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}MKCERT HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+mkcert::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+mkcert::installed() { command -v mkcert > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 mkcert::install()
@@ -26,15 +51,15 @@ mkcert::install()
 	echo "===================================================================="
 	echo
 
-	[[ ! -d "$HOME"/downloads ]] && mkdir -p "$HOME"/downloads
+	[[ ! -d "$XDG_DOWNLOAD_DIR" ]] && mkdir -p "$XDG_DOWNLOAD_DIR"
 
 	sudo apt install -y libnss3-tools
 
-	wget -O "$HOME"/downloads/mkcert https://dl.filippo.io/mkcert/latest?for=linux/amd64
+	wget -O "$XDG_DOWNLOAD_DIR"/mkcert https://dl.filippo.io/mkcert/latest?for=linux/amd64
 
-	chmod +x "$HOME"/downloads/mkcert
+	chmod +x "$XDG_DOWNLOAD_DIR"/mkcert
 
-	mv "$HOME"/downloads/mkcert /usr/local/bin/mkcert
+	mv "$XDG_DOWNLOAD_DIR"/mkcert /usr/local/bin/mkcert
 
 	echo
 	echo "DONE!"

@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+cockpit-cloudflared::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}COCKPIT-CLOUDFLARED HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+cockpit-cloudflared::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+cockpit-cloudflared::installed() { command -v cockpit-cloudflared > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 cockpit-cloudflared::install()
@@ -26,9 +51,9 @@ cockpit-cloudflared::install()
 	echo "===================================================================="
 	echo
 
-	[[ ! -d "$HOME"/downloads ]] && mkdir -p "$HOME"/downloads
+	[[ ! -d "$XDG_DOWNLOAD_DIR" ]] && mkdir -p "$XDG_DOWNLOAD_DIR"
 
-	wget -O "$HOME"/downloads/cockpit-cloudflared-v0.0.2-1.fc38.noarch.rpm https://github.com/spotsnel/cockpit-cloudflared/releases/download/v0.0.2/cockpit-cloudflared-v0.0.2-1.fc38.noarch.rpm
+	wget -O "$XDG_DOWNLOAD_DIR"/cockpit-cloudflared-v0.0.2-1.fc38.noarch.rpm https://github.com/spotsnel/cockpit-cloudflared/releases/download/v0.0.2/cockpit-cloudflared-v0.0.2-1.fc38.noarch.rpm
 
 	systemctl restart cockpit.socket
 

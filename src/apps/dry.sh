@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+dry::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}DRY HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+dry::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+dry::installed() { command -v dry > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 dry::install()
@@ -26,13 +51,13 @@ dry::install()
 	echo "===================================================================="
 	echo
 
-	[[ ! -d "$HOME"/downloads ]] && mkdir -p "$HOME"/downloads
+	[[ ! -d "$XDG_DOWNLOAD_DIR" ]] && mkdir -p "$XDG_DOWNLOAD_DIR"
 
-	wget -O "$HOME"/downloads/dryup.zsh https://moncho.github.io/dry/dryup.zsh
+	wget -O "$XDG_DOWNLOAD_DIR"/dryup.zsh https://moncho.github.io/dry/dryup.zsh
 
-	chmod 0755 "$HOME"/downloads/dryup.zsh
+	chmod 0755 "$XDG_DOWNLOAD_DIR"/dryup.zsh
 
-	sh "$HOME"/downloads/dryup.zsh
+	sh "$XDG_DOWNLOAD_DIR"/dryup.zsh
 
 	chmod 0755 /usr/local/bin/dry
 

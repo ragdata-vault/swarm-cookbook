@@ -16,9 +16,30 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+swap::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}SWAP HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+swap::requires() { echo; }
+#
 # INSTALLED FUNCTION
 #
-swap::installed() { command -v swap; }
+swap::installed() { command -v swap > /dev/null; }
 #
 # INSTALL FUNCTION
 #
@@ -67,7 +88,9 @@ swap::config()
 	if [[ "${SWAPYN:l}" == "n" ]]; then echo "User elected not to configure swap space"; fi
 
 	if [[ ! $SWAPYN =~ $NEGAT ]]; then
-		if [[ $SWAP_TOTAL -lt 4194000 ]]
+		if [[ $SWAP_TOTAL -lt 4194000 ]]; then
+			echo
+		fi
 	fi
 
 	echo

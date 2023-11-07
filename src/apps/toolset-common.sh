@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+toolset-common::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}TOOLSET-COMMON HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+toolset-common::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+toolset-common::installed() { command -v toolset-common > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 toolset-common::install()

@@ -38,6 +38,27 @@ dialog::theme::config()
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+dialog::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}DIALOG HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+dialog::requires() { echo; }
+#
 # INSTALLED FUNCTION
 #
 dialog::installed() { command -v dialog > /dev/null; }

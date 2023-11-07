@@ -16,9 +16,30 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+ssh::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}SSH HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+ssh::requires() { echo; }
+#
 # INSTALLED FUNCTION
 #
-ssh::installed() { command -v ssh; }
+ssh::installed() { command -v ssh > /dev/null; }
 #
 # INSTALL FUNCTION
 #

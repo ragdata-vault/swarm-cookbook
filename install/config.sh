@@ -151,7 +151,7 @@ config::install()
 	local RESULT MY_USER_DEFAULT MY_USER
 
 	# MY_USER
-	MY_USER_DEFAULT="Username"
+	MY_USER_DEFAULT="$(whoami)"
 	DIALOG_TITLE="System Username"
 	DIALOG_TEXT="Enter YOUR username on this host:"
 	DIALOG_INIT="${MY_USER:-${MY_USER_DEFAULT:-}}"
@@ -171,7 +171,7 @@ config::install()
 	local RESULT ADMIN_EMAIL_DEFAULT ADMIN_EMAIL
 
 	# ADMIN_EMAIL
-	ADMIN_EMAIL_DEFAULT="admin@example.com"
+	ADMIN_EMAIL_DEFAULT="$(whoami)@example.com"
 	DIALOG_TITLE="Admin Email Address"
 	DIALOG_TEXT="Enter an admin email address:"
 	DIALOG_INIT="${ADMIN_EMAIL:-${ADMIN_EMAIL_DEFAULT:-}}"
@@ -191,7 +191,7 @@ config::install()
 	local RESULT SYSTEM_EMAIL_DEFAULT SYSTEM_EMAIL
 
 	# SYSTEM_EMAIL
-	SYSTEM_EMAIL_DEFAULT="system@example.com"
+	SYSTEM_EMAIL_DEFAULT="$(whoami)@example.com"
 	DIALOG_TITLE="System Email Address"
 	DIALOG_TEXT="Enter a system email address:"
 	DIALOG_INIT="${SYSTEM_EMAIL:-${SYSTEM_EMAIL_DEFAULT:-}}"

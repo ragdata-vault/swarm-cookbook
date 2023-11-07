@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+php-8::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}PHP-8 HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+php-8::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+php-8::installed() { command -v php-8 > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 php-8::install()

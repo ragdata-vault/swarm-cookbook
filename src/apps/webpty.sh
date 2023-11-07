@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+webpty::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}WEBPTY HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+webpty::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+webpty::installed() { command -v webpty > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 webpty::install()
@@ -26,11 +51,11 @@ webpty::install()
 	echo "===================================================================="
 	echo
 
-	[[ ! -d "$HOME"/downloads ]] && mkdir -p "$HOME"/downloads
+	[[ ! -d "$XDG_DOWNLOAD_DIR" ]] && mkdir -p "$XDG_DOWNLOAD_DIR"
 
-	wget -O "$HOME"/downloads/webpty.bin https://github.com/mickael-kerjean/webpty/releases/download/stable/webpty_linux_amd64.bin
+	wget -O "$XDG_DOWNLOAD_DIR"/webpty.bin https://github.com/mickael-kerjean/webpty/releases/download/stable/webpty_linux_amd64.bin
 
-	sudo install -v -m 0755 -C -D -t /usr/local/bin "$HOME"/downloads/webpty.bin
+	sudo install -v -m 0755 -C -D -t /usr/local/bin "$XDG_DOWNLOAD_DIR"/webpty.bin
 
 	echo
 	echo "DONE!"

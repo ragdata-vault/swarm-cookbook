@@ -16,9 +16,30 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+docker::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}DOCKER HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+docker::requires() { echo; }
+#
 # INSTALLED FUNCTION
 #
-docker::installed() { command -v docker; }
+docker::installed() { command -v docker > /dev/null; }
 #
 # INSTALL FUNCTION
 #

@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+toolset-dev::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}TOOLSET-DEV HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+toolset-dev::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+toolset-dev::installed() { command -v toolset-dev > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 toolset-dev::install()

@@ -16,9 +16,30 @@ if [[ -z "$isLOC" ]]; then source "$ZSHDIR"/functions/regex_aliases.zsh; fi
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+locale::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}LOCALE HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+locale::requires() { echo; }
+#
 # INSTALLED FUNCTION
 #
-locale::installed() { command -v locale; }
+locale::installed() { command -v locale > /dev/null; }
 #
 # INSTALL FUNCTION
 #

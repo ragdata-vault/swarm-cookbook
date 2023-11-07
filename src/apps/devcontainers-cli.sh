@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+devcontainers-cli::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}DEVCONTAINERS-CLI HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+devcontainers-cli::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+devcontainers-cli::installed() { command -v devcontainers-cli > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 devcontainers-cli.zsh::install()

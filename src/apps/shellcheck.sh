@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+shellcheck::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}SHELLCHECK HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+shellcheck::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+shellcheck::installed() { command -v shellcheck > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 shellcheck::install()

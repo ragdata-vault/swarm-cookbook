@@ -16,6 +16,27 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+jq::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}JQ HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+jq::requires() { echo; }
+#
 # INSTALLED FUNCTION
 #
 jq::installed() { command -v jq > /dev/null; }

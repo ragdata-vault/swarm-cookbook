@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+gpg::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}GPG HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+gpg::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+gpg::installed() { command -v gpg > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 gpg::install()

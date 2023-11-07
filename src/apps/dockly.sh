@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+dockly::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}DOCKLY HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+dockly::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+dockly::installed() { command -v dockly > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 dockly::install()

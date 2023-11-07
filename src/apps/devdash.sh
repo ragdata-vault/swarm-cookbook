@@ -16,9 +16,30 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+devdash::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}DEVDASH HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+devdash::requires() { echo; }
+#
 # INSTALLED FUNCTION
 #
-devdash::installed() { command -v devdash; }
+devdash::installed() { command -v devdash > /dev/null; }
 #
 # INSTALL FUNCTION
 #

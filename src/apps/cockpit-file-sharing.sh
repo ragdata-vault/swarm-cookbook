@@ -17,6 +17,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+cockpit-file-sharing::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}COCKPIT-FILE-SHARING HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+cockpit-file-sharing::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+cockpit-file-sharing::installed() { command -v cockpit-file-sharing > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 cockpit-file-sharing::install()
@@ -27,13 +52,13 @@ cockpit-file-sharing::install()
 	echo "===================================================================="
 	echo
 
-	[[ ! -d "$HOME"/downloads ]] && mkdir -p "$HOME"/downloads
+	[[ ! -d "$XDG_DOWNLOAD_DIR" ]] && mkdir -p "$XDG_DOWNLOAD_DIR"
 
-	wget -O "$HOME"/downloads/cockpit-file-sharing_3.2.9_generic.zip https://github.com/45Drives/cockpit-file-sharing/releases/download/v3.2.9/cockpit-file-sharing_3.2.9_generic.zip
+	wget -O "$XDG_DOWNLOAD_DIR"/cockpit-file-sharing_3.2.9_generic.zip https://github.com/45Drives/cockpit-file-sharing/releases/download/v3.2.9/cockpit-file-sharing_3.2.9_generic.zip
 
-	unzip "$HOME"/downloads/cockpit-file-sharing_3.2.9_generic.zip
+	unzip "$XDG_DOWNLOAD_DIR"/cockpit-file-sharing_3.2.9_generic.zip
 
-	cd "$HOME"/downloads/cockpit-file-sharing_3.2.9_generic || return 1
+	cd "$XDG_DOWNLOAD_DIR"/cockpit-file-sharing_3.2.9_generic || return 1
 
 	# no need to 'make' this one first - it comes pre-built
 	make install

@@ -17,6 +17,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+git::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}GIT HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+git::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+git::installed() { command -v git > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 git::install() {

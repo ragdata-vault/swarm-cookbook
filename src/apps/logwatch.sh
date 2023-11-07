@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+logwatch::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}LOGWATCH HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+logwatch::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+logwatch::installed() { command -v logwatch > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 logwatch::install()

@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+logrotate::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}LOGROTATE HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+logrotate::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+logrotate::installed() { command -v logrotate > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 logrotate::install()

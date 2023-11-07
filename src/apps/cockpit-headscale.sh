@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+cockpit-headscale::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}COCKPIT-HEADSCALE HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+cockpit-headscale::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+cockpit-headscale::installed() { command -v cockpit-headscale > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 cockpit-headscale::install()
@@ -26,11 +51,11 @@ cockpit-headscale::install()
 	echo "===================================================================="
 	echo
 
-	[[ ! -d "$HOME"/downloads ]] && mkdir -p "$HOME"/downloads
+	[[ ! -d "$XDG_DOWNLOAD_DIR" ]] && mkdir -p "$XDG_DOWNLOAD_DIR"
 
-	wget -O "$HOME"/downloads/cockpit-headscale-v0.0.1-1.fc38.noarch.rpm https://github.com/spotsnel/cockpit-headscale/releases/download/v0.0.1/cockpit-headscale-v0.0.1-1.fc38.noarch.rpm
+	wget -O "$XDG_DOWNLOAD_DIR"/cockpit-headscale-v0.0.1-1.fc38.noarch.rpm https://github.com/spotsnel/cockpit-headscale/releases/download/v0.0.1/cockpit-headscale-v0.0.1-1.fc38.noarch.rpm
 
-	rpm -ivh "$HOME"/downloads/cockpit-headscale-v0.0.1-1.fc38.noarch.rpm
+	rpm -ivh "$XDG_DOWNLOAD_DIR"/cockpit-headscale-v0.0.1-1.fc38.noarch.rpm
 
 	systemctl restart cockpit.socket
 

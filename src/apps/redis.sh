@@ -16,9 +16,30 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+redis::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}REDIS HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+redis::requires() { echo; }
+#
 # INSTALLED FUNCTION
 #
-redis::installed() { command -v redis-server > /dev/null; }
+redis::installed() { command -v redis > /dev/null; }
 #
 # INSTALL FUNCTION
 #

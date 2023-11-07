@@ -39,6 +39,31 @@ pm2::requires() { echo; }
 #
 # INSTALLED FUNCTION
 #
+pm2::installed() { command -v pm2 > /dev/null; }
+#
+# HELP FUNCTION
+#
+pm2::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}PM2 HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+pm2::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
 pm2::installed() { command -v pm2; }
 #
 # INSTALL FUNCTION

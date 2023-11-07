@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+composer::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}COMPOSER HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+composer::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+composer::installed() { command -v composer > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 composer::install()

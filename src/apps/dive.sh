@@ -53,14 +53,14 @@ dive::install()
 	echo "===================================================================="
 	echo
 
-	[[ ! -d "$HOME"/downloads ]] && mkdir -p "$HOME"/downloads
+	[[ ! -d "$XDG_DOWNLOAD_DIR" ]] && mkdir -p "$XDG_DOWNLOAD_DIR"
 
 	# get latest version tag
 	DIVE_VERSION=$(curl -s "https://api.github.com/repos/wagoodman/dive/releases/latest" | grep -Po '"tag_name": "v\K[0-9.]+')
 	# download latest Debian package
-	wget -O "$HOME"/downloads/dive.deb https://github.com/wagoodman/dive/releases/latest/download/dive_${DIVE_VERSION}_linux_amd64.deb
+	wget -O "$XDG_DOWNLOAD_DIR"/dive.deb https://github.com/wagoodman/dive/releases/latest/download/dive_${DIVE_VERSION}_linux_amd64.deb
 
-	sudo apt install -y "$HOME"/downloads/dive.deb
+	sudo apt install -y "$XDG_DOWNLOAD_DIR"/dive.deb
 
 	echo
 	echo "DONE!"

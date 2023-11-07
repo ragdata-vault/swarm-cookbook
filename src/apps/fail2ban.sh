@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+fail2ban::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}FAIL2BAN HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+fail2ban::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+fail2ban::installed() { command -v fail2ban > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 fail2ban::install()
