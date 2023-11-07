@@ -40,6 +40,7 @@ zsh-plugins::install()
 	mkdir -p "$ZSH_CUSTOM_PLUGINS"
 
 	if ! command -v diff-so-fancy > /dev/null; then
+		echo
 		log::file "Adding PPA Repository for Diff-So-Fancy"
 		sudo add-apt-repository ppa:aos1/diff-so-fancy
 		sudo apt update
@@ -57,11 +58,13 @@ zsh-plugins::install()
 	fi
 
 	if ! command -v git-flow > /dev/null; then
+		echo
 		log::file "Installing Git-Flow Application"
 		sudo apt install -y git-flow
 	fi
 
 	if [[ ! -d "$HOME/.fzf" ]]; then
+		echo
 		log::file "Installing FZF Fuzzy Finder Application"
 		git clone git@github.com:junegunn/fzf "$HOME"/.fzf
 		chmod 0755 "$HOME"/.fzf/install
@@ -71,6 +74,7 @@ zsh-plugins::install()
 	fi
 
 	if [[ ! -f "$HOME/.cargo/bin/navi" ]]; then
+		echo
 		log::file "Installing Navi Application"
 		bash <(curl -sL https://raw.githubusercontent.com/denisidoro/navi/master/scripts/install)
 	fi
@@ -84,11 +88,13 @@ zsh-plugins::install()
 	echo
 
 	if [[ ! -d "$ZSH_CUSTOM/plugins/git-flow-completion" ]]; then
+		echo
 		log::file "Installing Git-Flow-Completion Plugin"
 		git clone git@github.com:bobthecow/git-flow-completion "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"/plugins/git-flow-completion
 	fi
 
 	if [[ ! -d "$ZSH_CUSTOM/plugins/zsh-completions" ]]; then
+		echo
 		log::file "Installing ZSH Completions Plugin"
 		git clone git@github.com:zsh-users/zsh-completions "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"/plugins/zsh-completions
 	fi
@@ -100,32 +106,38 @@ zsh-plugins::install()
 	echo
 
 	if [[ ! -f /etc/bash.command-not-found ]]; then
+		echo
 		log::file "Installing Bash-Insulter Plugin"
 		git clone git@github.com:hkbakke/bash-insulter
 		sudo cp bash-insulter/src/bash.command-not-found /etc/
 	fi
 
-	if [[ ! -d "$ZSH_CUSTOM/plugins/" ]]; then
+	if [[ ! -d "$ZSH_CUSTOM/plugins/zsh-diff-so-fancy" ]]; then
+		echo
 		log::file "Installing Diff-So-Fancy Plugin"
 		git clone git@github.com:z-shell/zsh-diff-so-fancy "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"/plugins/zsh-diff-so-fancy
 	fi
 
-	if [[ ! -d "$ZSH_CUSTOM/plugins/" ]]; then
+	if [[ ! -d "$ZSH_CUSTOM/plugins/enhancd" ]]; then
+		echo
 		log::file "Installing enhan/cd Plugin"
 		git clone git@github.com:b4b4r07/enhancd "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"/plugins/enhancd
 	fi
 
-	if [[ ! -d "$ZSH_CUSTOM/plugins/" ]]; then
+	if [[ ! -d "$ZSH_CUSTOM/plugins/fzf-zsh-plugin" ]]; then
+		echo
 		log::file "Installing FZF ZSH Plugin"
 		git clone git@github.com:unixorn/fzf-zsh-plugin "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"/plugins/fzf-zsh-plugin
 	fi
 
-	if [[ ! -d "$ZSH_CUSTOM/plugins/" ]]; then
+	if [[ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]]; then
+		echo
 		log::file "Installing ZSH AutoSuggestions Plugin"
 		git clone https://github.com/zsh-users/zsh-autosuggestions "${ZSH_CUSTOM:-"$HOME"/.oh-my-zsh/custom}"/plugins/zsh-autosuggestions
 	fi
 
-	if [[ ! -d "$ZSH_CUSTOM/plugins/" ]]; then
+	if [[ ! -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]]; then
+		echo
 		log::file "Installing ZSH Syntax Highlighting Plugin"
 		git clone git@github.com:zsh-users/zsh-syntax-highlighting "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"/plugins/zsh-syntax-highlighting
 	fi
