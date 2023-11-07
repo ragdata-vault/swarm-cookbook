@@ -8,6 +8,6 @@ if [[ -z "$REDISCLI_AUTH" ]]; then source "$HOME"/.env; fi
 declare value
 declare field="${1:-}"
 
-value="$(redis-cli GET "$field")"
+value="$(redis-cli GET "$field" 2> /dev/null)"
 
 printf '%s' "$value"

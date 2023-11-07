@@ -9,6 +9,6 @@ declare value
 declare key="${1:-}"
 declare field="${2:-}"
 
-value="$(redis-cli HGET "$key" "$field")"
+value="$(redis-cli HGET "$key" "$field" 2> /dev/null)"
 
 printf '%s' "$value"

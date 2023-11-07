@@ -48,15 +48,18 @@ chsh -s "$(which zsh)" "$(whoami)"
 # ------------------------------------------------------------------
 # FOUNDATION
 # ------------------------------------------------------------------
+if ! loadSource dialog -d; then loadSource dialog -i -c; fi
 if ! loadSource redis -d; then loadSource redis; fi
 if ! loadSource jq -d; then loadSource jq; fi
 loadSource gpg -i -c
 loadSource locale -c
+loadSource mkcert
 
 # ------------------------------------------------------------------
 # DEV TOOLSET
 # ------------------------------------------------------------------
 if ! loadSource git -d; then loadSource git; fi
+loadSource git-crypt
 loadSource toolset-common
 loadSource toolset-dev
 loadSource nodejs
@@ -76,3 +79,4 @@ loadSource sysstat -i -c
 loadSource docker
 loadSource docker-ctop
 loadSource dockly
+loadSource devdash
