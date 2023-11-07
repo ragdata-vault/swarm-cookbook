@@ -14,7 +14,7 @@ if [ -n "$ENV_SET" ]; then exit 0; fi
 # OWNERSHIP VARIABLES
 # ------------------------------------------------------------------
 
-export USERNAME="${SUDO_USER:-$(whoami)}"
+export USERNAME="$(whoami)"
 
 # ------------------------------------------------------------------
 # XDG PATH VARIABLES

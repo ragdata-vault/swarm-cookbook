@@ -25,7 +25,7 @@ if [[ -z "$REPO" ]]; then export REPO="${0:a:h}"; fi
 # define SOURCE_DIRS
 export SOURCE_DIRS=("$REPO/src/apps" "$REPO/install")
 # define USERNAME
-export USERNAME="${SUDO_USER:-$(whoami)}"
+export USERNAME="$(whoami)"
 # ==================================================================
 # HELPER FUNCTIONS
 # ==================================================================
