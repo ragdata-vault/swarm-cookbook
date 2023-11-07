@@ -21,7 +21,7 @@ if [[ "${1:l}" == "verbose" ]] || [[ "$LOG_VERBOSE" == 0 ]]; then shift; export 
 # VARIABLES
 # ==================================================================
 # define REPO
-if [[ -z "$REPO" ]]; then export REPO="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"; fi
+if [[ -z "$REPO" ]]; then export REPO="${0:a:h}"; fi
 # define SOURCE_DIRS
 export SOURCE_DIRS=("$REPO/src/apps" "$REPO/install")
 # define USERNAME
