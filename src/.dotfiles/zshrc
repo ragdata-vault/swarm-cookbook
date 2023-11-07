@@ -153,7 +153,7 @@ if command -v git-flow > /dev/null; then
 fi
 if [[ -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]]; then plugins+=(zsh-autosuggestions); fi
 if [[ -d "$ZSH_CUSTOM/plugins/zsh-completions" ]]; then plugins+=(zsh-completions); fi
-if [[ -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]]; then plugins+=(zsh-syntax-highlightling); fi
+if [[ -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]]; then plugins+=(zsh-syntax-highlighting); fi
 
 if [[ -f "$HOME/.cargo/bin/navi" ]]; then eval "$(navi widget zsh)"; fi
 
