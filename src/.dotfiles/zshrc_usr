@@ -33,7 +33,7 @@ else
 fi
 
 if [ -z "$PROFILE_SET" ]; then
-	source "$USERDIR/.profile"
+	source "$HOME/.profile"
 	export PROFILE_SET='zshrc'
 fi
 

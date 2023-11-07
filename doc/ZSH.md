@@ -10,16 +10,15 @@ Set ENV vars:
 
 ```shell
 export USERNAME=ragdata
-export USERDIR=/home/"$USERNAME"
 ```
 
 Archive bash profile files:
 
 ```shell
-mkdir -p "$USERDIR"/.bash_archive
-while IFS= read -r file; do filename="${file##*/}"; mv "$file" "$USERDIR"/.bash_archive/"$filename"; done < <(find "$USERDIR" -maxdepth 1 -name ".bash*" -type f)
-mv "$USERDIR/.bash*" "$USERDIR/.bash_archive/."
-mv "$USERDIR/.profile" "$USERDIR/.bash_archive/."
+mkdir -p "$HOME"/.bash_archive
+while IFS= read -r file; do filename="${file##*/}"; mv "$file" "$HOME"/.bash_archive/"$filename"; done < <(find "$HOME" -maxdepth 1 -name ".bash*" -type f)
+mv "$HOME/.bash*" "$HOME/.bash_archive/."
+mv "$HOME/.profile" "$HOME/.bash_archive/."
 ```
 
 Install ZSH
@@ -36,10 +35,9 @@ Set ENV vars:
 
 ```shell
 export USERNAME=ragdata
-export USERDIR=/home/"$USERNAME"
-export REPO="$USERDIR"/projects/ragdata/swarm-cookbook
-export ZDOTDIR="$USERDIR"
-export ZSHDIR="$USERDIR"/.zsh
+export REPO="$HOME"/projects/ragdata/swarm-cookbook
+export ZDOTDIR="$HOME"
+export ZSHDIR="$HOME"/.zsh
 ```
 
 Download and install OMZSH:
@@ -64,16 +62,15 @@ sed -i '/^ZSH_THEME.*/c\ZSH_THEME="powerlevel10k/powerlevel10k"'
 
 ```shell
 export USERNAME=ragdata
-export USERDIR=/home/"$USERNAME"
 ```
 
 ```shell
-mkdir -p "$USERDIR/.zsh_archive"
-rm -Rf "$USERDIR/.oh-my-zsh"
-rm -Rf export ZSH="$USERDIR"/.local/share/sheldon/repos/github.com/ohmyzsh/ohmyzsh
-rm -Rf "$USERDIR/.zsh"
-mv "$USERDIR/.zshrc" "$USERDIR/.zsh_archive/.zshrc"
-mv "$USERDIR/.p10k.zsh" "$USERDIR/.zsh_archive/.p10k.zsh"
+mkdir -p "$HOME/.zsh_archive"
+rm -Rf "$HOME/.oh-my-zsh"
+rm -Rf export ZSH="$HOME"/.local/share/sheldon/repos/github.com/ohmyzsh/ohmyzsh
+rm -Rf "$HOME/.zsh"
+mv "$HOME/.zshrc" "$HOME/.zsh_archive/.zshrc"
+mv "$HOME/.p10k.zsh" "$HOME/.zsh_archive/.p10k.zsh"
 ```
 
 ```shell
@@ -84,6 +81,6 @@ Restart terminal session, then:
 
 ```shell
 sudo apt purge -y --autoremove zsh && sudo apt autoremove -y
-mv "$USERDIR/.bash_archive/*" "$USERDIR"/.
-. "$USERDIR"/.bashrc
+mv "$HOME/.bash_archive/*" "$HOME"/.
+. "$HOME"/.bashrc
 ```

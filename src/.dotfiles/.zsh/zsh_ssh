@@ -15,7 +15,7 @@ if [[ "$AUTH_AGENT" == "ssh" ]] || [[ "$AUTH_AGENT" == "both" ]]; then
 			file="$(echo "$line" | awk '{print $2}')"
 			ssh-add "$file" > /dev/null
 		fi
-	done 3< "$USERDIR"/.ssh/config
+	done 3< "$HOME"/.ssh/config
 elif [[ "$AUTH_AGENT" == "gpg" ]] || [[ "$AUTH_AGENT" == "both" ]]; then
 	# Stop the gpg-agent to configure
 	systemctl --user stop gpg-agent

@@ -26,15 +26,15 @@ mkcert::install()
 	echo "===================================================================="
 	echo
 
-	[[ ! -d "$USERDIR"/downloads ]] && mkdir -p "$USERDIR"/downloads
+	[[ ! -d "$HOME"/downloads ]] && mkdir -p "$HOME"/downloads
 
 	sudo apt install -y libnss3-tools
 
-	wget -O "$USERDIR"/downloads/mkcert https://dl.filippo.io/mkcert/latest?for=linux/amd64
+	wget -O "$HOME"/downloads/mkcert https://dl.filippo.io/mkcert/latest?for=linux/amd64
 
-	chmod +x "$USERDIR"/downloads/mkcert
+	chmod +x "$HOME"/downloads/mkcert
 
-	mv "$USERDIR"/downloads/mkcert /usr/local/bin/mkcert
+	mv "$HOME"/downloads/mkcert /usr/local/bin/mkcert
 
 	echo
 	echo "DONE!"

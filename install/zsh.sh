@@ -41,13 +41,13 @@ zsh::install()
 	if [[ -z "$1" ]]; then
 		sudo apt update && sudo apt upgrade -y
 
-		mkdir -p "$USERDIR"/.bash_archive
+		mkdir -p "$HOME"/.bash_archive
 
-		while IFS= read -r file; do filename="${file##*/}"; mv "$file" "$USERDIR"/.bash_archive/"$filename"; done < <(find "$USERDIR" -maxdepth 1 -name ".bash*" -type f)
+		while IFS= read -r file; do filename="${file##*/}"; mv "$file" "$HOME"/.bash_archive/"$filename"; done < <(find "$HOME" -maxdepth 1 -name ".bash*" -type f)
 
-		mv "$USERDIR/.profile" "$USERDIR/.bash_archive/."
+		mv "$HOME/.profile" "$HOME/.bash_archive/."
 
-		chown "$USERNAME":"$USERNAME" "$USERDIR"/.bash_archive
+		chown "$USERNAME":"$USERNAME" "$HOME"/.bash_archive
 
 		sudo apt install -y zsh
 
@@ -124,9 +124,9 @@ zsh::remove()
 
 	#sudo chsh -s "$(which bash)" "$USERNAME"
 
-	while IFS= read -r file; do filename="${file##*/}"; mv "$file" "$USERDIR"/.bash_archive/"$filename"; done < <(find "$USERDIR/.bash_archive" -maxdepth 1 -name ".bash*" -type f)
+	while IFS= read -r file; do filename="${file##*/}"; mv "$file" "$HOME"/.bash_archive/"$filename"; done < <(find "$HOME/.bash_archive" -maxdepth 1 -name ".bash*" -type f)
 
-	if [[ -f "$USERDIR/.bash_archive/.profile" ]]; then mv "$USERDIR/.bash_archive/.profile" "$USERDIR/."; fi
+	if [[ -f "$HOME/.bash_archive/.profile" ]]; then mv "$HOME/.bash_archive/.profile" "$HOME/."; fi
 
 	sudo apt purge -y --autoremove zsh
 

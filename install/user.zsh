@@ -20,7 +20,7 @@
 #
 # INSTALLED FUNCTION
 #
-user::installed() { if [[ -d "$USERDIR" ]]; then return 0; else return 1; fi }
+user::installed() { if [[ -d "$HOME" ]]; then return 0; else return 1; fi }
 #
 # INSTALL FUNCTION
 #

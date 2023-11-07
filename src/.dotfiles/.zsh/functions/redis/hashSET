@@ -1,7 +1,7 @@
 # undefined
 builtin autoload -X
 
-if [[ -z "$REDISCLI_AUTH" ]]; then source "$USERDIR"/.env; fi
+if [[ -z "$REDISCLI_AUTH" ]]; then source "$HOME"/.env; fi
 
 (( $# < 3 )) && errorExit "Missing Arguments!"
 

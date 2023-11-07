@@ -27,13 +27,13 @@ cockpit-file-sharing::install()
 	echo "===================================================================="
 	echo
 
-	[[ ! -d "$USERDIR"/downloads ]] && mkdir -p "$USERDIR"/downloads
+	[[ ! -d "$HOME"/downloads ]] && mkdir -p "$HOME"/downloads
 
-	wget -O "$USERDIR"/downloads/cockpit-file-sharing_3.2.9_generic.zip https://github.com/45Drives/cockpit-file-sharing/releases/download/v3.2.9/cockpit-file-sharing_3.2.9_generic.zip
+	wget -O "$HOME"/downloads/cockpit-file-sharing_3.2.9_generic.zip https://github.com/45Drives/cockpit-file-sharing/releases/download/v3.2.9/cockpit-file-sharing_3.2.9_generic.zip
 
-	unzip "$USERDIR"/downloads/cockpit-file-sharing_3.2.9_generic.zip
+	unzip "$HOME"/downloads/cockpit-file-sharing_3.2.9_generic.zip
 
-	cd "$USERDIR"/downloads/cockpit-file-sharing_3.2.9_generic || return 1
+	cd "$HOME"/downloads/cockpit-file-sharing_3.2.9_generic || return 1
 
 	# no need to 'make' this one first - it comes pre-built
 	make install

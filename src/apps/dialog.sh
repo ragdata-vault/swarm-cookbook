@@ -22,16 +22,16 @@ dialog::theme::config()
 {
 	local theme="${1:-}"
 
-	if [[ -z "$theme" ]] && [[ -f "$USERDIR"/.dialogrc ]]; then
+	if [[ -z "$theme" ]] && [[ -f "$HOME"/.dialogrc ]]; then
 		echo "Resetting Theme"
-		rm -f "$USERDIR"/.dialogrc
+		rm -f "$HOME"/.dialogrc
 	fi
 
 	[[ "${theme:0:1}" != "." ]] && theme=".$theme"
 
 	if [[ -n "$theme" ]] && [[ -f "$SWARMDIR"/etc/dialog/"$theme" ]]; then
-		[[ -f "$USERDIR"/.dialogrc ]] && rm -f "$USERDIR"/.dialogrc
-		install -m 0644 -T "$SWARMDIR"/etc/dialog/"$theme" "$USERDIR"/.dialogrc
+		[[ -f "$HOME"/.dialogrc ]] && rm -f "$HOME"/.dialogrc
+		install -m 0644 -T "$SWARMDIR"/etc/dialog/"$theme" "$HOME"/.dialogrc
 	fi
 }
 # ==================================================================

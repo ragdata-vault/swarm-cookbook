@@ -25,7 +25,7 @@ if [[ -z "$REPO" ]]; then export REPO="$(dirname "$(realpath "${BASH_SOURCE[0]}"
 # define SOURCE_DIRS
 export SOURCE_DIRS=("$REPO/src/apps" "$REPO/install")
 # define USERNAME
-export USERNAME="${SUDO_USER:-$(whoami)}"
+export USERNAME="$(whoami)"
 # ==================================================================
 # HELPER FUNCTIONS
 # ==================================================================
@@ -380,7 +380,7 @@ if [[ "${1,,}" == "logfile" ]]; then export logFile="${2:-}"; shift 2; else log:
 # ------------------------------------------------------------------
 install::init()
 {
-	if [[ -f "$USERDIR/.local/.node-init" ]]; then return 0; fi
+	if [[ -f "$HOME/.local/.node-init" ]]; then return 0; fi
 
 	echo
 	echo "=================================================================="
@@ -393,8 +393,8 @@ install::init()
 	loadSource redis -c
 	checkPkg "dialog" "Dialog"
 
-	if [[ ! -d "$USERDIR/.local" ]]; then mkdir -p "$USERDIR/.local"; fi
-	touch "$USERDIR/.local/.node-init"
+	if [[ ! -d "$HOME/.local" ]]; then mkdir -p "$HOME/.local"; fi
+	touch "$HOME/.local/.node-init"
 
 	echo
 	echo "SYSTEM INITIALIZATION - DONE!"

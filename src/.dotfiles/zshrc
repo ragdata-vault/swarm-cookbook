@@ -82,7 +82,7 @@ zstyle ':omz:update' frequency 14
 # HISTORY CONFIG
 # ------------------------------------------------------------------
 # HISTORY FILE
-[ -z "$HISTFILE" ] && HISTFILE="$USERDIR/.zsh_history"
+[ -z "$HISTFILE" ] && HISTFILE="$HOME/.zsh_history"
 # HISTORY IGNORE
 HISTORY_IGNORE="(ls|[bf]g|exit|reset|clear|cd|cd ..|cd..)"
 # HISTORY SIZE
@@ -153,7 +153,7 @@ if [[ -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]]; then plugins+=(zsh-autosu
 if [[ -d "$ZSH_CUSTOM/plugins/zsh-completions" ]]; then plugins+=(zsh-completions); fi
 if [[ -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]]; then plugins+=(zsh-syntax-highlightling); fi
 
-if [[ -f "$USERDIR/.cargo/bin/navi" ]]; then eval "$(navi widget zsh)"; fi
+if [[ -f "$HOME/.cargo/bin/navi" ]]; then eval "$(navi widget zsh)"; fi
 
 # ------------------------------------------------------------------
 # OH MY ZSH!
@@ -189,7 +189,7 @@ zstyle ':completion:*' verbose true
 # # Delete old definitions
 # zstyle -d users
 # # For SSH & RSYNC, use remote users set in SSH config, plus root
-# zstyle ':completion:*:*:(scp|ssh|rsync):*' users root $(awk '$1 == "User" {print $2}' "$USERDIR"/.ssh/config | sort -u)
+# zstyle ':completion:*:*:(scp|ssh|rsync):*' users root $(awk '$1 == "User" {print $2}' "$HOME"/.ssh/config | sort -u)
 # # For everything else, use non-system users from /etc/passwd, plus root
 # zstyle ':completion:*:*:*:*' users root $(awk -F: '$3 > 1000 && $3 < 65000 {print $1}' /etc/passwd)
 #
@@ -216,7 +216,7 @@ zstyle ':completion:*' verbose true
 #
 # # USE CACHE
 # zstyle ':completion:*' use-cache on
-# zstyle ':completion:*' cache-path "$USERDIR"/.zsh/cache
+# zstyle ':completion:*' cache-path "$HOME"/.zsh/cache
 
 # ------------------------------------------------------------------
 # CASE-SENSITIVE COMPLETION

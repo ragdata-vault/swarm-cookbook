@@ -26,11 +26,11 @@ cockpit-tailscale::install()
 	echo "===================================================================="
 	echo
 
-	[[ ! -d "$USERDIR"/downloads ]] && mkdir -p "$USERDIR"/downloads
+	[[ ! -d "$HOME"/downloads ]] && mkdir -p "$HOME"/downloads
 
-	wget -O "$USERDIR"/downloads/cockpit-tailscale-v0.0.6.6.gb7dbce5-1.el9.noarch.rpm https://github.com/spotsnel/cockpit-tailscale/releases/download/v0.0.6/cockpit-tailscale-v0.0.6.6.gb7dbce5-1.el9.noarch.rpm
+	wget -O "$HOME"/downloads/cockpit-tailscale-v0.0.6.6.gb7dbce5-1.el9.noarch.rpm https://github.com/spotsnel/cockpit-tailscale/releases/download/v0.0.6/cockpit-tailscale-v0.0.6.6.gb7dbce5-1.el9.noarch.rpm
 
-	rpm -ivh "$USERDIR"/downloads/cockpit-tailscale-v0.0.6.6.gb7dbce5-1.el9.noarch.rpm
+	rpm -ivh "$HOME"/downloads/cockpit-tailscale-v0.0.6.6.gb7dbce5-1.el9.noarch.rpm
 
 	systemctl restart cockpit.socket
 

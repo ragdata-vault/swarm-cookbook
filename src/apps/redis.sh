@@ -43,7 +43,7 @@ redis::config()
 {
 	local REDIS_PWD ENV_FILE
 
-	if [[ -z "$USERDIR" ]]; then
+	if [[ -z "$HOME" ]]; then
 		echo "ERROR :: 'USERDIR' Undefined!"
 		exit 1
 	fi
@@ -60,10 +60,10 @@ redis::config()
 		sudo sed -i "/^# requirepass.*/c\requirepass ${REDIS_PWD}" /etc/redis/redis.conf
 	elif sudo grep -E -q "^requirepass.*$" /etc/redis/redis.conf; then
 		REDIS_PWD="$(redis::passGET)"
-		if [[ -f "$USERDIR/.zshenv" ]]; then
-			ENV_FILE="$USERDIR/.zshenv"
-		elif [[ -f "$USERDIR/.swarm/.env" ]]; then
-			ENV_FILE="$USERDIR/.swarm/.env"
+		if [[ -f "$HOME/.zshenv" ]]; then
+			ENV_FILE="$HOME/.zshenv"
+		elif [[ -f "$HOME/.swarm/.env" ]]; then
+			ENV_FILE="$HOME/.swarm/.env"
 		elif [[ -f "$REPO"/.env ]]; then
 			ENV_FILE="$REPO"/.env
 		elif [[ -f "$REPO"/.env.dist ]]; then

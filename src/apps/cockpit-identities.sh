@@ -26,11 +26,11 @@ cockpit-identities::install()
 	echo "===================================================================="
 	echo
 
-	[[ ! -d "$USERDIR"/downloads ]] && mkdir -p "$USERDIR"/downloads
+	[[ ! -d "$HOME"/downloads ]] && mkdir -p "$HOME"/downloads
 
-	wget -O "$USERDIR"/downloads/cockpit_identities-setup.zsh https://repo.45drives.com/setup
+	wget -O "$HOME"/downloads/cockpit_identities-setup.zsh https://repo.45drives.com/setup
 
-	bash "$USERDIR"/downloads/cockpit_identities-setup.zsh
+	bash "$HOME"/downloads/cockpit_identities-setup.zsh
 
 	sudo apt update
 
