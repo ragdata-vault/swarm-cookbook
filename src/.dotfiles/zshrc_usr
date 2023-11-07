@@ -5,11 +5,13 @@
 # .zshenv -> .zprofile -> .zshrc -> .zlogin -> .zlogout
 # ==================================================================
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+if [[ -d "$ZSH_CUSTOM/plugins/themes/powerlevel10k" ]]; then
+	# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+	# Initialization code that may require console input (password prompts, [y/n]
+	# confirmations, etc.) must go above this block; everything else may go below.
+	if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+	  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+	fi
 fi
 
 source "$ZSHSHARE/zshrc"
@@ -41,13 +43,17 @@ fi
 # If set to "random", then a random theme will be loaded each time oh-my-zsh is loaded.
 # If you need to know which theme was randomly loaded, run: `echo $RANDOM_THEME`
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="powerlevel10k/powerlevel10k"
+if [[ ! -d "$ZSH_CUSTOM/plugins/themes/powerlevel10k" ]]; then ZSH_THEME="bira"; fi
 
-# ------------------------------------------------------------------
-# POWERLEVEL10K THEME
-# ------------------------------------------------------------------
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+if [[ -d "$ZSH_CUSTOM/plugins/themes/powerlevel10k" ]]; then
+	ZSH_THEME="powerlevel10k/powerlevel10k"
 
-if [[ -r "$XDG_CACHE_HOME/p10k-instant-prompt-$USERNAME.zsh" ]]; then
-	source "$XDG_CACHE_HOME/p10k-instant-prompt-$USERNAME.zsh"
+	# ------------------------------------------------------------------
+	# POWERLEVEL10K THEME
+	# ------------------------------------------------------------------
+	typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
+
+	if [[ -r "$XDG_CACHE_HOME/p10k-instant-prompt-$USERNAME.zsh" ]]; then
+		source "$XDG_CACHE_HOME/p10k-instant-prompt-$USERNAME.zsh"
+	fi
 fi
