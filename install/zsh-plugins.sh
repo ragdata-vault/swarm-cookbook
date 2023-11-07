@@ -65,7 +65,7 @@ zsh-plugins::install()
 	log::file "Installing Navi Application"
 	bash <(curl -sL https://raw.githubusercontent.com/denisidoro/navi/master/scripts/install)
 
-	cd "$HOME/Downloads" || return 1
+	cd "$XDG_DOWNLOAD_DIR" || return 1
 
 	echo
 	echo "--------------------------------------------------------------------"

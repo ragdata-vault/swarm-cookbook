@@ -17,6 +17,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+dnsmasq::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}DNSMASQ HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+dnsmasq::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+dnsmasq::installed() { command -v dnsmasq > /dev/null; }
+#
 # INSTALL FUNCTION
 #
 dnsmasq::install()

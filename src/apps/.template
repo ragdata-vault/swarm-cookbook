@@ -39,7 +39,7 @@ template::requires() { echo; }
 #
 # INSTALLED FUNCTION
 #
-template::installed() { if command -v template > /dev/null; then return 0; else return 1; fi }
+template::installed() { command -v template > /dev/null; }
 #
 # INSTALL FUNCTION
 #

@@ -16,6 +16,31 @@
 # FUNCTIONS
 # ==================================================================
 #
+# HELP FUNCTION
+#
+dive::help()
+{
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo "${WHITE}DIVE HELP${RESET}"
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+
+
+
+	echo
+	echo "${GOLD}====================================================================${RESET}"
+	echo
+}
+#
+# REQUIRES FUNCTION
+#
+dive::requires() { echo; }
+#
+# INSTALLED FUNCTION
+#
+dive::installed() { if command -v dive > /dev/null; then return 0; else return 1; fi }
+#
 # INSTALL FUNCTION
 #
 dive::install()
