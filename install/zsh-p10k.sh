@@ -31,6 +31,7 @@ zsh-p10k::install()
 	echo
 
 	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "${ZSH_CUSTOM:-$USERDIR/.oh-my-zsh/custom}"/themes/powerlevel10k
+	chown -R "$USERNAME":"$USERNAME" "$ZSH_CUSTOM"
 
 	sed -i '/^ZSH_THEME.*/c\ZSH_THEME="powerlevel10k/powerlevel10k"' "$USERDIR"/.zshrc
 

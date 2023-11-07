@@ -77,6 +77,7 @@ echoWarning() { echoAlias "${SYMBOL_WARNING} $1" -c="${GOLD}" "${@:2}"; }
 # EXIT ALIASES
 #
 exitReturn() { local r="${1:-0}"; [[ "${BASH_SOURCE[0]:-${(%):-%x}}" != "${0}" ]] && return "$r" || exit "$r"; }
+errorExit() { echoError "$1"; exit "${2:-1}"; }
 errorExitReturn() { echoError "$1"; exitReturn "${2:-1}"; }
 #
 # BASIC SYSTEM FUNCTIONS
@@ -326,17 +327,47 @@ log::init()
 	log::file "LogFile Initialized"
 }
 # ------------------------------------------------------------------
+# log::exit
+# ------------------------------------------------------------------
+log::exit()
+{
+	local redis=0
+
+	if [[ "$1" == "-r" ]]; then redis=1; shift; fi
+
+	if [[ $redis -eq 0 ]]; then
+		local msg="${1:-}"
+		local code="${2:1}"
+		if [[ -f "$logFile" ]]; then log::file "$msg"; fi
+	elif [[ $redis -eq 1 ]]; then
+		local key="${1:-}"
+		local val="${2:-}"
+		local code="${3:1}"
+		if [[ -n "$logFile" ]]; then log::redis "$key" "$val"; fi
+	fi
+
+	# ALWAYS ECHO ERROR MESSAGE ONLY ONCE
+	if [[ "$LOG_VERBOSE" -ne 1 ]]; then echo "$msg"; fi
+
+	exit "$code"
+}
+# ------------------------------------------------------------------
 # log::file
 # ------------------------------------------------------------------
 log::file()
 {
+	local silent=0
+
+	if [[ "$1" == "-s" ]]; then silent=1; shift; fi
+
 	local msg="${1:-}" timestamp
 
 	timestamp="$(logStamp)"
 
 	[[ ! -f "$logFile" ]] && { echo "LogFile '$logFile' Not Found!"; exit 1; }
 
-	if [[ "$LOG_VERBOSE" -eq 1 ]]; then echo "$msg"; fi
+	if [[ "$LOG_VERBOSE" -eq 1 ]] && [[ "$silent" -eq 0 ]]; then echo "$msg"; fi
+
 	echo "$timestamp :: $USERNAME - $msg" | sudo tee -a "$logFile" > /dev/null
 }
 # ------------------------------------------------------------------
@@ -344,6 +375,10 @@ log::file()
 # ------------------------------------------------------------------
 log::redis()
 {
+	local silent=0
+
+	if [[ "$1" == "-s" ]]; then silent=1; shift; fi
+
 	local key="${1:-}" timestamp
 	local val="${2:-}"
 
@@ -351,7 +386,7 @@ log::redis()
 
 	[[ -z "$REDISCLI_AUTH" ]] && { echo "Redis Authentication Missing!"; exit 1; }
 
-	if [[ "$LOG_VERBOSE" -eq 1 ]]; then echo "$msg"; fi
+	if [[ "$LOG_VERBOSE" -eq 1 ]] && [[ "$silent" -eq 0 ]]; then echo "$msg"; fi
 
 	redis-cli "$logFile" "$key" "$val" > /dev/null
 }

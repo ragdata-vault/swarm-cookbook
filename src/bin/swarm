@@ -48,6 +48,7 @@ swarm::init()
 
 	local NODE_IPv4 IPv4_REPORTED MANAGER_TKN WORKER_TKN NODE_ID
 
+	source "$ENV_FILE"
 	source "$ENV_NODE"
 	source "$ENV_PATHS"
 

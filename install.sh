@@ -194,6 +194,18 @@ if [[ "${SHELL##*/}" == 'bash' ]]; then
 
 		source "$fullPath"
 
+		# HELP
+		if [[ "${FILEOPTS[help]}" -eq 1 ]]; then
+			log::file "Displaying '$fileName' help"
+			eval "$fileName::help $*"
+			return $?
+		fi
+		# REQUIRES
+		if [[ "${FILEOPTS[requires]}" -eq 1 ]]; then
+			log::file "Checking '$fileName' requirements"
+			eval "$fileName::requires $*"
+			return $?
+		fi
 		# INSTALLED
 		if [[ "${FILEOPTS[installed]}" -eq 1 ]]; then
 			log::file "Checking if '$fileName' installed"
@@ -224,6 +236,31 @@ if [[ "${SHELL##*/}" == 'bash' ]]; then
 		fi
 	}
 	# ------------------------------------------------------------------
+	# log::exit
+	# ------------------------------------------------------------------
+	log::exit()
+	{
+		local redis=0
+
+		if [[ "$1" == "-r" ]]; then redis=1; shift; fi
+
+		if [[ $redis -eq 0 ]]; then
+			local msg="${1:-}"
+			local code="${2:1}"
+			if [[ -f "$logFile" ]]; then log::file "$msg"; fi
+		elif [[ $redis -eq 1 ]]; then
+			local key="${1:-}"
+			local val="${2:-}"
+			local code="${3:1}"
+			if [[ -n "$logFile" ]]; then log::redis "$key" "$val"; fi
+		fi
+
+		# ALWAYS ECHO ERROR MESSAGE ONLY ONCE
+		if [[ "$LOG_VERBOSE" -ne 1 ]]; then echo "$msg"; fi
+
+		exit "$code"
+	}
+	# ------------------------------------------------------------------
 	# log::init
 	# ------------------------------------------------------------------
 	log::init()
@@ -245,13 +282,18 @@ if [[ "${SHELL##*/}" == 'bash' ]]; then
 	# ------------------------------------------------------------------
 	log::file()
 	{
+		local silent=0
+
+		if [[ "$1" == "-s" ]]; then silent=1; shift; fi
+
 		local msg="${1:-}" timestamp
 
 		timestamp="$(logStamp)"
 
 		[[ ! -f "$logFile" ]] && { echo "LogFile '$logFile' Not Found!"; exit 1; }
 
-		if [[ "$LOG_VERBOSE" -eq 1 ]]; then echo "$msg"; fi
+		if [[ "$LOG_VERBOSE" -eq 1 ]] && [[ "$silent" -eq 0 ]]; then echo "$msg"; fi
+
 		echo "$timestamp :: $USERNAME - $msg" | sudo tee -a "$logFile" > /dev/null
 	}
 	# ------------------------------------------------------------------
@@ -259,6 +301,10 @@ if [[ "${SHELL##*/}" == 'bash' ]]; then
 	# ------------------------------------------------------------------
 	log::redis()
 	{
+		local silent=0
+
+		if [[ "$1" == "-s" ]]; then silent=1; shift; fi
+
 		local key="${1:-}" timestamp
 		local val="${2:-}"
 
@@ -266,7 +312,7 @@ if [[ "${SHELL##*/}" == 'bash' ]]; then
 
 		[[ -z "$REDISCLI_AUTH" ]] && { echo "Redis Authentication Missing!"; exit 1; }
 
-		if [[ "$LOG_VERBOSE" -eq 1 ]]; then echo "$msg"; fi
+		if [[ "$LOG_VERBOSE" -eq 1 ]] && [[ "$silent" -eq 0 ]]; then echo "$msg"; fi
 
 		redis-cli "$logFile" "$key" "$val" > /dev/null
 	}

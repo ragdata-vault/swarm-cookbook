@@ -6,12 +6,6 @@
 # ==================================================================
 
 # ------------------------------------------------------------------
-# OH MY ZSH!
-# ------------------------------------------------------------------
-# Uncomment below to load 'Oh My ZSH' on startup
-source "$ZSH"/oh-my-zsh.sh
-
-# ------------------------------------------------------------------
 # LAZY AUTOLOAD
 # ------------------------------------------------------------------
 # Using this method of autoloading functions means that you don't
@@ -30,7 +24,7 @@ autoload -Uz "$ZSHDIR/functions/**/*"
 # FPATH="$FPATH:/usr/share/zsh/functions/Zle"
 
 # Uncomment the line below to initialise the ZSH Completion System
-autoload -U compinit; compinit
+autoload -Uz compinit; compinit
 
 # ------------------------------------------------------------------
 # RANDOM THEMES LIST
@@ -144,28 +138,47 @@ HIST_STAMPS="yyyy-mm-dd"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(
- 	git
- 	sudo
-#  	copybuffer
-#  	docker
-#  	docker-compose
-#	enhancd
-#  	fzf-zsh-plugin
-#	git-flow-completion
-#  	jsontools
-#  	zsh-autosuggestions
-#	zsh-completions
-#  	zsh-syntax-highlighting
-)
+# plugins=( git sudo copybuffer docker docker-compose enhancd fzf-zsh-plugin git-flow-completion jsontools zsh-autosuggestions zsh-completions zsh-syntax-highlighting )
+plugins=(git emoji extract fastfile systemadmin)
+
+if command -v diff-so-fancy; then plugins+=(zsh-diff-so-fancy); fi
+if command -v docker; then plugins+=(docker docker-compose); fi
+if [[ -d "$ZSH_CUSTOM/plugins/enhancd" ]]; then plugins+=(enhancd); fi
+if command -v fzf; then plugins+=(fzf); fi
+if command -v git-flow; then
+    plugins+=(git-flow)
+    if [[ -d "$ZSH_CUSTOM/plugins/git-flow-completion" ]]; then plugins+=(git-flow-completion); fi
+fi
+if [[ -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]]; then plugins+=(zsh-autosuggestions); fi
+if [[ -d "$ZSH_CUSTOM/plugins/zsh-completions" ]]; then plugins+=(zsh-completions); fi
+if [[ -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]]; then plugins+=(zsh-syntax-highlightling); fi
+
+# ------------------------------------------------------------------
+# OH MY ZSH!
+# ------------------------------------------------------------------
+# Uncomment below to load 'Oh My ZSH' on startup
+source "$ZSH"/oh-my-zsh.sh
 
 # ==================================================================
 # COMPLETION PREFERENCES
 # ==================================================================
 
 # CORE COMPLETIONS
-zstyle ':completion:*' completer _expand _complete _ignored _approximate
+zstyle ':completion:*' auto-description 'specify: %d'
+zstyle ':completion:*' completer _expand _complete _correct _approximate
 zstyle ':completion:*' max-errors 3 numeric
+zstyle ':completion:*' format 'Completing %d'
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' menu select=2
+eval "$(dircolors -b)"
+zstyle ':completion:*:default' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' list-colors ''
+zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
+zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
+zstyle ':completion:*' menu select=long
+zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+zstyle ':completion:*' use-compctl false
+zstyle ':completion:*' verbose true
 
 # # Don't complete backup files as commands
 # zstyle ':completion:*:complete:-command-::*' ignored-patterns '*\~'

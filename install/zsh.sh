@@ -30,10 +30,7 @@ zsh::installed() { return 0; }
 #
 zsh::install()
 {
-	if [[ -z "$USERNAME" ]]; then
-		echo "ERROR :: 'USERNAME' Undefined!"
-		exit 1
-	fi
+	if [[ -z "$USERNAME" ]]; then log::exit "ERROR :: 'USERNAME' Undefined!"; fi
 
 	echo
 	echo "===================================================================="

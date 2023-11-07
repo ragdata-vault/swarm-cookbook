@@ -63,9 +63,6 @@ app::version()
 # ==================================================================
 # trap 'errorHandler "LINENO" "BASH_LINENO" "${BASH_COMMAND}" "${?}"' ERR
 
-checkShell
-checkRoot
-
 file="${1:-}"
 
 [[ -z "$file" ]] && errorExit "launch :: Missing Argument!" -c 1
@@ -73,19 +70,25 @@ file="${1:-}"
 
 declare -A OPTS
 
+OPTS[help]=0
+OPTS[requires]=0
+OPTS[installed]=0
 OPTS[install]=0
 OPTS[config]=0
 OPTS[remove]=0
 OPTS[test]=0
 
-options=$(getopt -o "cirt" -a -- "$@")
+options=$(getopt -o "hRcdirt" -a -- "$@")
 
 eval set --"$options"
 
 while true
 do
 	case $1 in
+		-h) OPTS[help]=1;;
+		-R) OPTS[requires]=1;;
 		-c) OPTS[config]=1;;
+		-d) OPTS[installed]=1;;
 		-i) OPTS[install]=1;;
 		-r) OPTS[remove]=1;;
 		-t) OPTS[test]=1;;
@@ -99,7 +102,7 @@ do
 	shift
 done
 
-if [[ -z "${OPTS[install]}" ]] && [[ -z "${OPTS[config]}" ]] && [[ -z "${OPTS[remove]}" ]] && [[ -z "${OPTS[test]}" ]]; then
+if [[ -z "${OPTS[help]}" ]] && [[ -z "${OPTS[requires]}" ]] && [[ -z "${OPTS[installed]}" ]] && [[ -z "${OPTS[install]}" ]] && [[ -z "${OPTS[config]}" ]] && [[ -z "${OPTS[remove]}" ]] && [[ -z "${OPTS[test]}" ]]; then
 	OPTS["install"]=1
 	args+=("-i")
 fi
