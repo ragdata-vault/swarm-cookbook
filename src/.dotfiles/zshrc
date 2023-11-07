@@ -141,17 +141,19 @@ HIST_STAMPS="yyyy-mm-dd"
 # plugins=( git sudo copybuffer docker docker-compose enhancd fzf-zsh-plugin git-flow-completion jsontools zsh-autosuggestions zsh-completions zsh-syntax-highlighting )
 plugins=(git emoji extract fastfile systemadmin)
 
-if command -v diff-so-fancy; then plugins+=(zsh-diff-so-fancy); fi
-if command -v docker; then plugins+=(docker docker-compose); fi
+if command -v diff-so-fancy > /dev/null; then plugins+=(zsh-diff-so-fancy); fi
+if command -v docker > /dev/null; then plugins+=(docker docker-compose); fi
 if [[ -d "$ZSH_CUSTOM/plugins/enhancd" ]]; then plugins+=(enhancd); fi
-if command -v fzf; then plugins+=(fzf); fi
-if command -v git-flow; then
+if command -v fzf > /dev/null; then plugins+=(fzf); fi
+if command -v git-flow > /dev/null; then
     plugins+=(git-flow)
     if [[ -d "$ZSH_CUSTOM/plugins/git-flow-completion" ]]; then plugins+=(git-flow-completion); fi
 fi
 if [[ -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]]; then plugins+=(zsh-autosuggestions); fi
 if [[ -d "$ZSH_CUSTOM/plugins/zsh-completions" ]]; then plugins+=(zsh-completions); fi
 if [[ -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]]; then plugins+=(zsh-syntax-highlightling); fi
+
+if [[ -f "$USERDIR/.cargo/bin/navi" ]]; then eval "$(navi widget zsh)"; fi
 
 # ------------------------------------------------------------------
 # OH MY ZSH!
